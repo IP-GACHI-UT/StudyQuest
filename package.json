@@ -2,6 +2,10 @@
   "name": "studyquest",
   "version": "1.0.0",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "dev:web": "pnpm --filter @studyquest/web dev",
+    "build:web": "pnpm --filter @studyquest/web build",
+    "lint:web": "pnpm --filter @studyquest/web lint"
+  },
   "packageManager": "pnpm@10.13.1"
 }

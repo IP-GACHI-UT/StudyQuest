@@ -17,6 +17,14 @@ StudyQuestのフロントエンドアプリです。
 pnpm dev:web
 ```
 
+## 各コマンド
+
+```
+pnpm build:web
+pnpm lint:web
+pnpm typecheck:web
+```
+
 ## 担当範囲
 
 - 画面実装

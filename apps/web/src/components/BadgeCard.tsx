@@ -3,7 +3,7 @@ import Card from "./Card";
 export default function BadgeCard() {
     return (
         <Card title="Badges">
-            <p className="text-gray-700">Your earned badges will be displayed here. Collect badges to showcase your achievements!</p>
+            <p className="text-white">Your earned badges will be displayed here. Collect badges to showcase your achievements!</p>
         </Card>
     );
 }

@@ -7,7 +7,7 @@ import { MyQuestCard } from "@/components/MyQuestCard";
 import ProfileCard from "@/components/ProfileCard";
 import QuestCard from "@/components/QuestCard";
 import SectionHeader from "@/components/SectionHeader";
-import StudyLogCard from "@/components/StudyLogCard";
+import { StudyLogCard } from "@/components/StudyLogCard";
 import StudyTimeCard from "@/components/StudyTimeCard";
 import TargetCard from "@/components/TargetCard";
 
@@ -52,7 +52,14 @@ export default function Home() {
 
       <BadgeCard />
 
-      <StudyLogCard />
+      <StudyLogCard 
+        logs={[
+          { created_at: new Date(), text: "「公式ドキュメントを10分読む」を達成" },
+          { created_at: new Date(2026, 5, 12), text: "10分の学習セッションを記録" },
+          { created_at: new Date(2026, 5, 1), text: "「TypeScriptの型を復習」を達成" },
+          { created_at: new Date(2025, 3, 1), text: "「技術記事を1本読む」を達成" },
+        ]}
+      />
 
       <Footer />
     </main>

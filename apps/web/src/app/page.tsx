@@ -1,7 +1,9 @@
+"use client";
+
 import BadgeCard from "@/components/BadgeCard";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import MyQuestCard from "@/components/MyQuestCard";
+import { MyQuestCard } from "@/components/MyQuestCard";
 import ProfileCard from "@/components/ProfileCard";
 import QuestCard from "@/components/QuestCard";
 import SectionHeader from "@/components/SectionHeader";
@@ -19,7 +21,14 @@ export default function Home() {
         jaTitle="いま達成を目指しているクエスト"
         description="受注:1 / 3"
       />
-      <MyQuestCard />
+      <MyQuestCard 
+        status="進行中"
+        title="公式ドキュメントを10分読む"
+        category="プログラミング"
+        difficulty="easy"
+        buttonLabel="学習する"
+        onButtonClick={() => alert('Viewing quest details')}
+      />
 
       <SectionHeader 
         enTitle="RECOMMENDED"

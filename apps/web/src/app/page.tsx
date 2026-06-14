@@ -4,7 +4,7 @@ import BadgeCard from "@/components/BadgeCard";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { MyQuestCard } from "@/components/MyQuestCard";
-import ProfileCard from "@/components/ProfileCard";
+import { ProfileCard } from "@/components/ProfileCard";
 import QuestCard from "@/components/QuestCard";
 import SectionHeader from "@/components/SectionHeader";
 import { StudyLogCard } from "@/components/StudyLogCard";
@@ -48,7 +48,15 @@ export default function Home() {
 
       <StudyTimeCard />
 
-      <ProfileCard />
+      <ProfileCard 
+        userName="学習者"
+        level={5}
+        totalPoints={1000}
+        totalXp={500}
+        totalStudyTime="2時間 30分"
+        icon={<div className="h-full w-full bg-gray-300" />}
+        onProfileClick={() => alert('Viewing profile')}
+      />
 
       <BadgeCard />
 

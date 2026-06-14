@@ -11,7 +11,7 @@ type StudyLogCardProps = {
 };
 
 export const StudyLogCard = ({
-  logs,
+  logs = [],
 }: StudyLogCardProps) => {
   return (
     <Card>

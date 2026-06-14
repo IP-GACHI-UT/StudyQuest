@@ -1,6 +1,6 @@
 "use client";
 
-import BadgeCard from "@/components/BadgeCard";
+import { BadgeCard } from "@/components/BadgeCard";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { MyQuestCard } from "@/components/MyQuestCard";
@@ -58,7 +58,14 @@ export default function Home() {
         onProfileClick={() => alert('Viewing profile')}
       />
 
-      <BadgeCard />
+      <BadgeCard 
+        title="最近のバッジ"
+        badges={[
+          { id: "1", icon: "🏆", description: "初学者" },
+          { id: "2", icon: "⭐", description: "エキスパート" },
+          { id: "3", icon: "🔥", description: "熱心な学習者" },
+        ]}
+      />
 
       <StudyLogCard 
         logs={[

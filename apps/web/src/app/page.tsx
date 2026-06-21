@@ -8,9 +8,9 @@ import { ProfileCard } from "@/components/cards/ProfileCard";
 import { QuestAcceptanceRateCard } from "@/components/cards/QuestAcceptanceRateCard";
 import SectionHeader from "@/components/common/SectionHeader";
 import { StudyLogCard } from "@/components/cards/StudyLogCard";
-import StudyTimeCard from "@/components/cards/StudyTimeCard";
 import { GoalCard } from "@/components/cards/GoalCard";
 import { RecommendedQuestCard } from "@/components/cards/RecommendedQuestCard";
+import { WeeklyStudyCard } from "@/components/cards/WeeklyStudyCard";
 
 export default function Home() {
   return (
@@ -78,7 +78,22 @@ export default function Home() {
         questCount={5}
       />
 
-      <StudyTimeCard />
+      <WeeklyStudyCard
+        studyHours={7}
+        weeklyGoalHours={10}
+        completedQuests={3}
+        earnedXp={500}
+        streakDays={5}
+        chartData={[
+          { day: "月", hours: 2 },
+          { day: "火", hours: 1 },
+          { day: "水", hours: 3 },
+          { day: "木", hours: 1 },
+          { day: "金", hours: 2 },
+          { day: "土", hours: 0 },
+          { day: "日", hours: 0 },
+        ]}
+      />
 
       <ProfileCard 
         userName="学習者"

@@ -36,7 +36,7 @@ export default function RootLayout({
           nextLevelXp={1000}
           weeklyPoint={2450}
         />
-        <main className="mx-auto max-w-7xl px-4 py-6 pt-16">
+        <main className="mx-auto max-w-7xl px-4 py-6">
           {children}
         </main>
         <Footer />

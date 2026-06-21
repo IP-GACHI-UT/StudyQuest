@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { MyQuestCard } from "@/components/cards/MyQuestCard";
 import { ProfileCard } from "@/components/cards/ProfileCard";
-import QuestCard from "@/components/cards/QuestCard";
+import { QuestAcceptanceRateCard } from "@/components/cards/QuestAcceptanceRateCard";
 import SectionHeader from "@/components/common/SectionHeader";
 import { StudyLogCard } from "@/components/cards/StudyLogCard";
 import StudyTimeCard from "@/components/cards/StudyTimeCard";
@@ -62,7 +62,12 @@ export default function Home() {
         jaTitle="今日の活動"
         description="多くの学習者が取り組んでいるクエスト"
       />
-      <QuestCard />
+      <QuestAcceptanceRateCard
+        title="公式ドキュメントを10分読む"
+        category="プログラミング"
+        acceptedCount={15}
+        completedCount={10}
+      />
 
       <GoalCard
         tag="目標"

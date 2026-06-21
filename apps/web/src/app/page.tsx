@@ -10,6 +10,7 @@ import SectionHeader from "@/components/common/SectionHeader";
 import { StudyLogCard } from "@/components/cards/StudyLogCard";
 import StudyTimeCard from "@/components/cards/StudyTimeCard";
 import { GoalCard } from "@/components/cards/GoalCard";
+import { RecommendedQuestCard } from "@/components/cards/RecommendedQuestCard";
 
 export default function Home() {
   return (
@@ -35,7 +36,26 @@ export default function Home() {
         jaTitle="おすすめクエスト"
         description="今日受け取れるクエスト"
       />
-      <QuestCard />
+      <RecommendedQuestCard
+        title="公式ドキュメントを10分読む"
+        difficulty="Easy"
+        description="お気に入りのライブラリやフレームワークの公式ドキュメントを読んで理解を深めましょう"
+        category="プログラミング"
+        duration="10分"
+        acceptPoint={10}
+        clearPoint={20}
+        onAccept={() => alert('Accepting quest')}
+      />
+      <RecommendedQuestCard
+        title="英単語を10個覚える"
+        difficulty="Easy"
+        description="毎日10個の新しい英単語を学び、記憶に定着させましょう"
+        category="英語"
+        duration="10分"
+        acceptPoint={10}
+        clearPoint={20}
+        onAccept={() => alert('Accepting quest')}
+      />
 
       <SectionHeader 
         enTitle="BOARD"

@@ -1,15 +1,15 @@
 "use client";
 
-import { BadgeCard } from "@/components/BadgeCard";
+import { BadgeCard } from "@/components/cards/BadgeCard";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import { MyQuestCard } from "@/components/MyQuestCard";
-import { ProfileCard } from "@/components/ProfileCard";
-import QuestCard from "@/components/QuestCard";
-import SectionHeader from "@/components/SectionHeader";
-import { StudyLogCard } from "@/components/StudyLogCard";
-import StudyTimeCard from "@/components/StudyTimeCard";
-import TargetCard from "@/components/TargetCard";
+import { MyQuestCard } from "@/components/cards/MyQuestCard";
+import { ProfileCard } from "@/components/cards/ProfileCard";
+import QuestCard from "@/components/cards/QuestCard";
+import SectionHeader from "@/components/common/SectionHeader";
+import { StudyLogCard } from "@/components/cards/StudyLogCard";
+import StudyTimeCard from "@/components/cards/StudyTimeCard";
+import { GoalCard } from "@/components/cards/GoalCard";
 
 export default function Home() {
   return (
@@ -44,7 +44,14 @@ export default function Home() {
       />
       <QuestCard />
 
-      <TargetCard />
+      <GoalCard
+        tag="目標"
+        title="1週間で10時間学習する"
+        description="毎日1時間学習することで、1週間で10時間の学習を達成します。"
+        deadline="2023-12-31"
+        progress={70}
+        questCount={5}
+      />
 
       <StudyTimeCard />
 

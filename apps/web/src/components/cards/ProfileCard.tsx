@@ -1,6 +1,6 @@
 "use client";
 
-import Card from "./Card";
+import { Card } from "../common/Card";
 
 type ProfileCardProps = {
   userName: string;

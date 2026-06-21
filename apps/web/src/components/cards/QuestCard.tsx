@@ -1,4 +1,4 @@
-import Card from "./Card";
+import { Card } from "../common/Card";
 
 export default function QuestCard() {
     return (

@@ -1,7 +1,7 @@
 "use client";
 
-import Card from "./Card";
-import { Tag } from "./Tag";
+import { Card } from "../common/Card";
+import { Tag } from "../common/Tag";
 
 type MyQuestCardProps = {
     status: "進行中" | "達成済み" | "キャンセル済み";

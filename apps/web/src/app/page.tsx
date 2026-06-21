@@ -15,8 +15,6 @@ import { WeeklyStudyCard } from "@/components/cards/WeeklyStudyCard";
 export default function Home() {
   return (
     <main>
-      <Header />
-
       <SectionHeader 
         enTitle="MY QUEST"
         jaTitle="いま達成を目指しているクエスト"
@@ -122,8 +120,6 @@ export default function Home() {
           { created_at: new Date(2025, 3, 1), text: "「技術記事を1本読む」を達成" },
         ]}
       />
-
-      <Footer />
     </main>
   );
 }

@@ -31,6 +31,7 @@ export const WeeklyStudyChart = ({
           <Bar
             dataKey="hours"
             radius={[4, 4, 0, 0]}
+            fill="#3B82F6"
           />
         </BarChart>
       </ResponsiveContainer>

@@ -3,10 +3,7 @@ type ProgressBarProps = {
   value: number;
 };
 
-export const ProgressBar = ({
-  label,
-  value,
-}: ProgressBarProps) => {
+export const ProgressBar = ({ label, value }: ProgressBarProps) => {
   const percent = Math.max(0, Math.min(100, value));
 
   return (

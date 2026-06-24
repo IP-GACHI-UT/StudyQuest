@@ -1,15 +1,9 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X } from 'lucide-react';
+import { useState } from 'react';
 
-const navigationItems = [
-  "Home",
-  "Quests",
-  "MyQuest",
-  "Board",
-  "Profile",
-];
+const navigationItems = ['Home', 'Quests', 'MyQuest', 'Board', 'Profile'];
 
 export const NavigationMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,7 +15,7 @@ export const NavigationMenu = () => {
         <ul className="flex items-center gap-8">
           {navigationItems.map((item) => (
             <li key={item}>
-              <button>{item}</button>
+              <button type="button">{item}</button>
             </li>
           ))}
         </ul>
@@ -29,6 +23,7 @@ export const NavigationMenu = () => {
 
       {/* モバイル用ボタン */}
       <button
+        type="button"
         className="lg:hidden"
         onClick={() => setIsOpen((prev) => !prev)}
       >
@@ -41,7 +36,10 @@ export const NavigationMenu = () => {
           <ul className="flex flex-col">
             {navigationItems.map((item) => (
               <li key={item}>
-                <button className="w-full px-6 py-4 text-left text-white hover:bg-gray-500">
+                <button
+                  type="button"
+                  className="w-full px-6 py-4 text-left text-white hover:bg-gray-500"
+                >
                   {item}
                 </button>
               </li>

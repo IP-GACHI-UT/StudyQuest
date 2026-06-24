@@ -1,8 +1,7 @@
-"use client";
+'use client';
 
-import { ProgressBar } from "@/components/common/ProgressBar";
-//import { Button } from "@/components/common/Button";
-import { Card } from "../common/Card";
+import { ProgressBar } from '@/components/common/ProgressBar';
+import { Card } from '../common/Card';
 
 type GoalCardProps = {
   tag: string;
@@ -11,7 +10,6 @@ type GoalCardProps = {
   deadline: string;
   progress: number;
   questCount: number;
-  onDetailClick?: () => void;
 };
 
 export const GoalCard = ({
@@ -21,7 +19,6 @@ export const GoalCard = ({
   deadline,
   progress,
   questCount,
-  onDetailClick,
 }: GoalCardProps) => {
   return (
     <Card>
@@ -39,25 +36,14 @@ export const GoalCard = ({
       <p className="text-sm text-gray-600">{description}</p>
 
       {/* 期限 */}
-      <p className="text-sm text-gray-500">
-        期限: {deadline}
-      </p>
+      <p className="text-sm text-gray-500">期限: {deadline}</p>
 
       {/* ProgressBar */}
-      <ProgressBar
-        label="進捗"
-        value={progress}
-      />
+      <ProgressBar label="進捗" value={progress} />
 
       {/* 下部 */}
       <div className="flex items-center justify-between">
-        <span className="text-sm">
-          関連クエスト: {questCount}
-        </span>
-
-        {/* <Button onClick={onDetailClick}>
-          詳細
-        </Button> */}
+        <span className="text-sm">関連クエスト: {questCount}</span>
       </div>
     </Card>
   );

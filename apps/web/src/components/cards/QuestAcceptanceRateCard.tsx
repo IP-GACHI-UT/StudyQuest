@@ -1,4 +1,4 @@
-import { Card } from "@/components/common/Card";
+import { Card } from '@/components/common/Card';
 
 type QuestAcceptanceRateCardProps = {
   title: string;
@@ -21,44 +21,30 @@ export const QuestAcceptanceRateCard = ({
 
   return (
     <Card>
-    <div className="flex items-start justify-between">
-        <h3 className="font-semibold text-lg">
-        {title}
-        </h3>
+      <div className="flex items-start justify-between">
+        <h3 className="font-semibold text-lg">{title}</h3>
 
         <span className="rounded-full bg-blue-100 px-3 py-1 text-sm">
-        {category}
+          {category}
         </span>
-    </div>
+      </div>
 
-    <div className="mt-4 flex items-center gap-6 text-sm">
+      <div className="mt-4 flex items-center gap-6 text-sm">
         <div>
-        <span className="text-gray-500">
-            受注人数
-        </span>
-        <span className="ml-2 font-semibold">
-            {acceptedCount}人
-        </span>
+          <span className="text-gray-500">受注人数</span>
+          <span className="ml-2 font-semibold">{acceptedCount}人</span>
         </div>
 
         <div>
-        <span className="text-gray-500">
-            達成人数
-        </span>
-        <span className="ml-2 font-semibold">
-            {completedCount}人
-        </span>
+          <span className="text-gray-500">達成人数</span>
+          <span className="ml-2 font-semibold">{completedCount}人</span>
         </div>
 
         <div>
-        <span className="text-gray-500">
-            達成率
-        </span>
-        <span className="ml-2 font-semibold">
-            {completionRate}%
-        </span>
+          <span className="text-gray-500">達成率</span>
+          <span className="ml-2 font-semibold">{completionRate}%</span>
         </div>
-    </div>
+      </div>
     </Card>
   );
 };

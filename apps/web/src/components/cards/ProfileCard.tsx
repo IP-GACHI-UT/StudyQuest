@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Card } from "../common/Card";
+import { Card } from '../common/Card';
 
 type ProfileCardProps = {
   userName: string;
@@ -25,9 +25,7 @@ export const ProfileCard = ({
     <Card>
       {/* ヘッダー */}
       <div className="flex items-center gap-4">
-        <div className="h-16 w-16 overflow-hidden rounded-full">
-          {icon}
-        </div>
+        <div className="h-16 w-16 overflow-hidden rounded-full">{icon}</div>
 
         <div>
           <h2 className="text-xl font-bold">{userName}</h2>
@@ -49,6 +47,7 @@ export const ProfileCard = ({
 
       {/* ボタン */}
       <button
+        type="button"
         className="mt-6 w-full rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         onClick={onProfileClick}
       >

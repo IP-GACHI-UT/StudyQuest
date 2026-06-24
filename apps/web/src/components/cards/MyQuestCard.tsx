@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { Card } from "../common/Card";
-import { Tag } from "../common/Tag";
+import { Card } from '../common/Card';
+import { Tag } from '../common/Tag';
 
 type MyQuestCardProps = {
-    status: "進行中" | "達成済み" | "キャンセル済み";
-    title: string;
-    category: string;
-    difficulty: string;
-    buttonLabel: string;
-    onButtonClick: () => void;
+  status: '進行中' | '達成済み' | 'キャンセル済み';
+  title: string;
+  category: string;
+  difficulty: string;
+  buttonLabel: string;
+  onButtonClick: () => void;
 };
 
 export const MyQuestCard = ({
@@ -25,14 +25,16 @@ export const MyQuestCard = ({
       <div className="flex items-start justify-between">
         <Tag label={status} color="blue" />
 
-        <button onClick={onButtonClick} className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
+        <button
+          type="button"
+          onClick={onButtonClick}
+          className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
           {buttonLabel}
         </button>
       </div>
 
-      <p className="mt-3 font-semibold">
-        {title}
-      </p>
+      <p className="mt-3 font-semibold">{title}</p>
 
       <div className="mt-2 flex gap-4 text-sm text-gray-500">
         <span>{category}</span>

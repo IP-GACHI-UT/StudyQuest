@@ -1,10 +1,10 @@
 'use client';
 
-import Link from "next/link";
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X } from 'lucide-react';
+import Link from 'next/link';
+import { useState } from 'react';
 
-import { navigationItems } from "@/constants/navigation";
+import { navigationItems } from '@/constants/navigation';
 
 export const NavigationMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,7 +29,7 @@ export const NavigationMenu = () => {
 
       {/* モバイル */}
       <div className="lg:hidden">
-        <button onClick={() => setIsOpen((prev) => !prev)}>
+        <button type="button" onClick={() => setIsOpen((prev) => !prev)}>
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 

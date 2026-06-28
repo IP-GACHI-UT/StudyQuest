@@ -2,8 +2,8 @@
 
 import { Card } from '@/components/common/Card';
 import { Tag } from '@/components/common/Tag';
-import type { Category } from "@/constants/quest/category";
-import type { Difficulty } from "@/constants/quest/difficulty";
+import type { Category } from '@/constants/quest/category';
+import type { Difficulty } from '@/constants/quest/difficulty';
 
 type RecommendedQuestCardProps = {
   title: string;

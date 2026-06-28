@@ -4,13 +4,10 @@ type FilterButtonProps = {
   onClick: () => void;
 };
 
-export const FilterButton = ({
-  label,
-  active,
-  onClick,
-}: FilterButtonProps) => {
+export const FilterButton = ({ label, active, onClick }: FilterButtonProps) => {
   return (
     <button
+      type="button"
       onClick={onClick}
       className={`
         rounded-full
@@ -21,8 +18,8 @@ export const FilterButton = ({
         transition-colors
         ${
           active
-            ? "bg-blue-600 text-white border-blue-600"
-            : "bg-white text-gray-700 hover:bg-gray-100"
+            ? 'bg-blue-600 text-white border-blue-600'
+            : 'bg-white text-gray-700 hover:bg-gray-100'
         }
       `}
     >

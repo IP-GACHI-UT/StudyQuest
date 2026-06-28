@@ -1,0 +1,1084 @@
+﻿pnpm : apps\web\src\app\layout.tsx format 笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏
+≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏・
+発生場所 行:1 文字:26
++ ... Hub/StudyQuest; pnpm exec biome check apps/web --verbose 2>&1 | Out-F ...
++                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (apps\web\src\ap...煤笏≫煤笏≫煤笏≫煤笏≫煤笏・ 
+   :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  ﾃ・Formatter would have printed the following content:
+  
+     1    笏・- importﾂｷtypeﾂｷ{ﾂｷMetadataﾂｷ}ﾂｷfromﾂｷ'next';竦・     2    笏・- import
+ﾂｷ{ﾂｷGeist,ﾂｷGeist_Monoﾂｷ}ﾂｷfromﾂｷ'next/font/google';竦・     3    笏・- importﾂｷ'.
+/globals.css';竦・     4    笏・- importﾂｷFooterﾂｷfromﾂｷ'@/components/Footer';竦・   
+  5    笏・- importﾂｷHeaderﾂｷfromﾂｷ'@/components/Header';竦・     6    笏・- 竦・     7
+    笏・- constﾂｷgeistSansﾂｷ=ﾂｷGeist({竦・     8    笏・- ﾂｷﾂｷvariable:ﾂｷ'--font-geis
+t-sans',竦・     9    笏・- ﾂｷﾂｷsubsets:ﾂｷ['latin'],竦・    10    笏・- });竦・    11    
+笏・- 竦・    12    笏・- constﾂｷgeistMonoﾂｷ=ﾂｷGeist_Mono({竦・    13    笏・- ﾂｷﾂｷvariab
+le:ﾂｷ'--font-geist-mono',竦・    14    笏・- ﾂｷﾂｷsubsets:ﾂｷ['latin'],竦・    15    笏・
+- });竦・    16    笏・- 竦・    17    笏・- exportﾂｷconstﾂｷmetadata:ﾂｷMetadataﾂｷ=ﾂｷ{竦・
+    18    笏・- ﾂｷﾂｷtitle:ﾂｷ'CreateﾂｷNextﾂｷApp',竦・    19    笏・- ﾂｷﾂｷdescription:ﾂ
+ｷ'Generatedﾂｷbyﾂｷcreateﾂｷnextﾂｷapp',竦・    20    笏・- };竦・    21    笏・- 竦・    22 
+   笏・- exportﾂｷdefaultﾂｷfunctionﾂｷRootLayout({竦・    23    笏・- ﾂｷﾂｷchildren,竦・  
+  24    笏・- }:ﾂｷReadonly<{竦・    25    笏・- ﾂｷﾂｷchildren:ﾂｷReact.ReactNode;竦・    
+26    笏・- }>)ﾂｷ{竦・    27    笏・- ﾂｷﾂｷreturnﾂｷ(竦・    28    笏・- ﾂｷﾂｷﾂｷﾂｷ<html竦・   
+ 29    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷlang="en"竦・    30    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷclassName={`${geist
+Sans.variable}ﾂｷ${geistMono.variable}ﾂｷh-fullﾂｷantialiased`}竦・    31    笏・- ﾂｷﾂ
+ｷﾂｷﾂｷ>竦・    32    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<bodyﾂｷclassName="min-h-screenﾂｷbg-background
+">竦・    33    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<Header竦・    34    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷle
+vel={12}竦・    35    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷcurrentXp={800}竦・    36    笏・- ﾂｷﾂｷ
+ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷnextLevelXp={1000}竦・    37    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷweeklyPoi
+nt={2450}竦・    38    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ/>竦・    39    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<mai
+nﾂｷclassName="mx-autoﾂｷmax-w-7xlﾂｷpx-4ﾂｷpy-6">{children}</main>竦・    40    笏・- 
+ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<Footerﾂｷ/>竦・    41    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</body>竦・    42    笏・- ﾂ
+ｷﾂｷﾂｷﾂｷ</html>竦・    43    笏・- ﾂｷﾂｷ);竦・    44    笏・- }竦・        1 笏・+ importﾂｷty
+peﾂｷ{ﾂｷMetadataﾂｷ}ﾂｷfromﾂｷ'next';
+        2 笏・+ importﾂｷ{ﾂｷGeist,ﾂｷGeist_Monoﾂｷ}ﾂｷfromﾂｷ'next/font/google';
+        3 笏・+ importﾂｷ'./globals.css';
+        4 笏・+ importﾂｷFooterﾂｷfromﾂｷ'@/components/Footer';
+        5 笏・+ importﾂｷHeaderﾂｷfromﾂｷ'@/components/Header';
+        6 笏・+ 
+        7 笏・+ constﾂｷgeistSansﾂｷ=ﾂｷGeist({
+        8 笏・+ ﾂｷﾂｷvariable:ﾂｷ'--font-geist-sans',
+        9 笏・+ ﾂｷﾂｷsubsets:ﾂｷ['latin'],
+       10 笏・+ });
+       11 笏・+ 
+       12 笏・+ constﾂｷgeistMonoﾂｷ=ﾂｷGeist_Mono({
+       13 笏・+ ﾂｷﾂｷvariable:ﾂｷ'--font-geist-mono',
+       14 笏・+ ﾂｷﾂｷsubsets:ﾂｷ['latin'],
+       15 笏・+ });
+       16 笏・+ 
+       17 笏・+ exportﾂｷconstﾂｷmetadata:ﾂｷMetadataﾂｷ=ﾂｷ{
+       18 笏・+ ﾂｷﾂｷtitle:ﾂｷ'CreateﾂｷNextﾂｷApp',
+       19 笏・+ ﾂｷﾂｷdescription:ﾂｷ'Generatedﾂｷbyﾂｷcreateﾂｷnextﾂｷapp',
+       20 笏・+ };
+       21 笏・+ 
+       22 笏・+ exportﾂｷdefaultﾂｷfunctionﾂｷRootLayout({
+       23 笏・+ ﾂｷﾂｷchildren,
+       24 笏・+ }:ﾂｷReadonly<{
+       25 笏・+ ﾂｷﾂｷchildren:ﾂｷReact.ReactNode;
+       26 笏・+ }>)ﾂｷ{
+       27 笏・+ ﾂｷﾂｷreturnﾂｷ(
+       28 笏・+ ﾂｷﾂｷﾂｷﾂｷ<html
+       29 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷlang="en"
+       30 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷclassName={`${geistSans.variable}ﾂｷ${geistMono.variab
+le}ﾂｷh-fullﾂｷantialiased`}
+       31 笏・+ ﾂｷﾂｷﾂｷﾂｷ>
+       32 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<bodyﾂｷclassName="min-h-screenﾂｷbg-background">
+       33 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<Header
+       34 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷlevel={12}
+       35 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷcurrentXp={800}
+       36 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷnextLevelXp={1000}
+       37 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷweeklyPoint={2450}
+       38 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ/>
+       39 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<mainﾂｷclassName="mx-autoﾂｷmax-w-7xlﾂｷpx-4ﾂｷpy-6"
+>{children}</main>
+       40 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<Footerﾂｷ/>
+       41 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</body>
+       42 笏・+ ﾂｷﾂｷﾂｷﾂｷ</html>
+       43 笏・+ ﾂｷﾂｷ);
+       44 笏・+ }
+    45 45 笏・  
+  
+
+apps\web\src\app\quests\page.tsx format 笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤
+笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤
+
+  ﾃ・Formatter would have printed the following content:
+  
+     1    笏・- importﾂｷSectionHeaderﾂｷfromﾂｷ"@/components/common/SectionHeader";
+竦・     2    笏・- importﾂｷ{ﾂｷQuestListﾂｷ}ﾂｷfromﾂｷ"@/components/quests/QuestList";
+竦・     3    笏・- 竦・     4    笏・- exportﾂｷdefaultﾂｷfunctionﾂｷQuestsPage()ﾂｷ{竦・   
+  5    笏・- ﾂｷﾂｷreturnﾂｷ(竦・     6    笏・- ﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="space-y-6">竦・ 
+    7    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<SectionHeader竦・     8    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷenTitle=
+"QUESTﾂｷBOARD"竦・     9    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷjaTitle="繧ｯ繧ｨ繧ｹ繝井ｸ隕ｧ"竦・    10   
+ 笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷdescription="謖第姶縺励◆縺・け繧ｨ繧ｹ繝医ｒ驕ｸ縺ｳ縺ｾ縺励ｇ縺・竦・    11    笏・- ﾂｷ
+ﾂｷﾂｷﾂｷﾂｷﾂｷ/>竦・    12    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<QuestListﾂｷ/>竦・    13    笏・- ﾂｷﾂｷﾂｷﾂｷ<
+/div>竦・    14    笏・- ﾂｷﾂｷ);竦・    15    笏・- }
+        1 笏・+ importﾂｷSectionHeaderﾂｷfromﾂｷ'@/components/common/SectionHeader';
+        2 笏・+ importﾂｷ{ﾂｷQuestListﾂｷ}ﾂｷfromﾂｷ'@/components/quests/QuestList';
+        3 笏・+ 
+        4 笏・+ exportﾂｷdefaultﾂｷfunctionﾂｷQuestsPage()ﾂｷ{
+        5 笏・+ ﾂｷﾂｷreturnﾂｷ(
+        6 笏・+ ﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="space-y-6">
+        7 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<SectionHeader
+        8 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷenTitle="QUESTﾂｷBOARD"
+        9 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷjaTitle="繧ｯ繧ｨ繧ｹ繝井ｸ隕ｧ"
+       10 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷdescription="謖第姶縺励◆縺・け繧ｨ繧ｹ繝医ｒ驕ｸ縺ｳ縺ｾ縺励ｇ縺・
+       11 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ/>
+       12 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<QuestListﾂｷ/>
+       13 笏・+ ﾂｷﾂｷﾂｷﾂｷ</div>
+       14 笏・+ ﾂｷﾂｷ);
+       15 笏・+ }
+       16 笏・+ 
+  
+
+apps\web\src\components\Header.tsx format 笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏
+≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤
+
+  ﾃ・Formatter would have printed the following content:
+  
+     1    笏・- importﾂｷ{ﾂｷUserﾂｷ}ﾂｷfromﾂｷ'lucide-react';竦・     2    笏・- importﾂｷ
+{ﾂｷNavigationMenuﾂｷ}ﾂｷfromﾂｷ'./Header/NavigationMenu';竦・     3    笏・- 竦・     4 
+   笏・- typeﾂｷHeaderPropsﾂｷ=ﾂｷ{竦・     5    笏・- ﾂｷﾂｷlevel:ﾂｷnumber;竦・     6    笏・
+- ﾂｷﾂｷcurrentXp:ﾂｷnumber;竦・     7    笏・- ﾂｷﾂｷnextLevelXp:ﾂｷnumber;竦・     8    笏
+・- ﾂｷﾂｷweeklyPoint:ﾂｷnumber;竦・     9    笏・- };竦・    10    笏・- 竦・    11    笏・- e
+xportﾂｷdefaultﾂｷfunctionﾂｷHeader({竦・    12    笏・- ﾂｷﾂｷlevel,竦・    13    笏・- ﾂｷﾂ
+ｷcurrentXp,竦・    14    笏・- ﾂｷﾂｷnextLevelXp,竦・    15    笏・- ﾂｷﾂｷweeklyPoint,竦・  
+  16    笏・- }:ﾂｷHeaderProps)ﾂｷ{竦・    17    笏・- ﾂｷﾂｷreturnﾂｷ(竦・    18    笏・- ﾂｷﾂ
+ｷﾂｷﾂｷ<headerﾂｷclassName="stickyﾂｷtop-0ﾂｷz-50ﾂｷborder-bﾂｷbg-gray-800ﾂｷtext-white
+ﾂｷp-4">竦・    19    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="mx-autoﾂｷflexﾂｷh-20ﾂｷw-full
+ﾂｷmax-w-7xlﾂｷitems-centerﾂｷjustify-betweenﾂｷpx-8">竦・    20    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂ
+ｷﾂｷ{/*ﾂｷLogoﾂｷ*/}竦・    21    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="flexﾂｷflex-co
+l">竦・    22    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<h1ﾂｷclassName="text-xlﾂｷfont-bold">Stud
+yQuest</h1>竦・    23    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<pﾂｷclassName="text-xsﾂｷtext-gra
+y-500">Smallﾂｷquests.ﾂｷQuietﾂｷprogress.</p>竦・    24    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</di
+v>竦・    25    笏・- 竦・    26    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ{/*ﾂｷNavigationﾂｷ*/}竦・    27 
+   笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<NavigationMenuﾂｷ/>竦・    28    笏・- 竦・    29    笏・- ﾂｷﾂｷﾂ
+ｷﾂｷﾂｷﾂｷﾂｷﾂｷ{/*ﾂｷUserﾂｷInfoﾂｷ*/}竦・    30    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName=
+"flexﾂｷitems-centerﾂｷgap-8">竦・    31    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ{/*ﾂｷLevelﾂｷ&ﾂｷ
+XPﾂｷ*/}竦・    32    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="min-w-48">竦・    33 
+   笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="mb-1ﾂｷflexﾂｷitems-centerﾂｷjusti
+fy-betweenﾂｷtext-sm">竦・    34    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassNa
+me="font-semibold">Lv.{level}</span>竦・    35    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂ
+ｷ<spanﾂｷclassName="text-gray-500">竦・    36    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂ
+ｷﾂｷ{currentXp}ﾂｷ/ﾂｷ{nextLevelXp}ﾂｷXP竦・    37    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂ
+ｷ</span>竦・    38    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>竦・    39    笏・- 竦・    40 
+   笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="h-2ﾂｷw-fullﾂｷoverflow-hiddenﾂｷr
+ounded-fullﾂｷbg-gray-200">竦・    41    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷcla
+ssName="h-fullﾂｷw-4/5ﾂｷrounded-fullﾂｷbg-blue-500"ﾂｷ/>竦・    42    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷ
+ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>竦・    43    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>竦・    44    笏・- 竦
+・    45    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ{/*ﾂｷWeeklyﾂｷPointsﾂｷ*/}竦・    46    笏・- ﾂｷﾂｷ
+ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="text-right">竦・    47    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ
+ﾂｷﾂｷﾂｷ<pﾂｷclassName="text-xsﾂｷtext-gray-500">ThisﾂｷWeek</p>竦・    48    笏・- ﾂｷﾂｷ
+ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<pﾂｷclassName="font-semibold">{weeklyPoint.toLocaleString()
+}ﾂｷPt</p>竦・    49    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>竦・    50    笏・- 竦・    51    
+笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ{/*ﾂｷProfileﾂｷIconﾂｷ*/}竦・    52    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ
+ﾂｷﾂｷ<button竦・    53    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷtype="button"竦・    54    笏・-
+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷclassName="flexﾂｷh-10ﾂｷw-10ﾂｷitems-centerﾂｷjustify-cen
+terﾂｷrounded-fullﾂｷborderﾂｷbg-gray-50ﾂｷhover:bg-gray-100"竦・    55    笏・- ﾂｷﾂｷﾂｷ
+ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ>竦・    56    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="h-16ﾂｷw
+-16ﾂｷoverflow-hiddenﾂｷrounded-full">竦・    57    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂ
+ｷ<Userﾂｷsize={20}ﾂｷ/>竦・    58    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>竦・    59    
+笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</button>竦・    60    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>竦・    61
+    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>竦・    62    笏・- ﾂｷﾂｷﾂｷﾂｷ</header>竦・    63    笏・- ﾂｷﾂｷ
+);竦・    64    笏・- }竦・        1 笏・+ importﾂｷ{ﾂｷUserﾂｷ}ﾂｷfromﾂｷ'lucide-react';
+        2 笏・+ importﾂｷ{ﾂｷNavigationMenuﾂｷ}ﾂｷfromﾂｷ'./Header/NavigationMenu';
+        3 笏・+ 
+        4 笏・+ typeﾂｷHeaderPropsﾂｷ=ﾂｷ{
+        5 笏・+ ﾂｷﾂｷlevel:ﾂｷnumber;
+        6 笏・+ ﾂｷﾂｷcurrentXp:ﾂｷnumber;
+        7 笏・+ ﾂｷﾂｷnextLevelXp:ﾂｷnumber;
+        8 笏・+ ﾂｷﾂｷweeklyPoint:ﾂｷnumber;
+        9 笏・+ };
+       10 笏・+ 
+       11 笏・+ exportﾂｷdefaultﾂｷfunctionﾂｷHeader({
+       12 笏・+ ﾂｷﾂｷlevel,
+       13 笏・+ ﾂｷﾂｷcurrentXp,
+       14 笏・+ ﾂｷﾂｷnextLevelXp,
+       15 笏・+ ﾂｷﾂｷweeklyPoint,
+       16 笏・+ }:ﾂｷHeaderProps)ﾂｷ{
+       17 笏・+ ﾂｷﾂｷreturnﾂｷ(
+       18 笏・+ ﾂｷﾂｷﾂｷﾂｷ<headerﾂｷclassName="stickyﾂｷtop-0ﾂｷz-50ﾂｷborder-bﾂｷbg-gra
+y-800ﾂｷtext-whiteﾂｷp-4">
+       19 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="mx-autoﾂｷflexﾂｷh-20ﾂｷw-fullﾂｷmax-w-7
+xlﾂｷitems-centerﾂｷjustify-betweenﾂｷpx-8">
+       20 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ{/*ﾂｷLogoﾂｷ*/}
+       21 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="flexﾂｷflex-col">
+       22 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<h1ﾂｷclassName="text-xlﾂｷfont-bold">StudyQues
+t</h1>
+       23 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<pﾂｷclassName="text-xsﾂｷtext-gray-500">Smallﾂ
+ｷquests.ﾂｷQuietﾂｷprogress.</p>
+       24 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       25 笏・+ 
+       26 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ{/*ﾂｷNavigationﾂｷ*/}
+       27 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<NavigationMenuﾂｷ/>
+       28 笏・+ 
+       29 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ{/*ﾂｷUserﾂｷInfoﾂｷ*/}
+       30 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="flexﾂｷitems-centerﾂｷgap-8">
+       31 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ{/*ﾂｷLevelﾂｷ&ﾂｷXPﾂｷ*/}
+       32 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="min-w-48">
+       33 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="mb-1ﾂｷflexﾂｷitems-center
+ﾂｷjustify-betweenﾂｷtext-sm">
+       34 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="font-semibold">Lv.{
+level}</span>
+       35 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="text-gray-500">
+       36 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ{currentXp}ﾂｷ/ﾂｷ{nextLevelXp}ﾂｷXP
+       37 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</span>
+       38 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       39 笏・+ 
+       40 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="h-2ﾂｷw-fullﾂｷoverflow-hi
+ddenﾂｷrounded-fullﾂｷbg-gray-200">
+       41 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="h-fullﾂｷw-4/5ﾂｷround
+ed-fullﾂｷbg-blue-500"ﾂｷ/>
+       42 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       43 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       44 笏・+ 
+       45 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ{/*ﾂｷWeeklyﾂｷPointsﾂｷ*/}
+       46 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="text-right">
+       47 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<pﾂｷclassName="text-xsﾂｷtext-gray-500">Th
+isﾂｷWeek</p>
+       48 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<pﾂｷclassName="font-semibold">{weeklyPoin
+t.toLocaleString()}ﾂｷPt</p>
+       49 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       50 笏・+ 
+       51 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ{/*ﾂｷProfileﾂｷIconﾂｷ*/}
+       52 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<button
+       53 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷtype="button"
+       54 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷclassName="flexﾂｷh-10ﾂｷw-10ﾂｷitems-center
+ﾂｷjustify-centerﾂｷrounded-fullﾂｷborderﾂｷbg-gray-50ﾂｷhover:bg-gray-100"
+       55 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ>
+       56 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="h-16ﾂｷw-16ﾂｷoverflow-hid
+denﾂｷrounded-full">
+       57 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<Userﾂｷsize={20}ﾂｷ/>
+       58 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       59 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</button>
+       60 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       61 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       62 笏・+ ﾂｷﾂｷﾂｷﾂｷ</header>
+       63 笏・+ ﾂｷﾂｷ);
+       64 笏・+ }
+    65 65 笏・  
+  
+
+apps\web\src\components\Header\NavigationMenu.tsx:3:1 assist/source/organizeImp
+orts  FIXABLE  笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤
+
+  ﾃ・Sort these imports.
+  
+    1 笏・'use client';
+    2 笏・
+  > 3 笏・import Link from 'next/link';
+      笏・^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  > 4 笏・import { useState } from 'react';
+  > 5 笏・import { Menu, X } from 'lucide-react';
+      笏・^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    6 笏・
+    7 笏・import { navigationItems } from '@/constants/navigation';
+  
+  i Safe fix: Organize imports and exports (Biome)
+  
+     1  1 笏・  'use client';
+     2  2 笏・  
+     3    笏・- importﾂｷLinkﾂｷfromﾂｷ'next/link';
+     4    笏・- importﾂｷ{ﾂｷuseStateﾂｷ}ﾂｷfromﾂｷ'react';
+     5    笏・- importﾂｷ{ﾂｷMenu,ﾂｷXﾂｷ}ﾂｷfromﾂｷ'lucide-react';
+        3 笏・+ importﾂｷ{ﾂｷMenu,ﾂｷXﾂｷ}ﾂｷfromﾂｷ'lucide-react';
+        4 笏・+ importﾂｷLinkﾂｷfromﾂｷ'next/link';
+        5 笏・+ importﾂｷ{ﾂｷuseStateﾂｷ}ﾂｷfromﾂｷ'react';
+     6  6 笏・  
+     7  7 笏・  import { navigationItems } from '@/constants/navigation';
+  
+
+apps\web\src\components\Header\NavigationMenu.tsx:32:9 lint/a11y/useButtonType 
+笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏・
+  ﾃ・Provide an explicit type prop for the button element.
+  
+    30 笏・      {/* 繝｢繝舌う繝ｫ */}
+    31 笏・      <div className="lg:hidden">
+  > 32 笏・        <button onClick={() => setIsOpen((prev) => !prev)}>
+       笏・        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    33 笏・          {isOpen ? <X size={24} /> : <Menu size={24} />}
+    34 笏・        </button>
+  
+  i The default type of a button is submit, which causes the submission of a fo
+rm when placed inside a `form` element. This is likely not the behaviour that y
+ou want inside a React application.
+  
+  i Allowed button types are: submit, button or reset
+  
+
+apps\web\src\components\cards\BadgeCard.tsx format 笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏
+≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏・
+  ﾃ・Formatter would have printed the following content:
+  
+     1    笏・- importﾂｷ{ﾂｷCardﾂｷ}ﾂｷfromﾂｷ'../common/Card';竦・     2    笏・- 竦・    
+ 3    笏・- typeﾂｷBadgeItemﾂｷ=ﾂｷ{竦・     4    笏・- ﾂｷﾂｷid:ﾂｷstring;竦・     5    笏・- 
+ﾂｷﾂｷicon:ﾂｷReact.ReactNode;竦・     6    笏・- ﾂｷﾂｷdescription:ﾂｷstring;竦・     7   
+ 笏・- };竦・     8    笏・- 竦・     9    笏・- typeﾂｷBadgeCardPropsﾂｷ=ﾂｷ{竦・    10    笏・
+- ﾂｷﾂｷtitle:ﾂｷstring;竦・    11    笏・- ﾂｷﾂｷbadges:ﾂｷBadgeItem[];竦・    12    笏・- }
+;竦・    13    笏・- 竦・    14    笏・- exportﾂｷconstﾂｷBadgeCardﾂｷ=ﾂｷ({ﾂｷtitle,ﾂｷbadge
+sﾂｷ=ﾂｷ[]ﾂｷ}:ﾂｷBadgeCardProps)ﾂｷ=>ﾂｷ{竦・    15    笏・- ﾂｷﾂｷreturnﾂｷ(竦・    16    笏・
+- ﾂｷﾂｷﾂｷﾂｷ<Card>竦・    17    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<h3ﾂｷclassName="mb-4ﾂｷtext-lgﾂｷfont
+-bold">{title}</h3>竦・    18    笏・- 竦・    19    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName=
+"flexﾂｷjustify-betweenﾂｷgap-4">竦・    20    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ{badges.map((bad
+ge)ﾂｷ=>ﾂｷ(竦・    21    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷkey={badge.id}ﾂｷclassName="
+flexﾂｷflex-1ﾂｷflex-colﾂｷitems-center">竦・    22    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<
+divﾂｷclassName="mb-2ﾂｷtext-4xl">{badge.icon}</div>竦・    23    笏・- 竦・    24    笏
+・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<pﾂｷclassName="text-centerﾂｷtext-sm">{badge.descript
+ion}</p>竦・    25    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>竦・    26    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂ
+ｷﾂｷ))}竦・    27    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>竦・    28    笏・- ﾂｷﾂｷﾂｷﾂｷ</Card>竦・    29
+    笏・- ﾂｷﾂｷ);竦・    30    笏・- };竦・        1 笏・+ importﾂｷ{ﾂｷCardﾂｷ}ﾂｷfromﾂｷ'../c
+ommon/Card';
+        2 笏・+ 
+        3 笏・+ typeﾂｷBadgeItemﾂｷ=ﾂｷ{
+        4 笏・+ ﾂｷﾂｷid:ﾂｷstring;
+        5 笏・+ ﾂｷﾂｷicon:ﾂｷReact.ReactNode;
+        6 笏・+ ﾂｷﾂｷdescription:ﾂｷstring;
+        7 笏・+ };
+        8 笏・+ 
+        9 笏・+ typeﾂｷBadgeCardPropsﾂｷ=ﾂｷ{
+       10 笏・+ ﾂｷﾂｷtitle:ﾂｷstring;
+       11 笏・+ ﾂｷﾂｷbadges:ﾂｷBadgeItem[];
+       12 笏・+ };
+       13 笏・+ 
+       14 笏・+ exportﾂｷconstﾂｷBadgeCardﾂｷ=ﾂｷ({ﾂｷtitle,ﾂｷbadgesﾂｷ=ﾂｷ[]ﾂｷ}:ﾂｷBadge
+CardProps)ﾂｷ=>ﾂｷ{
+       15 笏・+ ﾂｷﾂｷreturnﾂｷ(
+       16 笏・+ ﾂｷﾂｷﾂｷﾂｷ<Card>
+       17 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<h3ﾂｷclassName="mb-4ﾂｷtext-lgﾂｷfont-bold">{title}</h3
+>
+       18 笏・+ 
+       19 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="flexﾂｷjustify-betweenﾂｷgap-4">
+       20 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ{badges.map((badge)ﾂｷ=>ﾂｷ(
+       21 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷkey={badge.id}ﾂｷclassName="flexﾂｷflex-1
+ﾂｷflex-colﾂｷitems-center">
+       22 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="mb-2ﾂｷtext-4xl">{badge.i
+con}</div>
+       23 笏・+ 
+       24 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<pﾂｷclassName="text-centerﾂｷtext-sm">{bad
+ge.description}</p>
+       25 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       26 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ))}
+       27 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       28 笏・+ ﾂｷﾂｷﾂｷﾂｷ</Card>
+       29 笏・+ ﾂｷﾂｷ);
+       30 笏・+ };
+    31 31 笏・  
+  
+
+apps\web\src\components\cards\QuestAcceptanceRateCard.tsx format 笏≫煤笏≫煤笏≫煤笏≫煤笏≫
+煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏・
+  ﾃ・Formatter would have printed the following content:
+  
+     1    笏・- importﾂｷ{ﾂｷCardﾂｷ}ﾂｷfromﾂｷ'@/components/common/Card';竦・     2    
+笏・- 竦・     3    笏・- typeﾂｷQuestAcceptanceRateCardPropsﾂｷ=ﾂｷ{竦・     4    笏・- ﾂｷﾂ
+ｷtitle:ﾂｷstring;竦・     5    笏・- ﾂｷﾂｷcategory:ﾂｷstring;竦・     6    笏・- 竦・     7 
+   笏・- ﾂｷﾂｷacceptedCount:ﾂｷnumber;竦・     8    笏・- ﾂｷﾂｷcompletedCount:ﾂｷnumber;竦
+・     9    笏・- };竦・    10    笏・- 竦・    11    笏・- exportﾂｷconstﾂｷQuestAcceptance
+RateCardﾂｷ=ﾂｷ({竦・    12    笏・- ﾂｷﾂｷtitle,竦・    13    笏・- ﾂｷﾂｷcategory,竦・    14 
+   笏・- ﾂｷﾂｷacceptedCount,竦・    15    笏・- ﾂｷﾂｷcompletedCount,竦・    16    笏・- }:ﾂ
+ｷQuestAcceptanceRateCardProps)ﾂｷ=>ﾂｷ{竦・    17    笏・- ﾂｷﾂｷconstﾂｷcompletionRateﾂ
+ｷ=竦・    18    笏・- ﾂｷﾂｷﾂｷﾂｷacceptedCountﾂｷ===ﾂｷ0竦・    19    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ?ﾂｷ0
+竦・    20    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ:ﾂｷMath.round((completedCountﾂｷ/ﾂｷacceptedCount)ﾂｷ*
+ﾂｷ100);竦・    21    笏・- 竦・    22    笏・- ﾂｷﾂｷreturnﾂｷ(竦・    23    笏・- ﾂｷﾂｷﾂｷﾂｷ<Ca
+rd>竦・    24    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="flexﾂｷitems-startﾂｷjustify-betw
+een">竦・    25    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<h3ﾂｷclassName="font-semiboldﾂｷtext-lg">{t
+itle}</h3>竦・    26    笏・- 竦・    27    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="rou
+nded-fullﾂｷbg-blue-100ﾂｷpx-3ﾂｷpy-1ﾂｷtext-sm">竦・    28    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ
+ﾂｷ{category}竦・    29    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</span>竦・    30    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ
+</div>竦・    31    笏・- 竦・    32    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="mt-4ﾂｷflexﾂｷ
+items-centerﾂｷgap-6ﾂｷtext-sm">竦・    33    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<div>竦・    34    
+笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="text-gray-500">蜿玲ｳｨ莠ｺ謨ｰ</span>竦・    3
+5    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="ml-2ﾂｷfont-semibold">{acceptedCo
+unt}莠ｺ</span>竦・    36    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>竦・    37    笏・- 竦・    38    
+笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<div>竦・    39    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="
+text-gray-500">驕疲・莠ｺ謨ｰ</span>竦・    40    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassNa
+me="ml-2ﾂｷfont-semibold">{completedCount}莠ｺ</span>竦・    41    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂ
+ｷﾂｷ</div>竦・    42    笏・- 竦・    43    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<div>竦・    44    笏・- ﾂ
+ｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="text-gray-500">驕疲・邇・/span>竦・    45    笏・- 
+ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="ml-2ﾂｷfont-semibold">{completionRate}%</s
+pan>竦・    46    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>竦・    47    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>竦・ 
+   48    笏・- ﾂｷﾂｷﾂｷﾂｷ</Card>竦・    49    笏・- ﾂｷﾂｷ);竦・    50    笏・- };竦・        1
+ 笏・+ importﾂｷ{ﾂｷCardﾂｷ}ﾂｷfromﾂｷ'@/components/common/Card';
+        2 笏・+ 
+        3 笏・+ typeﾂｷQuestAcceptanceRateCardPropsﾂｷ=ﾂｷ{
+        4 笏・+ ﾂｷﾂｷtitle:ﾂｷstring;
+        5 笏・+ ﾂｷﾂｷcategory:ﾂｷstring;
+        6 笏・+ 
+        7 笏・+ ﾂｷﾂｷacceptedCount:ﾂｷnumber;
+        8 笏・+ ﾂｷﾂｷcompletedCount:ﾂｷnumber;
+        9 笏・+ };
+       10 笏・+ 
+       11 笏・+ exportﾂｷconstﾂｷQuestAcceptanceRateCardﾂｷ=ﾂｷ({
+       12 笏・+ ﾂｷﾂｷtitle,
+       13 笏・+ ﾂｷﾂｷcategory,
+       14 笏・+ ﾂｷﾂｷacceptedCount,
+       15 笏・+ ﾂｷﾂｷcompletedCount,
+       16 笏・+ }:ﾂｷQuestAcceptanceRateCardProps)ﾂｷ=>ﾂｷ{
+       17 笏・+ ﾂｷﾂｷconstﾂｷcompletionRateﾂｷ=
+       18 笏・+ ﾂｷﾂｷﾂｷﾂｷacceptedCountﾂｷ===ﾂｷ0
+       19 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ?ﾂｷ0
+       20 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ:ﾂｷMath.round((completedCountﾂｷ/ﾂｷacceptedCount)ﾂｷ*ﾂｷ
+100);
+       21 笏・+ 
+       22 笏・+ ﾂｷﾂｷreturnﾂｷ(
+       23 笏・+ ﾂｷﾂｷﾂｷﾂｷ<Card>
+       24 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="flexﾂｷitems-startﾂｷjustify-between">
+       25 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<h3ﾂｷclassName="font-semiboldﾂｷtext-lg">{title}</
+h3>
+       26 笏・+ 
+       27 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="rounded-fullﾂｷbg-blue-100ﾂｷpx-3
+ﾂｷpy-1ﾂｷtext-sm">
+       28 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ{category}
+       29 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</span>
+       30 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       31 笏・+ 
+       32 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="mt-4ﾂｷflexﾂｷitems-centerﾂｷgap-6ﾂｷtex
+t-sm">
+       33 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<div>
+       34 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="text-gray-500">蜿玲ｳｨ莠ｺ謨ｰ</sp
+an>
+       35 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="ml-2ﾂｷfont-semibold">{accep
+tedCount}莠ｺ</span>
+       36 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       37 笏・+ 
+       38 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<div>
+       39 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="text-gray-500">驕疲・莠ｺ謨ｰ</spa
+n>
+       40 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="ml-2ﾂｷfont-semibold">{compl
+etedCount}莠ｺ</span>
+       41 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       42 笏・+ 
+       43 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<div>
+       44 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="text-gray-500">驕疲・邇・/span>
+       45 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="ml-2ﾂｷfont-semibold">{compl
+etionRate}%</span>
+       46 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       47 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       48 笏・+ ﾂｷﾂｷﾂｷﾂｷ</Card>
+       49 笏・+ ﾂｷﾂｷ);
+       50 笏・+ };
+    51 51 笏・  
+  
+
+apps\web\src\components\cards\WeeklyStudyCard.tsx format 笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏
+≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏・
+  ﾃ・Formatter would have printed the following content:
+  
+     1    笏・- importﾂｷ{ﾂｷWeeklyStudyChartﾂｷ}ﾂｷfromﾂｷ'../charts/WeeklyStudyChart
+';竦・     2    笏・- importﾂｷ{ﾂｷCardﾂｷ}ﾂｷfromﾂｷ'../common/Card';竦・     3    笏・- im
+portﾂｷ{ﾂｷProgressBarﾂｷ}ﾂｷfromﾂｷ'../common/ProgressBar';竦・     4    笏・- 竦・     5
+    笏・- typeﾂｷWeeklyStudyCardPropsﾂｷ=ﾂｷ{竦・     6    笏・- ﾂｷﾂｷstudyHours:ﾂｷnumber
+;竦・     7    笏・- ﾂｷﾂｷcompletedQuests:ﾂｷnumber;竦・     8    笏・- ﾂｷﾂｷearnedXp:ﾂｷnu
+mber;竦・     9    笏・- ﾂｷﾂｷstreakDays:ﾂｷnumber;竦・    10    笏・- 竦・    11    笏・- ﾂｷ
+ﾂｷweeklyGoalHours:ﾂｷnumber;竦・    12    笏・- 竦・    13    笏・- ﾂｷﾂｷchartData:ﾂｷ{竦・ 
+   14    笏・- ﾂｷﾂｷﾂｷﾂｷday:ﾂｷstring;竦・    15    笏・- ﾂｷﾂｷﾂｷﾂｷhours:ﾂｷnumber;竦・    
+16    笏・- ﾂｷﾂｷ}[];竦・    17    笏・- };竦・    18    笏・- 竦・    19    笏・- exportﾂｷcon
+stﾂｷWeeklyStudyCardﾂｷ=ﾂｷ({竦・    20    笏・- ﾂｷﾂｷstudyHours,竦・    21    笏・- ﾂｷﾂｷco
+mpletedQuests,竦・    22    笏・- ﾂｷﾂｷearnedXp,竦・    23    笏・- ﾂｷﾂｷstreakDays,竦・   
+ 24    笏・- ﾂｷﾂｷweeklyGoalHours,竦・    25    笏・- ﾂｷﾂｷchartData,竦・    26    笏・- }:
+ﾂｷWeeklyStudyCardProps)ﾂｷ=>ﾂｷ{竦・    27    笏・- ﾂｷﾂｷreturnﾂｷ(竦・    28    笏・- ﾂｷﾂｷ
+ﾂｷﾂｷ<Card>竦・    29    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="mb-6">竦・    30    笏・- ﾂｷ
+ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<h2ﾂｷclassName="text-lgﾂｷfont-bold">莉企ｱ縺ｮ蟄ｦ鄙堤憾豕・/h2>竦・    31    
+笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>竦・    32    笏・- 竦・    33    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassNa
+me="space-y-3">竦・    34    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="flexﾂｷjustify-b
+etween">竦・    35    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="text-smﾂｷtext-gra
+y-500">蟄ｦ鄙呈凾髢・/span>竦・    36    笏・- 竦・    37    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷ
+className="font-medium">{studyHours}譎る俣</span>竦・    38    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<
+/div>竦・    39    笏・- 竦・    40    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="flexﾂｷjus
+tify-between">竦・    41    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="text-smﾂｷte
+xt-gray-500">驕疲・繧ｯ繧ｨ繧ｹ繝・/span>竦・    42    笏・- 竦・    43    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂ
+ｷﾂｷ<spanﾂｷclassName="font-medium">{completedQuests}莉ｶ</span>竦・    44    笏・- ﾂｷﾂ
+ｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>竦・    45    笏・- 竦・    46    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassN
+ame="flexﾂｷjustify-between">竦・    47    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassNam
+e="text-smﾂｷtext-gray-500">迯ｲ蠕郵P</span>竦・    48    笏・- 竦・    49    笏・- ﾂｷﾂｷﾂｷﾂｷ
+ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="font-medium">{earnedXp.toLocaleString()}ﾂｷXP</spa
+n>竦・    50    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>竦・    51    笏・- 竦・    52    笏・- ﾂｷﾂｷﾂｷﾂ
+ｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="flexﾂｷjustify-between">竦・    53    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ
+ﾂｷﾂｷﾂｷ<spanﾂｷclassName="text-smﾂｷtext-gray-500">騾｣邯壼ｭｦ鄙呈律謨ｰ</span>竦・    54    笏
+・- 竦・    55    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="font-medium">{streakDa
+ys}譌･</span>竦・    56    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>竦・    57    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<
+/div>竦・    58    笏・- 竦・    59    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="mt-6">竦・    6
+0    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<ProgressBar竦・    61    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷlabel=
+"騾ｱ髢鍋岼讓呎凾髢・竦・    62    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷvalue={Math.round((studyHoursﾂｷ/
+ﾂｷweeklyGoalHours)ﾂｷ*ﾂｷ100)}竦・    63    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ/>竦・    64    笏・- ﾂ
+ｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>竦・    65    笏・- 竦・    66    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="m
+t-6">竦・    67    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<WeeklyStudyChartﾂｷdata={chartData}ﾂｷ/>竦・ 
+   68    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>竦・    69    笏・- ﾂｷﾂｷﾂｷﾂｷ</Card>竦・    70    笏・- ﾂ
+ｷﾂｷ);竦・    71    笏・- };竦・        1 笏・+ importﾂｷ{ﾂｷWeeklyStudyChartﾂｷ}ﾂｷfromﾂｷ'.
+./charts/WeeklyStudyChart';
+        2 笏・+ importﾂｷ{ﾂｷCardﾂｷ}ﾂｷfromﾂｷ'../common/Card';
+        3 笏・+ importﾂｷ{ﾂｷProgressBarﾂｷ}ﾂｷfromﾂｷ'../common/ProgressBar';
+        4 笏・+ 
+        5 笏・+ typeﾂｷWeeklyStudyCardPropsﾂｷ=ﾂｷ{
+        6 笏・+ ﾂｷﾂｷstudyHours:ﾂｷnumber;
+        7 笏・+ ﾂｷﾂｷcompletedQuests:ﾂｷnumber;
+        8 笏・+ ﾂｷﾂｷearnedXp:ﾂｷnumber;
+        9 笏・+ ﾂｷﾂｷstreakDays:ﾂｷnumber;
+       10 笏・+ 
+       11 笏・+ ﾂｷﾂｷweeklyGoalHours:ﾂｷnumber;
+       12 笏・+ 
+       13 笏・+ ﾂｷﾂｷchartData:ﾂｷ{
+       14 笏・+ ﾂｷﾂｷﾂｷﾂｷday:ﾂｷstring;
+       15 笏・+ ﾂｷﾂｷﾂｷﾂｷhours:ﾂｷnumber;
+       16 笏・+ ﾂｷﾂｷ}[];
+       17 笏・+ };
+       18 笏・+ 
+       19 笏・+ exportﾂｷconstﾂｷWeeklyStudyCardﾂｷ=ﾂｷ({
+       20 笏・+ ﾂｷﾂｷstudyHours,
+       21 笏・+ ﾂｷﾂｷcompletedQuests,
+       22 笏・+ ﾂｷﾂｷearnedXp,
+       23 笏・+ ﾂｷﾂｷstreakDays,
+       24 笏・+ ﾂｷﾂｷweeklyGoalHours,
+       25 笏・+ ﾂｷﾂｷchartData,
+       26 笏・+ }:ﾂｷWeeklyStudyCardProps)ﾂｷ=>ﾂｷ{
+       27 笏・+ ﾂｷﾂｷreturnﾂｷ(
+       28 笏・+ ﾂｷﾂｷﾂｷﾂｷ<Card>
+       29 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="mb-6">
+       30 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<h2ﾂｷclassName="text-lgﾂｷfont-bold">莉企ｱ縺ｮ蟄ｦ鄙堤憾豕・
+/h2>
+       31 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       32 笏・+ 
+       33 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="space-y-3">
+       34 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="flexﾂｷjustify-between">
+       35 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="text-smﾂｷtext-gray-500">蟄ｦ鄙
+呈凾髢・/span>
+       36 笏・+ 
+       37 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="font-medium">{studyHours}譎る
+俣</span>
+       38 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       39 笏・+ 
+       40 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="flexﾂｷjustify-between">
+       41 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="text-smﾂｷtext-gray-500">驕疲・
+繧ｯ繧ｨ繧ｹ繝・/span>
+       42 笏・+ 
+       43 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="font-medium">{completedQues
+ts}莉ｶ</span>
+       44 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       45 笏・+ 
+       46 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="flexﾂｷjustify-between">
+       47 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="text-smﾂｷtext-gray-500">迯ｲ蠕
+郵P</span>
+       48 笏・+ 
+       49 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="font-medium">{earnedXp.toLo
+caleString()}ﾂｷXP</span>
+       50 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       51 笏・+ 
+       52 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="flexﾂｷjustify-between">
+       53 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="text-smﾂｷtext-gray-500">騾｣邯
+壼ｭｦ鄙呈律謨ｰ</span>
+       54 笏・+ 
+       55 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="font-medium">{streakDays}譌･
+</span>
+       56 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       57 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       58 笏・+ 
+       59 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="mt-6">
+       60 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<ProgressBar
+       61 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷlabel="騾ｱ髢鍋岼讓呎凾髢・
+       62 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷvalue={Math.round((studyHoursﾂｷ/ﾂｷweeklyGoalH
+ours)ﾂｷ*ﾂｷ100)}
+       63 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ/>
+       64 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       65 笏・+ 
+       66 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="mt-6">
+       67 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<WeeklyStudyChartﾂｷdata={chartData}ﾂｷ/>
+       68 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       69 笏・+ ﾂｷﾂｷﾂｷﾂｷ</Card>
+       70 笏・+ ﾂｷﾂｷ);
+       71 笏・+ };
+    72 72 笏・  
+  
+
+apps\web\src\components\charts\WeeklyStudyChart.tsx format 笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫
+煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏・
+  ﾃ・Formatter would have printed the following content:
+  
+     1    笏・- 'useﾂｷclient';竦・     2    笏・- 竦・     3    笏・- importﾂｷ{ﾂｷBar,ﾂｷBa
+rChart,ﾂｷResponsiveContainer,ﾂｷTooltip,ﾂｷXAxisﾂｷ}ﾂｷfromﾂｷ'recharts';竦・     4   
+ 笏・- 竦・     5    笏・- typeﾂｷWeeklyStudyChartPropsﾂｷ=ﾂｷ{竦・     6    笏・- ﾂｷﾂｷdata:
+ﾂｷ{竦・     7    笏・- ﾂｷﾂｷﾂｷﾂｷday:ﾂｷstring;竦・     8    笏・- ﾂｷﾂｷﾂｷﾂｷhours:ﾂｷnumber;
+竦・     9    笏・- ﾂｷﾂｷ}[];竦・    10    笏・- };竦・    11    笏・- 竦・    12    笏・- expor
+tﾂｷconstﾂｷWeeklyStudyChartﾂｷ=ﾂｷ({ﾂｷdataﾂｷ}:ﾂｷWeeklyStudyChartProps)ﾂｷ=>ﾂｷ{竦・   
+ 13    笏・- ﾂｷﾂｷreturnﾂｷ(竦・    14    笏・- ﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="h-48ﾂｷw-fullﾂｷ
+min-w-0">竦・    15    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<ResponsiveContainerﾂｷwidth="100%"ﾂｷheight
+={200}>竦・    16    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<BarChartﾂｷdata={data}>竦・    17    笏・- ﾂ
+ｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<XAxisﾂｷdataKey="day"ﾂｷ/>竦・    18    笏・- 竦・    19    笏・- ﾂｷﾂ
+ｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<Tooltipﾂｷformatter={(value)ﾂｷ=>ﾂｷ[`${value}譎る俣`,ﾂｷ'蟄ｦ鄙呈凾髢・]}ﾂ
+ｷ/>竦・    20    笏・- 竦・    21    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<BarﾂｷdataKey="hours"ﾂｷr
+adius={[4,ﾂｷ4,ﾂｷ0,ﾂｷ0]}ﾂｷfill="#3B82F6"ﾂｷ/>竦・    22    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</Ba
+rChart>竦・    23    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</ResponsiveContainer>竦・    24    笏・- ﾂｷﾂｷﾂｷ
+ﾂｷ</div>竦・    25    笏・- ﾂｷﾂｷ);竦・    26    笏・- };竦・        1 笏・+ 'useﾂｷclient';
+        2 笏・+ 
+        3 笏・+ importﾂｷ{ﾂｷBar,ﾂｷBarChart,ﾂｷResponsiveContainer,ﾂｷTooltip,ﾂｷXAxis
+ﾂｷ}ﾂｷfromﾂｷ'recharts';
+        4 笏・+ 
+        5 笏・+ typeﾂｷWeeklyStudyChartPropsﾂｷ=ﾂｷ{
+        6 笏・+ ﾂｷﾂｷdata:ﾂｷ{
+        7 笏・+ ﾂｷﾂｷﾂｷﾂｷday:ﾂｷstring;
+        8 笏・+ ﾂｷﾂｷﾂｷﾂｷhours:ﾂｷnumber;
+        9 笏・+ ﾂｷﾂｷ}[];
+       10 笏・+ };
+       11 笏・+ 
+       12 笏・+ exportﾂｷconstﾂｷWeeklyStudyChartﾂｷ=ﾂｷ({ﾂｷdataﾂｷ}:ﾂｷWeeklyStudyChar
+tProps)ﾂｷ=>ﾂｷ{
+       13 笏・+ ﾂｷﾂｷreturnﾂｷ(
+       14 笏・+ ﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="h-48ﾂｷw-fullﾂｷmin-w-0">
+       15 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<ResponsiveContainerﾂｷwidth="100%"ﾂｷheight={200}>
+       16 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<BarChartﾂｷdata={data}>
+       17 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<XAxisﾂｷdataKey="day"ﾂｷ/>
+       18 笏・+ 
+       19 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<Tooltipﾂｷformatter={(value)ﾂｷ=>ﾂｷ[`${value}譎
+る俣`,ﾂｷ'蟄ｦ鄙呈凾髢・]}ﾂｷ/>
+       20 笏・+ 
+       21 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<BarﾂｷdataKey="hours"ﾂｷradius={[4,ﾂｷ4,ﾂｷ0,ﾂｷ0
+]}ﾂｷfill="#3B82F6"ﾂｷ/>
+       22 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</BarChart>
+       23 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</ResponsiveContainer>
+       24 笏・+ ﾂｷﾂｷﾂｷﾂｷ</div>
+       25 笏・+ ﾂｷﾂｷ);
+       26 笏・+ };
+    27 27 笏・  
+  
+
+apps\web\src\components\common\Card.tsx format 笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫
+煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏・
+  ﾃ・Formatter would have printed the following content:
+  
+     1    笏・- typeﾂｷCardPropsﾂｷ=ﾂｷ{竦・     2    笏・- ﾂｷﾂｷchildren:ﾂｷReact.ReactNo
+de;竦・     3    笏・- ﾂｷﾂｷclassName?:ﾂｷstring;竦・     4    笏・- };竦・     5    笏・- 竦・
+     6    笏・- exportﾂｷfunctionﾂｷCard({ﾂｷchildren,ﾂｷclassNameﾂｷ=ﾂｷ''ﾂｷ}:ﾂｷCardPr
+ops)ﾂｷ{竦・     7    笏・- ﾂｷﾂｷreturnﾂｷ(竦・     8    笏・- ﾂｷﾂｷﾂｷﾂｷ<div竦・     9    笏・-
+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷclassName={`bg-gray-700ﾂｷshadow-mdﾂｷrounded-lgﾂｷp-6ﾂｷmb-4ﾂｷ${class
+Nameﾂｷ||ﾂｷ''}`}竦・    10    笏・- ﾂｷﾂｷﾂｷﾂｷ>竦・    11    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<div>{child
+ren}</div>竦・    12    笏・- ﾂｷﾂｷﾂｷﾂｷ</div>竦・    13    笏・- ﾂｷﾂｷ);竦・    14    笏・- }
+竦・        1 笏・+ typeﾂｷCardPropsﾂｷ=ﾂｷ{
+        2 笏・+ ﾂｷﾂｷchildren:ﾂｷReact.ReactNode;
+        3 笏・+ ﾂｷﾂｷclassName?:ﾂｷstring;
+        4 笏・+ };
+        5 笏・+ 
+        6 笏・+ exportﾂｷfunctionﾂｷCard({ﾂｷchildren,ﾂｷclassNameﾂｷ=ﾂｷ''ﾂｷ}:ﾂｷCardPr
+ops)ﾂｷ{
+        7 笏・+ ﾂｷﾂｷreturnﾂｷ(
+        8 笏・+ ﾂｷﾂｷﾂｷﾂｷ<div
+        9 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷclassName={`bg-gray-700ﾂｷshadow-mdﾂｷrounded-lgﾂｷp-6ﾂｷ
+mb-4ﾂｷ${classNameﾂｷ||ﾂｷ''}`}
+       10 笏・+ ﾂｷﾂｷﾂｷﾂｷ>
+       11 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<div>{children}</div>
+       12 笏・+ ﾂｷﾂｷﾂｷﾂｷ</div>
+       13 笏・+ ﾂｷﾂｷ);
+       14 笏・+ }
+    15 15 笏・  
+  
+
+apps\web\src\components\common\FilterButton.tsx:13:5 lint/a11y/useButtonType 笏≫
+煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏・
+  ﾃ・Provide an explicit type prop for the button element.
+  
+    11 笏・}: FilterButtonProps) => {
+    12 笏・  return (
+  > 13 笏・    <button
+       笏・    ^^^^^^^
+  > 14 笏・      onClick={onClick}
+        ...
+  > 27 笏・      `}
+  > 28 笏・    >
+       笏・    ^
+    29 笏・      {label}
+    30 笏・    </button>
+  
+  i The default type of a button is submit, which causes the submission of a fo
+rm when placed inside a `form` element. This is likely not the behaviour that y
+ou want inside a React application.
+  
+  i Allowed button types are: submit, button or reset
+  
+
+apps\web\src\components\common\FilterButton.tsx format 笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤
+笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏・
+  ﾃ・Formatter would have printed the following content:
+  
+     1    笏・- typeﾂｷFilterButtonPropsﾂｷ=ﾂｷ{竦・     2    笏・- ﾂｷﾂｷlabel:ﾂｷstring;竦
+・     3    笏・- ﾂｷﾂｷactive:ﾂｷboolean;竦・     4    笏・- ﾂｷﾂｷonClick:ﾂｷ()ﾂｷ=>ﾂｷvoid;
+竦・     5    笏・- };竦・     6    笏・- 竦・     7    笏・- exportﾂｷconstﾂｷFilterButtonﾂｷ
+=ﾂｷ({竦・     8    笏・- ﾂｷﾂｷlabel,竦・     9    笏・- ﾂｷﾂｷactive,竦・    10    笏・- ﾂｷﾂｷo
+nClick,竦・    11    笏・- }:ﾂｷFilterButtonProps)ﾂｷ=>ﾂｷ{竦・    12    笏・- ﾂｷﾂｷreturnﾂ
+ｷ(竦・    13    笏・- ﾂｷﾂｷﾂｷﾂｷ<button竦・    14    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷonClick={onClick}竦
+・    15    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷclassName={`竦・    16    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷrounded-
+full竦・    17    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷborder竦・    18    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷpx-4竦
+・    19    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷpy-2竦・    20    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷtext-sm竦・   
+ 21    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷtransition-colors竦・    22    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ${竦
+・    23    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷactive竦・    24    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ
+ﾂｷ?ﾂｷ"bg-blue-600ﾂｷtext-whiteﾂｷborder-blue-600"竦・    25    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ
+ﾂｷﾂｷﾂｷﾂｷ:ﾂｷ"bg-whiteﾂｷtext-gray-700ﾂｷhover:bg-gray-100"竦・    26    笏・- ﾂｷﾂｷﾂｷﾂｷ
+ﾂｷﾂｷﾂｷﾂｷ}竦・    27    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ`}竦・    28    笏・- ﾂｷﾂｷﾂｷﾂｷ>竦・    29    笏・-
+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ{label}竦・    30    笏・- ﾂｷﾂｷﾂｷﾂｷ</button>竦・    31    笏・- ﾂｷﾂｷ);竦・  
+  32    笏・- };
+        1 笏・+ typeﾂｷFilterButtonPropsﾂｷ=ﾂｷ{
+        2 笏・+ ﾂｷﾂｷlabel:ﾂｷstring;
+        3 笏・+ ﾂｷﾂｷactive:ﾂｷboolean;
+        4 笏・+ ﾂｷﾂｷonClick:ﾂｷ()ﾂｷ=>ﾂｷvoid;
+        5 笏・+ };
+        6 笏・+ 
+        7 笏・+ exportﾂｷconstﾂｷFilterButtonﾂｷ=ﾂｷ({ﾂｷlabel,ﾂｷactive,ﾂｷonClickﾂｷ}:ﾂ
+ｷFilterButtonProps)ﾂｷ=>ﾂｷ{
+        8 笏・+ ﾂｷﾂｷreturnﾂｷ(
+        9 笏・+ ﾂｷﾂｷﾂｷﾂｷ<button
+       10 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷonClick={onClick}
+       11 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷclassName={`
+       12 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷrounded-full
+       13 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷborder
+       14 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷpx-4
+       15 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷpy-2
+       16 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷtext-sm
+       17 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷtransition-colors
+       18 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ${
+       19 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷactive
+       20 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ?ﾂｷ'bg-blue-600ﾂｷtext-whiteﾂｷborder-blue-
+600'
+       21 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ:ﾂｷ'bg-whiteﾂｷtext-gray-700ﾂｷhover:bg-gra
+y-100'
+       22 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ}
+       23 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ`}
+       24 笏・+ ﾂｷﾂｷﾂｷﾂｷ>
+       25 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ{label}
+       26 笏・+ ﾂｷﾂｷﾂｷﾂｷ</button>
+       27 笏・+ ﾂｷﾂｷ);
+       28 笏・+ };
+       29 笏・+ 
+  
+
+apps\web\src\components\common\ProgressBar.tsx format 笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏
+≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤
+
+  ﾃ・Formatter would have printed the following content:
+  
+     1    笏・- typeﾂｷProgressBarPropsﾂｷ=ﾂｷ{竦・     2    笏・- ﾂｷﾂｷlabel:ﾂｷstring;竦・
+     3    笏・- ﾂｷﾂｷvalue:ﾂｷnumber;竦・     4    笏・- };竦・     5    笏・- 竦・     6    
+笏・- exportﾂｷconstﾂｷProgressBarﾂｷ=ﾂｷ({ﾂｷlabel,ﾂｷvalueﾂｷ}:ﾂｷProgressBarProps)ﾂｷ=>
+ﾂｷ{竦・     7    笏・- ﾂｷﾂｷconstﾂｷpercentﾂｷ=ﾂｷMath.max(0,ﾂｷMath.min(100,ﾂｷvalue));竦
+・     8    笏・- 竦・     9    笏・- ﾂｷﾂｷreturnﾂｷ(竦・    10    笏・- ﾂｷﾂｷﾂｷﾂｷ<divﾂｷclass
+Name="w-full">竦・    11    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="mb-2ﾂｷflexﾂｷitems-ce
+nterﾂｷjustify-between">竦・    12    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="text-s
+mﾂｷfont-semibold">{label}</span>竦・    13    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassNam
+e="text-sm">{percent}%</span>竦・    14    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>竦・    15    笏・- 
+竦・    16    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="h-3ﾂｷw-fullﾂｷoverflow-hiddenﾂｷroun
+ded-fullﾂｷbg-gray-200">竦・    17    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<div竦・    18    笏・- ﾂｷﾂｷ
+ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷclassName="h-fullﾂｷrounded-fullﾂｷbg-blue-500ﾂｷtransition-allﾂｷd
+uration-300"竦・    19    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷstyle={{ﾂｷwidth:ﾂｷ`${percent}%`
+ﾂｷ}}竦・    20    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ/>竦・    21    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>竦・    2
+2    笏・- ﾂｷﾂｷﾂｷﾂｷ</div>竦・    23    笏・- ﾂｷﾂｷ);竦・    24    笏・- };竦・        1 笏・+ 
+typeﾂｷProgressBarPropsﾂｷ=ﾂｷ{
+        2 笏・+ ﾂｷﾂｷlabel:ﾂｷstring;
+        3 笏・+ ﾂｷﾂｷvalue:ﾂｷnumber;
+        4 笏・+ };
+        5 笏・+ 
+        6 笏・+ exportﾂｷconstﾂｷProgressBarﾂｷ=ﾂｷ({ﾂｷlabel,ﾂｷvalueﾂｷ}:ﾂｷProgressBar
+Props)ﾂｷ=>ﾂｷ{
+        7 笏・+ ﾂｷﾂｷconstﾂｷpercentﾂｷ=ﾂｷMath.max(0,ﾂｷMath.min(100,ﾂｷvalue));
+        8 笏・+ 
+        9 笏・+ ﾂｷﾂｷreturnﾂｷ(
+       10 笏・+ ﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="w-full">
+       11 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="mb-2ﾂｷflexﾂｷitems-centerﾂｷjustify-be
+tween">
+       12 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="text-smﾂｷfont-semibold">{label}
+</span>
+       13 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<spanﾂｷclassName="text-sm">{percent}%</span>
+       14 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       15 笏・+ 
+       16 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="h-3ﾂｷw-fullﾂｷoverflow-hiddenﾂｷrounde
+d-fullﾂｷbg-gray-200">
+       17 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<div
+       18 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷclassName="h-fullﾂｷrounded-fullﾂｷbg-blue-500ﾂ
+ｷtransition-allﾂｷduration-300"
+       19 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷstyle={{ﾂｷwidth:ﾂｷ`${percent}%`ﾂｷ}}
+       20 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ/>
+       21 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       22 笏・+ ﾂｷﾂｷﾂｷﾂｷ</div>
+       23 笏・+ ﾂｷﾂｷ);
+       24 笏・+ };
+    25 25 笏・  
+  
+
+apps\web\src\components\common\SectionHeader.tsx format 笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫
+煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤
+
+  ﾃ・Formatter would have printed the following content:
+  
+     1    笏・- typeﾂｷSectionHeaderPropsﾂｷ=ﾂｷ{竦・     2    笏・- ﾂｷﾂｷenTitle:ﾂｷstrin
+g;竦・     3    笏・- ﾂｷﾂｷjaTitle:ﾂｷstring;竦・     4    笏・- ﾂｷﾂｷdescription:ﾂｷstring
+;竦・     5    笏・- };竦・     6    笏・- 竦・     7    笏・- exportﾂｷdefaultﾂｷfunctionﾂｷS
+ectionHeader({竦・     8    笏・- ﾂｷﾂｷenTitle,竦・     9    笏・- ﾂｷﾂｷjaTitle,竦・    10 
+   笏・- ﾂｷﾂｷdescription,竦・    11    笏・- }:ﾂｷSectionHeaderProps)ﾂｷ{竦・    12    笏・
+- ﾂｷﾂｷreturnﾂｷ(竦・    13    笏・- ﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="flexﾂｷitems-centerﾂｷgap
+-4">竦・    14    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="w-1ﾂｷh-16ﾂｷbg-blue-800"ﾂｷ/>竦・ 
+   15    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<div>竦・    16    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<pﾂｷclassName="te
+xt-blue-400">{enTitle}</p>竦・    17    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<h2ﾂｷclassName="text-
+xlﾂｷfont-semiboldﾂｷtext-white">{jaTitle}</h2>竦・    18    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<p
+ﾂｷclassName="text-gray-400">{description}</p>竦・    19    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+竦・    20    笏・- ﾂｷﾂｷﾂｷﾂｷ</div>竦・    21    笏・- ﾂｷﾂｷ);竦・    22    笏・- }竦・        
+1 笏・+ typeﾂｷSectionHeaderPropsﾂｷ=ﾂｷ{
+        2 笏・+ ﾂｷﾂｷenTitle:ﾂｷstring;
+        3 笏・+ ﾂｷﾂｷjaTitle:ﾂｷstring;
+        4 笏・+ ﾂｷﾂｷdescription:ﾂｷstring;
+        5 笏・+ };
+        6 笏・+ 
+        7 笏・+ exportﾂｷdefaultﾂｷfunctionﾂｷSectionHeader({
+        8 笏・+ ﾂｷﾂｷenTitle,
+        9 笏・+ ﾂｷﾂｷjaTitle,
+       10 笏・+ ﾂｷﾂｷdescription,
+       11 笏・+ }:ﾂｷSectionHeaderProps)ﾂｷ{
+       12 笏・+ ﾂｷﾂｷreturnﾂｷ(
+       13 笏・+ ﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="flexﾂｷitems-centerﾂｷgap-4">
+       14 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<divﾂｷclassName="w-1ﾂｷh-16ﾂｷbg-blue-800"ﾂｷ/>
+       15 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<div>
+       16 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<pﾂｷclassName="text-blue-400">{enTitle}</p>
+       17 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<h2ﾂｷclassName="text-xlﾂｷfont-semiboldﾂｷtext-whit
+e">{jaTitle}</h2>
+       18 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ<pﾂｷclassName="text-gray-400">{description}</p>
+       19 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ</div>
+       20 笏・+ ﾂｷﾂｷﾂｷﾂｷ</div>
+       21 笏・+ ﾂｷﾂｷ);
+       22 笏・+ }
+    23 23 笏・  
+  
+
+apps\web\src\components\common\Tag.tsx format 笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤
+笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤
+
+  ﾃ・Formatter would have printed the following content:
+  
+     1    笏・- typeﾂｷTagPropsﾂｷ=ﾂｷ{竦・     2    笏・- ﾂｷﾂｷlabel:ﾂｷstring;竦・     3  
+  笏・- ﾂｷﾂｷcolor:ﾂｷ'blue'ﾂｷ|ﾂｷ'green'ﾂｷ|ﾂｷ'yellow'ﾂｷ|ﾂｷ'red';竦・     4    笏・- };竦
+・     5    笏・- 竦・     6    笏・- exportﾂｷfunctionﾂｷTag({ﾂｷlabel,ﾂｷcolorﾂｷ}:ﾂｷTagP
+rops)ﾂｷ{竦・     7    笏・- ﾂｷﾂｷconstﾂｷcolorClassesﾂｷ=ﾂｷ{竦・     8    笏・- ﾂｷﾂｷﾂｷﾂｷbl
+ue:ﾂｷ'bg-blue-100ﾂｷtext-blue-800',竦・     9    笏・- ﾂｷﾂｷﾂｷﾂｷgreen:ﾂｷ'bg-green-100
+ﾂｷtext-green-800',竦・    10    笏・- ﾂｷﾂｷﾂｷﾂｷyellow:ﾂｷ'bg-yellow-100ﾂｷtext-yellow-
+800',竦・    11    笏・- ﾂｷﾂｷﾂｷﾂｷred:ﾂｷ'bg-red-100ﾂｷtext-red-800',竦・    12    笏・- ﾂ
+ｷﾂｷ};竦・    13    笏・- 竦・    14    笏・- ﾂｷﾂｷreturnﾂｷ(竦・    15    笏・- ﾂｷﾂｷﾂｷﾂｷ<span
+竦・    16    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷclassName={`px-2ﾂｷpy-1ﾂｷrounded-fullﾂｷtext-xsﾂｷfont
+-mediumﾂｷ${colorClasses[color]}`}竦・    17    笏・- ﾂｷﾂｷﾂｷﾂｷ>竦・    18    笏・- ﾂｷﾂｷﾂ
+ｷﾂｷﾂｷﾂｷ{label}竦・    19    笏・- ﾂｷﾂｷﾂｷﾂｷ</span>竦・    20    笏・- ﾂｷﾂｷ);竦・    21    
+笏・- }竦・        1 笏・+ typeﾂｷTagPropsﾂｷ=ﾂｷ{
+        2 笏・+ ﾂｷﾂｷlabel:ﾂｷstring;
+        3 笏・+ ﾂｷﾂｷcolor:ﾂｷ'blue'ﾂｷ|ﾂｷ'green'ﾂｷ|ﾂｷ'yellow'ﾂｷ|ﾂｷ'red';
+        4 笏・+ };
+        5 笏・+ 
+        6 笏・+ exportﾂｷfunctionﾂｷTag({ﾂｷlabel,ﾂｷcolorﾂｷ}:ﾂｷTagProps)ﾂｷ{
+        7 笏・+ ﾂｷﾂｷconstﾂｷcolorClassesﾂｷ=ﾂｷ{
+        8 笏・+ ﾂｷﾂｷﾂｷﾂｷblue:ﾂｷ'bg-blue-100ﾂｷtext-blue-800',
+        9 笏・+ ﾂｷﾂｷﾂｷﾂｷgreen:ﾂｷ'bg-green-100ﾂｷtext-green-800',
+       10 笏・+ ﾂｷﾂｷﾂｷﾂｷyellow:ﾂｷ'bg-yellow-100ﾂｷtext-yellow-800',
+       11 笏・+ ﾂｷﾂｷﾂｷﾂｷred:ﾂｷ'bg-red-100ﾂｷtext-red-800',
+       12 笏・+ ﾂｷﾂｷ};
+       13 笏・+ 
+       14 笏・+ ﾂｷﾂｷreturnﾂｷ(
+       15 笏・+ ﾂｷﾂｷﾂｷﾂｷ<span
+       16 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷclassName={`px-2ﾂｷpy-1ﾂｷrounded-fullﾂｷtext-xsﾂｷfont-m
+ediumﾂｷ${colorClasses[color]}`}
+       17 笏・+ ﾂｷﾂｷﾂｷﾂｷ>
+       18 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷ{label}
+       19 笏・+ ﾂｷﾂｷﾂｷﾂｷ</span>
+       20 笏・+ ﾂｷﾂｷ);
+       21 笏・+ }
+    22 22 笏・  
+  
+
+apps\web\src\constants\navigation.ts format 笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫
+煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤
+
+  ﾃ・Formatter would have printed the following content:
+  
+     1    笏・- exportﾂｷconstﾂｷnavigationItemsﾂｷ=ﾂｷ[竦・     2    笏・- ﾂｷﾂｷ{竦・     3
+    笏・- ﾂｷﾂｷﾂｷﾂｷlabel:ﾂｷ"Home",竦・     4    笏・- ﾂｷﾂｷﾂｷﾂｷhref:ﾂｷ"/",竦・     5    笏
+・- ﾂｷﾂｷ},竦・     6    笏・- ﾂｷﾂｷ{竦・     7    笏・- ﾂｷﾂｷﾂｷﾂｷlabel:ﾂｷ"Quests",竦・     8
+    笏・- ﾂｷﾂｷﾂｷﾂｷhref:ﾂｷ"/quests",竦・     9    笏・- ﾂｷﾂｷ},竦・    10    笏・- ﾂｷﾂｷ{竦・ 
+   11    笏・- ﾂｷﾂｷﾂｷﾂｷlabel:ﾂｷ"MyQuest",竦・    12    笏・- ﾂｷﾂｷﾂｷﾂｷhref:ﾂｷ"/my-ques
+t",竦・    13    笏・- ﾂｷﾂｷ},竦・    14    笏・- ﾂｷﾂｷ{竦・    15    笏・- ﾂｷﾂｷﾂｷﾂｷlabel:ﾂｷ"
+Board",竦・    16    笏・- ﾂｷﾂｷﾂｷﾂｷhref:ﾂｷ"/board",竦・    17    笏・- ﾂｷﾂｷ},竦・    18  
+  笏・- ﾂｷﾂｷ{竦・    19    笏・- ﾂｷﾂｷﾂｷﾂｷlabel:ﾂｷ"Profile",竦・    20    笏・- ﾂｷﾂｷﾂｷﾂｷhr
+ef:ﾂｷ"/profile",竦・    21    笏・- ﾂｷﾂｷ},竦・    22    笏・- ];
+        1 笏・+ exportﾂｷconstﾂｷnavigationItemsﾂｷ=ﾂｷ[
+        2 笏・+ ﾂｷﾂｷ{
+        3 笏・+ ﾂｷﾂｷﾂｷﾂｷlabel:ﾂｷ'Home',
+        4 笏・+ ﾂｷﾂｷﾂｷﾂｷhref:ﾂｷ'/',
+        5 笏・+ ﾂｷﾂｷ},
+        6 笏・+ ﾂｷﾂｷ{
+        7 笏・+ ﾂｷﾂｷﾂｷﾂｷlabel:ﾂｷ'Quests',
+        8 笏・+ ﾂｷﾂｷﾂｷﾂｷhref:ﾂｷ'/quests',
+        9 笏・+ ﾂｷﾂｷ},
+       10 笏・+ ﾂｷﾂｷ{
+       11 笏・+ ﾂｷﾂｷﾂｷﾂｷlabel:ﾂｷ'MyQuest',
+       12 笏・+ ﾂｷﾂｷﾂｷﾂｷhref:ﾂｷ'/my-quest',
+       13 笏・+ ﾂｷﾂｷ},
+       14 笏・+ ﾂｷﾂｷ{
+       15 笏・+ ﾂｷﾂｷﾂｷﾂｷlabel:ﾂｷ'Board',
+       16 笏・+ ﾂｷﾂｷﾂｷﾂｷhref:ﾂｷ'/board',
+       17 笏・+ ﾂｷﾂｷ},
+       18 笏・+ ﾂｷﾂｷ{
+       19 笏・+ ﾂｷﾂｷﾂｷﾂｷlabel:ﾂｷ'Profile',
+       20 笏・+ ﾂｷﾂｷﾂｷﾂｷhref:ﾂｷ'/profile',
+       21 笏・+ ﾂｷﾂｷ},
+       22 笏・+ ];
+       23 笏・+ 
+  
+
+apps\web\src\constants\quest\category.ts format 笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏
+≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤
+
+  ﾃ・Formatter would have printed the following content:
+  
+     1    笏・- exportﾂｷconstﾂｷCATEGORIESﾂｷ=ﾂｷ[竦・     2    笏・- ﾂｷﾂｷ"繝輔Ο繝ｳ繝医お繝ｳ繝・,
+竦・     3    笏・- ﾂｷﾂｷ"繝舌ャ繧ｯ繧ｨ繝ｳ繝・,竦・     4    笏・- ﾂｷﾂｷ"繝・・繧ｿ繝吶・繧ｹ",竦・     5    笏
+・- ﾂｷﾂｷ"繧｢繝ｫ繧ｴ繝ｪ繧ｺ繝",竦・     6    笏・- ﾂｷﾂｷ"闍ｱ隱・,竦・     7    笏・- ﾂｷﾂｷ"縺昴・莉・,竦・  
+   8    笏・- ]ﾂｷasﾂｷconst;竦・     9    笏・- 竦・    10    笏・- exportﾂｷtypeﾂｷCategory
+ﾂｷ=ﾂｷ(typeofﾂｷCATEGORIES)[number];
+        1 笏・+ exportﾂｷconstﾂｷCATEGORIESﾂｷ=ﾂｷ[
+        2 笏・+ ﾂｷﾂｷ'繝輔Ο繝ｳ繝医お繝ｳ繝・,
+        3 笏・+ ﾂｷﾂｷ'繝舌ャ繧ｯ繧ｨ繝ｳ繝・,
+        4 笏・+ ﾂｷﾂｷ'繝・・繧ｿ繝吶・繧ｹ',
+        5 笏・+ ﾂｷﾂｷ'繧｢繝ｫ繧ｴ繝ｪ繧ｺ繝',
+        6 笏・+ ﾂｷﾂｷ'闍ｱ隱・,
+        7 笏・+ ﾂｷﾂｷ'縺昴・莉・,
+        8 笏・+ ]ﾂｷasﾂｷconst;
+        9 笏・+ 
+       10 笏・+ exportﾂｷtypeﾂｷCategoryﾂｷ=ﾂｷ(typeofﾂｷCATEGORIES)[number];
+       11 笏・+ 
+  
+
+apps\web\src\constants\quest\difficulty.ts format 笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫
+煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤
+
+  ﾃ・Formatter would have printed the following content:
+  
+    1   笏・- exportﾂｷconstﾂｷDIFFICULTIESﾂｷ=ﾂｷ[竦・    2   笏・- ﾂｷﾂｷ"蛻晉ｴ・,竦・    3   
+笏・- ﾂｷﾂｷ"荳ｭ邏・,竦・    4   笏・- ﾂｷﾂｷ"荳顔ｴ・,竦・    5   笏・- ]ﾂｷasﾂｷconst;竦・    6   笏・- 
+竦・    7   笏・- exportﾂｷtypeﾂｷDifficultyﾂｷ=ﾂｷ(typeofﾂｷDIFFICULTIES)[number];
+      1 笏・+ exportﾂｷconstﾂｷDIFFICULTIESﾂｷ=ﾂｷ['蛻晉ｴ・,ﾂｷ'荳ｭ邏・,ﾂｷ'荳顔ｴ・]ﾂｷasﾂｷconst;
+      2 笏・+ 
+      3 笏・+ exportﾂｷtypeﾂｷDifficultyﾂｷ=ﾂｷ(typeofﾂｷDIFFICULTIES)[number];
+      4 笏・+ 
+  
+
+apps\web\src\types\quest.ts format 笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫
+煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏・
+  ﾃ・Formatter would have printed the following content:
+  
+     1    笏・- importﾂｷtypeﾂｷ{ﾂｷCategoryﾂｷ}ﾂｷfromﾂｷ"@/constants/quest/category";
+竦・     2    笏・- importﾂｷtypeﾂｷ{ﾂｷDifficultyﾂｷ}ﾂｷfromﾂｷ"@/constants/quest/diffic
+ulty";竦・     3    笏・- 竦・     4    笏・- exportﾂｷtypeﾂｷQuestﾂｷ=ﾂｷ{竦・     5    笏・- 
+ﾂｷﾂｷid:ﾂｷnumber;竦・     6    笏・- ﾂｷﾂｷtitle:ﾂｷstring;竦・     7    笏・- ﾂｷﾂｷdifficul
+ty:ﾂｷDifficulty;竦・     8    笏・- ﾂｷﾂｷdescription:ﾂｷstring;竦・     9    笏・- ﾂｷﾂｷca
+tegory:ﾂｷCategory;竦・    10    笏・- ﾂｷﾂｷduration:ﾂｷstring;竦・    11    笏・- ﾂｷﾂｷacc
+eptPoint:ﾂｷnumber;竦・    12    笏・- ﾂｷﾂｷclearPoint:ﾂｷnumber;竦・    13    笏・- };
+        1 笏・+ importﾂｷtypeﾂｷ{ﾂｷCategoryﾂｷ}ﾂｷfromﾂｷ'@/constants/quest/category';
+        2 笏・+ importﾂｷtypeﾂｷ{ﾂｷDifficultyﾂｷ}ﾂｷfromﾂｷ'@/constants/quest/difficul
+ty';
+        3 笏・+ 
+        4 笏・+ exportﾂｷtypeﾂｷQuestﾂｷ=ﾂｷ{
+        5 笏・+ ﾂｷﾂｷid:ﾂｷnumber;
+        6 笏・+ ﾂｷﾂｷtitle:ﾂｷstring;
+        7 笏・+ ﾂｷﾂｷdifficulty:ﾂｷDifficulty;
+        8 笏・+ ﾂｷﾂｷdescription:ﾂｷstring;
+        9 笏・+ ﾂｷﾂｷcategory:ﾂｷCategory;
+       10 笏・+ ﾂｷﾂｷduration:ﾂｷstring;
+       11 笏・+ ﾂｷﾂｷacceptPoint:ﾂｷnumber;
+       12 笏・+ ﾂｷﾂｷclearPoint:ﾂｷnumber;
+       13 笏・+ };
+       14 笏・+ 
+  
+
+apps\web\src\utils\formatLogTime.ts format 笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤
+笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏・
+  ﾃ・Formatter would have printed the following content:
+  
+     1    笏・- exportﾂｷconstﾂｷformatLogTimeﾂｷ=ﾂｷ(date:ﾂｷDate)ﾂｷ=>ﾂｷ{竦・     2    
+笏・- ﾂｷﾂｷconstﾂｷnowﾂｷ=ﾂｷnewﾂｷDate();竦・     3    笏・- 竦・     4    笏・- ﾂｷﾂｷconstﾂｷi
+sSameDayﾂｷ=竦・     5    笏・- ﾂｷﾂｷﾂｷﾂｷnow.getFullYear()ﾂｷ===ﾂｷdate.getFullYear()ﾂｷ
+&&竦・     6    笏・- ﾂｷﾂｷﾂｷﾂｷnow.getMonth()ﾂｷ===ﾂｷdate.getMonth()ﾂｷ&&竦・     7    笏
+・- ﾂｷﾂｷﾂｷﾂｷnow.getDate()ﾂｷ===ﾂｷdate.getDate();竦・     8    笏・- 竦・     9    笏・- ﾂ
+ｷﾂｷifﾂｷ(isSameDay)ﾂｷ{竦・    10    笏・- ﾂｷﾂｷﾂｷﾂｷreturnﾂｷdate.toLocaleTimeString('j
+a-JP',ﾂｷ{竦・    11    笏・- ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷhour:ﾂｷ'2-digit',竦・    12    笏・- ﾂｷﾂｷﾂｷﾂｷﾂ
+ｷﾂｷminute:ﾂｷ'2-digit',竦・    13    笏・- ﾂｷﾂｷﾂｷﾂｷ});竦・    14    笏・- ﾂｷﾂｷ}竦・    15 
+   笏・- 竦・    16    笏・- ﾂｷﾂｷconstﾂｷtodayﾂｷ=ﾂｷnewﾂｷDate(now.getFullYear(),ﾂｷnow.g
+etMonth(),ﾂｷnow.getDate());竦・    17    笏・- 竦・    18    笏・- ﾂｷﾂｷconstﾂｷtargetﾂｷ=
+ﾂｷnewﾂｷDate(date.getFullYear(),ﾂｷdate.getMonth(),ﾂｷdate.getDate());竦・    19    
+笏・- 竦・    20    笏・- ﾂｷﾂｷconstﾂｷdiffDaysﾂｷ=ﾂｷMath.floor(竦・    21    笏・- ﾂｷﾂｷﾂｷﾂｷ
+(today.getTime()ﾂｷ-ﾂｷtarget.getTime())ﾂｷ/ﾂｷ(1000ﾂｷ*ﾂｷ60ﾂｷ*ﾂｷ60ﾂｷ*ﾂｷ24),竦・    22
+    笏・- ﾂｷﾂｷ);竦・    23    笏・- 竦・    24    笏・- ﾂｷﾂｷifﾂｷ(diffDaysﾂｷ===ﾂｷ1)ﾂｷ{竦・  
+  25    笏・- ﾂｷﾂｷﾂｷﾂｷreturnﾂｷ'譏ｨ譌･';竦・    26    笏・- ﾂｷﾂｷ}竦・    27    笏・- 竦・    2
+8    笏・- ﾂｷﾂｷreturnﾂｷ`${diffDays}譌･蜑港;竦・    29    笏・- };竦・        1 笏・+ exportﾂ
+ｷconstﾂｷformatLogTimeﾂｷ=ﾂｷ(date:ﾂｷDate)ﾂｷ=>ﾂｷ{
+        2 笏・+ ﾂｷﾂｷconstﾂｷnowﾂｷ=ﾂｷnewﾂｷDate();
+        3 笏・+ 
+        4 笏・+ ﾂｷﾂｷconstﾂｷisSameDayﾂｷ=
+        5 笏・+ ﾂｷﾂｷﾂｷﾂｷnow.getFullYear()ﾂｷ===ﾂｷdate.getFullYear()ﾂｷ&&
+        6 笏・+ ﾂｷﾂｷﾂｷﾂｷnow.getMonth()ﾂｷ===ﾂｷdate.getMonth()ﾂｷ&&
+        7 笏・+ ﾂｷﾂｷﾂｷﾂｷnow.getDate()ﾂｷ===ﾂｷdate.getDate();
+        8 笏・+ 
+        9 笏・+ ﾂｷﾂｷifﾂｷ(isSameDay)ﾂｷ{
+       10 笏・+ ﾂｷﾂｷﾂｷﾂｷreturnﾂｷdate.toLocaleTimeString('ja-JP',ﾂｷ{
+       11 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷhour:ﾂｷ'2-digit',
+       12 笏・+ ﾂｷﾂｷﾂｷﾂｷﾂｷﾂｷminute:ﾂｷ'2-digit',
+       13 笏・+ ﾂｷﾂｷﾂｷﾂｷ});
+       14 笏・+ ﾂｷﾂｷ}
+       15 笏・+ 
+       16 笏・+ ﾂｷﾂｷconstﾂｷtodayﾂｷ=ﾂｷnewﾂｷDate(now.getFullYear(),ﾂｷnow.getMonth()
+,ﾂｷnow.getDate());
+       17 笏・+ 
+       18 笏・+ ﾂｷﾂｷconstﾂｷtargetﾂｷ=ﾂｷnewﾂｷDate(date.getFullYear(),ﾂｷdate.getMont
+h(),ﾂｷdate.getDate());
+       19 笏・+ 
+       20 笏・+ ﾂｷﾂｷconstﾂｷdiffDaysﾂｷ=ﾂｷMath.floor(
+       21 笏・+ ﾂｷﾂｷﾂｷﾂｷ(today.getTime()ﾂｷ-ﾂｷtarget.getTime())ﾂｷ/ﾂｷ(1000ﾂｷ*ﾂｷ60ﾂｷ
+*ﾂｷ60ﾂｷ*ﾂｷ24),
+       22 笏・+ ﾂｷﾂｷ);
+       23 笏・+ 
+       24 笏・+ ﾂｷﾂｷifﾂｷ(diffDaysﾂｷ===ﾂｷ1)ﾂｷ{
+       25 笏・+ ﾂｷﾂｷﾂｷﾂｷreturnﾂｷ'譏ｨ譌･';
+       26 笏・+ ﾂｷﾂｷ}
+       27 笏・+ 
+       28 笏・+ ﾂｷﾂｷreturnﾂｷ`${diffDays}譌･蜑港;
+       29 笏・+ };
+    30 30 笏・  
+  
+
+ VERBOSE  笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤
+
+  i Files processed:
+  
+  - apps\web\package.json
+  - apps\web\tsconfig.json
+  - apps\web\eslint.config.mjs
+  - apps\web\next.config.ts
+  - apps\web\postcss.config.mjs
+  - apps\web\src\app\globals.css
+  - apps\web\src\app\layout.tsx
+  - apps\web\src\app\page.tsx
+  - apps\web\src\app\quests\page.tsx
+  - apps\web\src\components\Footer.tsx
+  - apps\web\src\components\Header\NavigationMenu.tsx
+  - apps\web\src\components\Header.tsx
+  - apps\web\src\components\cards\BadgeCard.tsx
+  - apps\web\src\components\cards\GoalCard.tsx
+  - apps\web\src\components\cards\MyQuestCard.tsx
+  - apps\web\src\components\cards\ProfileCard.tsx
+  - apps\web\src\components\cards\QuestAcceptanceRateCard.tsx
+  - apps\web\src\components\cards\RecommendedQuestCard.tsx
+  - apps\web\src\components\cards\StudyLogCard.tsx
+  - apps\web\src\components\cards\WeeklyStudyCard.tsx
+  - apps\web\src\components\charts\WeeklyStudyChart.tsx
+  - apps\web\src\components\common\Card.tsx
+  - apps\web\src\components\common\FilterButton.tsx
+  - apps\web\src\components\common\ProgressBar.tsx
+  - apps\web\src\components\common\SectionHeader.tsx
+  - apps\web\src\components\common\Tag.tsx
+  - apps\web\src\components\quests\QuestList.tsx
+  - apps\web\src\constants\navigation.ts
+  - apps\web\src\constants\quest\category.ts
+  - apps\web\src\constants\quest\difficulty.ts
+  - apps\web\src\types\quest.ts
+  - apps\web\src\utils\formatLogTime.ts
+  
+
+ VERBOSE  笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤
+
+  i Files fixed:
+  
+  ! The list is empty.
+  
+
+The number of diagnostics exceeds the limit allowed. Use --max-diagnostics to increase it.
+Diagnostics not shown: 8.
+Scanned project folder in 1888ﾂｵs.
+Checked 32 files in 15ms. No fixes applied.
+Found 26 errors.
+Found 2 warnings.
+check 笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏
+≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤笏≫煤
+
+  ﾃ・Some errors were emitted while running checks.
+  
+

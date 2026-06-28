@@ -1,91 +1,95 @@
-"use client";
+'use client';
 
-import { useMemo, useState } from "react";
-import { FilterButton } from "@/components/common/FilterButton";
+import { useMemo, useState } from 'react';
 import { RecommendedQuestCard } from '@/components/cards/RecommendedQuestCard';
-import type { Quest } from "@/types/quest";
-import { CATEGORIES, Category } from "@/constants/quest/category";
-import { DIFFICULTIES, Difficulty } from "@/constants/quest/difficulty";
+import { FilterButton } from '@/components/common/FilterButton';
+import { CATEGORIES, type Category } from '@/constants/quest/category';
+import { DIFFICULTIES, type Difficulty } from '@/constants/quest/difficulty';
+import type { Quest } from '@/types/quest';
 
 const quests: Quest[] = [
   {
     id: 1,
-    title: "Reactを30分勉強",
-    difficulty: "初級",
-    description: "ReactのuseStateとuseEffectを学習する",
-    category: "フロントエンド",
-    duration: "30分",
+    title: 'Reactを30分勉強',
+    difficulty: '初級',
+    description: 'ReactのuseStateとuseEffectを学習する',
+    category: 'フロントエンド',
+    duration: '30分',
     acceptPoint: 50,
     clearPoint: 100,
   },
   {
     id: 2,
-    title: "SQL問題を5問解く",
-    difficulty: "中級",
-    description: "SELECT・JOIN問題を解く",
-    category: "データベース",
-    duration: "45分",
+    title: 'SQL問題を5問解く',
+    difficulty: '中級',
+    description: 'SELECT・JOIN問題を解く',
+    category: 'データベース',
+    duration: '45分',
     acceptPoint: 80,
     clearPoint: 150,
   },
-    {
+  {
     id: 3,
-    title: "SQLでJOIN問題を解く",
-    difficulty: "中級",
-    description: "INNER JOIN・LEFT JOINを使った問題を5問解く",
-    category: "データベース",
-    duration: "45分",
+    title: 'SQLでJOIN問題を解く',
+    difficulty: '中級',
+    description: 'INNER JOIN・LEFT JOINを使った問題を5問解く',
+    category: 'データベース',
+    duration: '45分',
     acceptPoint: 70,
     clearPoint: 140,
   },
   {
     id: 4,
-    title: "二分探索を実装する",
-    difficulty: "上級",
-    description: "二分探索アルゴリズムを理解し実装する",
-    category: "アルゴリズム",
-    duration: "60分",
+    title: '二分探索を実装する',
+    difficulty: '上級',
+    description: '二分探索アルゴリズムを理解し実装する',
+    category: 'アルゴリズム',
+    duration: '60分',
     acceptPoint: 100,
     clearPoint: 200,
   },
   {
     id: 5,
-    title: "Gitでコンフリクトを解消する",
-    difficulty: "初級",
-    description: "ブランチをマージし、コンフリクトを解決する",
-    category: "その他",
-    duration: "20分",
+    title: 'Gitでコンフリクトを解消する',
+    difficulty: '初級',
+    description: 'ブランチをマージし、コンフリクトを解決する',
+    category: 'その他',
+    duration: '20分',
     acceptPoint: 40,
     clearPoint: 80,
   },
   {
     id: 6,
-    title: "Next.jsで一覧画面を作る",
-    difficulty: "上級",
-    description: "App Routerを使ってクエスト一覧画面を実装する",
-    category: "フロントエンド",
-    duration: "90分",
+    title: 'Next.jsで一覧画面を作る',
+    difficulty: '上級',
+    description: 'App Routerを使ってクエスト一覧画面を実装する',
+    category: 'フロントエンド',
+    duration: '90分',
     acceptPoint: 120,
     clearPoint: 250,
   },
 ];
 
 export const QuestList = () => {
-  const categoryOptions: Array<Category | "すべて"> = ["すべて", ...CATEGORIES];
-  const difficultyOptions: Array<Difficulty | "すべて"> = ["すべて", ...DIFFICULTIES];
-  const [selectedCategory, setSelectedCategory] =
-  useState<Category | "すべて">("すべて");
-  const [selectedDifficulty, setSelectedDifficulty] =
-  useState<Difficulty | "すべて">("すべて");
+  const categoryOptions: Array<Category | 'すべて'> = ['すべて', ...CATEGORIES];
+  const difficultyOptions: Array<Difficulty | 'すべて'> = [
+    'すべて',
+    ...DIFFICULTIES,
+  ];
+  const [selectedCategory, setSelectedCategory] = useState<Category | 'すべて'>(
+    'すべて',
+  );
+  const [selectedDifficulty, setSelectedDifficulty] = useState<
+    Difficulty | 'すべて'
+  >('すべて');
 
   const filteredQuests = useMemo(() => {
     return quests.filter((quest) => {
       const categoryMatch =
-        selectedCategory === "すべて" ||
-        quest.category === selectedCategory;
+        selectedCategory === 'すべて' || quest.category === selectedCategory;
 
       const difficultyMatch =
-        selectedDifficulty === "すべて" ||
+        selectedDifficulty === 'すべて' ||
         quest.difficulty === selectedDifficulty;
 
       return categoryMatch && difficultyMatch;
@@ -104,7 +108,7 @@ export const QuestList = () => {
               active={selectedCategory === category}
               onClick={() => setSelectedCategory(category)}
             />
-        ))}
+          ))}
         </div>
       </div>
 

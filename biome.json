@@ -11,6 +11,9 @@
     "indentWidth": 2,
     "lineEnding": "lf"
   },
+  "files": {
+    "ignoreUnknown": true
+  },
   "javascript": {
     "formatter": {
       "quoteStyle": "single",

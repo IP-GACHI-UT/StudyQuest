@@ -1,5 +1,5 @@
-import SectionHeader from "@/components/common/SectionHeader";
-import { QuestList } from "@/components/quests/QuestList";
+import SectionHeader from '@/components/common/SectionHeader';
+import { QuestList } from '@/components/quests/QuestList';
 
 export default function QuestsPage() {
   return (

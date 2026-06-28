@@ -3,8 +3,11 @@
 import { useMemo, useState } from "react";
 import { FilterButton } from "@/components/common/FilterButton";
 import { RecommendedQuestCard } from '@/components/cards/RecommendedQuestCard';
+import type { Quest } from "@/types/quest";
+import { CATEGORIES, Category } from "@/constants/quest/category";
+import { DIFFICULTIES, Difficulty } from "@/constants/quest/difficulty";
 
-const quests = [
+const quests: Quest[] = [
   {
     id: 1,
     title: "Reactを30分勉強",
@@ -67,50 +70,41 @@ const quests = [
   },
 ];
 
-const categories = [
-  "すべて",
-  "Frontend",
-  "Backend",
-  "Database",
-  "資格",
-];
-
-const difficulties = [
-  "すべて",
-  "初級",
-  "中級",
-  "上級",
-];
-
 export const QuestList = () => {
-  const [category, setCategory] = useState("すべて");
-  const [difficulty, setDifficulty] = useState("すべて");
+  const categoryOptions: Array<Category | "すべて"> = ["すべて", ...CATEGORIES];
+  const difficultyOptions: Array<Difficulty | "すべて"> = ["すべて", ...DIFFICULTIES];
+  const [selectedCategory, setSelectedCategory] =
+  useState<Category | "すべて">("すべて");
+  const [selectedDifficulty, setSelectedDifficulty] =
+  useState<Difficulty | "すべて">("すべて");
 
   const filteredQuests = useMemo(() => {
     return quests.filter((quest) => {
       const categoryMatch =
-        category === "すべて" || quest.category === category;
+        selectedCategory === "すべて" ||
+        quest.category === selectedCategory;
 
       const difficultyMatch =
-        difficulty === "すべて" || quest.difficulty === difficulty;
+        selectedDifficulty === "すべて" ||
+        quest.difficulty === selectedDifficulty;
 
       return categoryMatch && difficultyMatch;
     });
-  }, [category, difficulty]);
+  }, [selectedCategory, selectedDifficulty]);
 
   return (
     <div className="space-y-6">
       <div className="space-y-2">
         <p className="font-medium">カテゴリ</p>
         <div className="flex flex-wrap gap-2">
-          {categories.map((item) => (
+          {categoryOptions.map((category) => (
             <FilterButton
-              key={item}
-              label={item}
-              active={category === item}
-              onClick={() => setCategory(item)}
+              key={category}
+              label={category}
+              active={selectedCategory === category}
+              onClick={() => setSelectedCategory(category)}
             />
-          ))}
+        ))}
         </div>
       </div>
 
@@ -118,12 +112,12 @@ export const QuestList = () => {
         <p className="font-medium">難易度</p>
 
         <div className="flex flex-wrap gap-2">
-          {difficulties.map((item) => (
+          {difficultyOptions.map((difficulty) => (
             <FilterButton
-              key={item}
-              label={item}
-              active={difficulty === item}
-              onClick={() => setDifficulty(item)}
+              key={difficulty}
+              label={difficulty}
+              active={selectedDifficulty === difficulty}
+              onClick={() => setSelectedDifficulty(difficulty)}
             />
           ))}
         </div>

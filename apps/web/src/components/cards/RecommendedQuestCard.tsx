@@ -2,12 +2,14 @@
 
 import { Card } from '@/components/common/Card';
 import { Tag } from '@/components/common/Tag';
+import type { Category } from "@/constants/quest/category";
+import type { Difficulty } from "@/constants/quest/difficulty";
 
 type RecommendedQuestCardProps = {
   title: string;
-  difficulty: string;
+  difficulty: Difficulty;
   description: string;
-  category: string;
+  category: Category;
   duration: string;
   acceptPoint: number;
   clearPoint: number;

@@ -34,9 +34,9 @@ export default function Home() {
       />
       <RecommendedQuestCard
         title="公式ドキュメントを10分読む"
-        difficulty="Easy"
+        difficulty="初級"
         description="お気に入りのライブラリやフレームワークの公式ドキュメントを読んで理解を深めましょう"
-        category="プログラミング"
+        category="アルゴリズム"
         duration="10分"
         acceptPoint={10}
         clearPoint={20}
@@ -44,7 +44,7 @@ export default function Home() {
       />
       <RecommendedQuestCard
         title="英単語を10個覚える"
-        difficulty="Easy"
+        difficulty="初級"
         description="毎日10個の新しい英単語を学び、記憶に定着させましょう"
         category="英語"
         duration="10分"

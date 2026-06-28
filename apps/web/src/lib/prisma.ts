@@ -5,9 +5,11 @@ const globalForPrisma = globalThis as unknown as {
   prisma?: PrismaClient;
 };
 
-const connectionString =
-  process.env.DATABASE_URL ??
-  'postgresql://USER:PASSWORD@localhost:5432/studyquest?schema=public';
+const connectionString = process.env.DATABASE_URL;
+
+if (!connectionString) {
+  throw new Error('DATABASE_URL is not set');
+}
 
 function createPrismaClient() {
   const adapter = new PrismaPg({ connectionString });

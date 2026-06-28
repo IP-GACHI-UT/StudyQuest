@@ -1,5 +1,10 @@
 import type { Quest, StudyLog, UserQuest } from '@prisma/client';
 
+/**
+ * QuestをAPIレスポンス用に整形する
+ * @param quest Quest
+ * @returns APIレスポンス用のQuestオブジェクト
+ */
 export function presentQuest(quest: Quest) {
   return {
     id: quest.id,
@@ -17,6 +22,11 @@ export function presentQuest(quest: Quest) {
   };
 }
 
+/**
+ * UserQuestをAPIレスポンス用に整形する
+ * @param userQuest UserQuest & { quest: Quest }
+ * @returns APIレスポンス用のUserQuestオブジェクト
+ */
 export function presentUserQuest(userQuest: UserQuest & { quest: Quest }) {
   return {
     id: userQuest.id,
@@ -27,6 +37,11 @@ export function presentUserQuest(userQuest: UserQuest & { quest: Quest }) {
   };
 }
 
+/**
+ * StudyLogをAPIレスポンス用に整形する
+ * @param studyLog StudyLog
+ * @returns APIレスポンス用のStudyLogオブジェクト
+ */
 export function presentStudyLog(studyLog: StudyLog) {
   return {
     id: studyLog.id,

@@ -1,52 +1,56 @@
 'use client';
 
-import { Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import Link from "next/link";
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
 
-const navigationItems = ['Home', 'Quests', 'MyQuest', 'Board', 'Profile'];
+import { navigationItems } from "@/constants/navigation";
 
 export const NavigationMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
-      {/* PC用ナビゲーション */}
+      {/* PC */}
       <nav className="hidden lg:block">
         <ul className="flex items-center gap-8">
           {navigationItems.map((item) => (
-            <li key={item}>
-              <button type="button">{item}</button>
+            <li key={item.href}>
+              <Link
+                href={item.href}
+                className="font-medium text-gray-600 hover:text-gray-900"
+              >
+                {item.label}
+              </Link>
             </li>
           ))}
         </ul>
       </nav>
 
-      {/* モバイル用ボタン */}
-      <button
-        type="button"
-        className="lg:hidden"
-        onClick={() => setIsOpen((prev) => !prev)}
-      >
-        {isOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
+      {/* モバイル */}
+      <div className="lg:hidden">
+        <button onClick={() => setIsOpen((prev) => !prev)}>
+          {isOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
 
-      {/* 展開メニュー */}
-      {isOpen && (
-        <div className="absolute left-0 top-full w-full border-b bg-gray-800 shadow-md lg:hidden">
-          <ul className="flex flex-col">
-            {navigationItems.map((item) => (
-              <li key={item}>
-                <button
-                  type="button"
-                  className="w-full px-6 py-4 text-left text-white hover:bg-gray-500"
-                >
-                  {item}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+        {isOpen && (
+          <div className="absolute left-0 top-full w-full border-b bg-white shadow-md">
+            <ul className="flex flex-col">
+              {navigationItems.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    onClick={() => setIsOpen(false)}
+                    className="block px-6 py-4 hover:bg-gray-50"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
     </>
   );
 };

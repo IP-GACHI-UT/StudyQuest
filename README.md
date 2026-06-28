@@ -28,7 +28,7 @@ pnpm dev:game
 ```
 
 `.env` を作成したら、`DATABASE_URL` をローカルのPostgreSQL接続先に合わせて変更してください。
-実際の接続情報や秘密情報はコミットしないでください。
+`.env` や `.env.local` には実際の接続情報や秘密情報が入るため、コミットしないでください。
 
 `.env.example` の `DATABASE_URL` は、PrismaがPostgreSQLへ接続するためのURLです。
 `USER` はDBユーザー名、`PASSWORD` はDBパスワード、`localhost:5432` はDBホストとポート、`studyquest` は接続先データベース名を表します。

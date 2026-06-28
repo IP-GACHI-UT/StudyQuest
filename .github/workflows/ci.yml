@@ -10,6 +10,8 @@ jobs:
   web:
     name: web
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://USER:PASSWORD@localhost:5432/studyquest?schema=public
 
     steps:
       - name: Checkout

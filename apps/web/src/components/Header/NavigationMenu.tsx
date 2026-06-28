@@ -34,7 +34,7 @@ export const NavigationMenu = () => {
         </button>
 
         {isOpen && (
-          <div className="absolute left-0 top-full w-full border-b bg-white shadow-md">
+          <div className="absolute left-0 top-full w-full border-b bg-gray-800 shadow-md">
             <ul className="flex flex-col">
               {navigationItems.map((item) => (
                 <li key={item.href}>

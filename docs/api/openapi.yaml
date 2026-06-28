@@ -1,0 +1,533 @@
+openapi: 3.0.3
+info:
+  title: StudyQuest MVP API
+  version: 0.1.0
+  description: |
+    StudyQuest MVPで使うAPI仕様です。
+    Swagger/OpenAPIをAPI契約書として扱い、フロントエンドとバックエンドの認識を合わせるために使います。
+servers:
+  - url: http://localhost:3000
+    description: ローカル開発環境
+tags:
+  - name: Quests
+    description: クエストの取得と受注に関するAPI
+  - name: StudyLogs
+    description: 学習記録に関するAPI
+  - name: Summary
+    description: 学習状況の集計に関するAPI
+  - name: ActivityLogs
+    description: 活動ログと掲示板表示に関するAPI
+  - name: Profile
+    description: プロフィール表示に関するAPI
+paths:
+  /api/quests:
+    get:
+      tags:
+        - Quests
+      summary: クエスト一覧を取得する
+      description: |
+        受注できるクエストの一覧を取得します。
+        MVPでは有効なクエストだけを返し、画面の「おすすめクエスト」表示に使います。
+      x-implementation-status: implemented
+      responses:
+        "200":
+          description: クエスト一覧の取得に成功しました。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestListResponse"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/quests/{questId}/accept:
+    post:
+      tags:
+        - Quests
+      summary: クエストを受注する
+      description: |
+        指定したクエストを現在のユーザーのマイクエストに追加します。
+        同じユーザーが同じクエストを重複して受注することはできません。
+      x-implementation-status: implemented
+      parameters:
+        - name: questId
+          in: path
+          required: true
+          description: 受注したいクエストIDです。
+          schema:
+            type: string
+      responses:
+        "201":
+          description: クエストの受注に成功しました。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserQuestResponse"
+        "404":
+          description: 指定されたクエストが存在しません。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: すでに同じクエストを受注しています。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/my-quests:
+    get:
+      tags:
+        - Quests
+      summary: マイクエストを取得する
+      description: |
+        現在のユーザーが受注しているクエスト一覧を取得します。
+        画面の「いま達成を目指しているクエスト」表示に使います。
+      x-implementation-status: implemented
+      responses:
+        "200":
+          description: マイクエスト一覧の取得に成功しました。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MyQuestListResponse"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/study-logs:
+    post:
+      tags:
+        - StudyLogs
+      summary: 学習記録を作成する
+      description: |
+        受注済みクエストに対して、学習した時間と任意のメモを記録します。
+        MVPでは学習タイマーや学習完了ボタンから呼び出す想定です。
+      x-implementation-status: implemented
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateStudyLogRequest"
+            examples:
+              basic:
+                summary: 10分学習した例
+                value:
+                  questId: clxquest001
+                  minutes: 10
+                  note: 公式ドキュメントの導入部分を読んだ
+                  studiedAt: "2026-06-28T10:00:00.000Z"
+      responses:
+        "201":
+          description: 学習記録の作成に成功しました。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudyLogResponse"
+        "400":
+          description: 入力内容が不正、またはクエストをまだ受注していません。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/study-summary/weekly:
+    get:
+      tags:
+        - Summary
+      summary: 今週の学習状況を取得する
+      description: |
+        現在のユーザーの今週の学習時間、達成クエスト数、獲得XP、連続学習日数を取得します。
+        今回はAPI仕様のみ定義し、実装は後続タスクで行います。
+      x-implementation-status: planned
+      responses:
+        "200":
+          description: 今週の学習状況の取得に成功しました。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WeeklyStudySummaryResponse"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/activity-logs:
+    get:
+      tags:
+        - ActivityLogs
+      summary: 活動ログを取得する
+      description: |
+        クエスト受注や学習記録など、ユーザーの活動ログを新しい順に取得します。
+        掲示板エリアや「今日の活動」表示に使う想定です。
+      x-implementation-status: planned
+      responses:
+        "200":
+          description: 活動ログ一覧の取得に成功しました。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActivityLogListResponse"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/profile:
+    get:
+      tags:
+        - Profile
+      summary: プロフィールを取得する
+      description: |
+        現在のユーザーの名前、レベル、累計ポイント、累計XP、累計学習時間、獲得バッジを取得します。
+        パスワードや認証トークンなどの秘密情報は返しません。
+      x-implementation-status: planned
+      responses:
+        "200":
+          description: プロフィールの取得に成功しました。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfileResponse"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+components:
+  responses:
+    InternalServerError:
+      description: サーバー内部で予期しないエラーが発生しました。
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+  schemas:
+    QuestDifficulty:
+      type: string
+      description: クエストの難易度です。
+      enum:
+        - easy
+        - normal
+        - hard
+    UserQuestStatus:
+      type: string
+      description: ユーザーごとのクエスト進捗です。
+      enum:
+        - in_progress
+        - completed
+        - canceled
+    ActivityLogType:
+      type: string
+      description: 活動ログの種類です。
+      enum:
+        - quest_accepted
+        - quest_completed
+        - study_log_created
+        - badge_earned
+    Quest:
+      type: object
+      required:
+        - id
+        - title
+        - description
+        - category
+        - difficulty
+        - estimatedMinutes
+        - acceptPoint
+        - clearPoint
+        - xpReward
+        - isActive
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          description: クエストIDです。
+        title:
+          type: string
+          description: クエスト名です。
+        description:
+          type: string
+          description: クエストの説明です。
+        category:
+          type: string
+          description: プログラミング、英語などのカテゴリです。
+        difficulty:
+          $ref: "#/components/schemas/QuestDifficulty"
+        estimatedMinutes:
+          type: integer
+          minimum: 1
+          description: 想定学習時間です。
+        acceptPoint:
+          type: integer
+          description: 受注時にもらえるポイントです。
+        clearPoint:
+          type: integer
+          description: 達成時にもらえるポイントです。
+        xpReward:
+          type: integer
+          description: 達成時にもらえるXPです。
+        isActive:
+          type: boolean
+          description: 現在受注可能かどうかです。
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    UserQuest:
+      type: object
+      required:
+        - id
+        - status
+        - acceptedAt
+        - quest
+      properties:
+        id:
+          type: string
+          description: ユーザーごとの受注IDです。
+        status:
+          $ref: "#/components/schemas/UserQuestStatus"
+        acceptedAt:
+          type: string
+          format: date-time
+          description: クエストを受注した日時です。
+        completedAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: クエストを達成した日時です。
+        quest:
+          $ref: "#/components/schemas/Quest"
+    StudyLog:
+      type: object
+      required:
+        - id
+        - userId
+        - questId
+        - minutes
+        - studiedAt
+        - createdAt
+      properties:
+        id:
+          type: string
+          description: 学習記録IDです。
+        userId:
+          type: string
+          description: ユーザーIDです。
+        questId:
+          type: string
+          description: 学習対象のクエストIDです。
+        minutes:
+          type: integer
+          minimum: 1
+          description: 学習時間です。
+        note:
+          type: string
+          nullable: true
+          description: 任意のメモです。
+        studiedAt:
+          type: string
+          format: date-time
+          description: 実際に学習した日時です。
+        createdAt:
+          type: string
+          format: date-time
+          description: 記録を作成した日時です。
+    ActivityLog:
+      type: object
+      required:
+        - id
+        - type
+        - message
+        - createdAt
+      properties:
+        id:
+          type: string
+        type:
+          $ref: "#/components/schemas/ActivityLogType"
+        message:
+          type: string
+          description: 画面に表示する活動内容です。
+        questId:
+          type: string
+          nullable: true
+          description: 関連するクエストIDです。
+        createdAt:
+          type: string
+          format: date-time
+    Badge:
+      type: object
+      required:
+        - id
+        - name
+        - description
+        - earnedAt
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          description: バッジ名です。
+        description:
+          type: string
+          description: バッジの説明です。
+        icon:
+          type: string
+          nullable: true
+          description: バッジ表示用のアイコン文字列です。
+        earnedAt:
+          type: string
+          format: date-time
+          description: バッジを獲得した日時です。
+    QuestListResponse:
+      type: object
+      required:
+        - quests
+      properties:
+        quests:
+          type: array
+          items:
+            $ref: "#/components/schemas/Quest"
+    UserQuestResponse:
+      type: object
+      required:
+        - userQuest
+      properties:
+        userQuest:
+          $ref: "#/components/schemas/UserQuest"
+    MyQuestListResponse:
+      type: object
+      required:
+        - userQuests
+      properties:
+        userQuests:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserQuest"
+    CreateStudyLogRequest:
+      type: object
+      required:
+        - questId
+        - minutes
+      properties:
+        questId:
+          type: string
+          description: 学習記録を紐づけるクエストIDです。
+        minutes:
+          type: integer
+          minimum: 1
+          description: 学習時間です。1以上の整数を指定します。
+        note:
+          type: string
+          description: 任意の学習メモです。
+        studiedAt:
+          type: string
+          format: date-time
+          description: 学習した日時です。省略時はAPI実行時刻を使います。
+    StudyLogResponse:
+      type: object
+      required:
+        - studyLog
+      properties:
+        studyLog:
+          $ref: "#/components/schemas/StudyLog"
+    WeeklyStudySummaryResponse:
+      type: object
+      required:
+        - summary
+      properties:
+        summary:
+          type: object
+          required:
+            - studyMinutes
+            - completedQuestCount
+            - earnedXp
+            - streakDays
+            - dailyStudyMinutes
+          properties:
+            studyMinutes:
+              type: integer
+              description: 今週の合計学習時間です。
+            completedQuestCount:
+              type: integer
+              description: 今週達成したクエスト数です。
+            earnedXp:
+              type: integer
+              description: 今週獲得したXPです。
+            streakDays:
+              type: integer
+              description: 連続学習日数です。
+            dailyStudyMinutes:
+              type: array
+              description: 曜日ごとの学習時間です。
+              items:
+                type: object
+                required:
+                  - date
+                  - minutes
+                properties:
+                  date:
+                    type: string
+                    format: date
+                  minutes:
+                    type: integer
+    ActivityLogListResponse:
+      type: object
+      required:
+        - activityLogs
+      properties:
+        activityLogs:
+          type: array
+          items:
+            $ref: "#/components/schemas/ActivityLog"
+    ProfileResponse:
+      type: object
+      required:
+        - profile
+      properties:
+        profile:
+          type: object
+          required:
+            - id
+            - displayName
+            - level
+            - totalPoints
+            - totalXp
+            - totalStudyMinutes
+            - badges
+          properties:
+            id:
+              type: string
+              description: ユーザーIDです。
+            displayName:
+              type: string
+              description: 表示名です。
+            level:
+              type: integer
+              description: 現在のレベルです。
+            totalPoints:
+              type: integer
+              description: 累計ポイントです。
+            totalXp:
+              type: integer
+              description: 累計XPです。
+            totalStudyMinutes:
+              type: integer
+              description: 累計学習時間です。
+            badges:
+              type: array
+              items:
+                $ref: "#/components/schemas/Badge"
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: object
+          required:
+            - code
+            - message
+          properties:
+            code:
+              type: string
+              description: フロントエンドで分岐に使うエラーコードです。
+            message:
+              type: string
+              description: ユーザーまたは開発者に表示できるエラーメッセージです。
+            details:
+              description: バリデーションエラーなどの補足情報です。

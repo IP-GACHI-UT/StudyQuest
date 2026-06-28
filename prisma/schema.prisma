@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum QuestDifficulty {
+  EASY   @map("easy")
+  NORMAL @map("normal")
+  HARD   @map("hard")
+
+  @@map("quest_difficulty")
+}
+
+enum UserQuestStatus {
+  IN_PROGRESS @map("in_progress")
+  COMPLETED   @map("completed")
+  CANCELED    @map("canceled")
+
+  @@map("user_quest_status")
+}
+
+enum ActivityLogType {
+  QUEST_ACCEPTED    @map("quest_accepted")
+  QUEST_COMPLETED   @map("quest_completed")
+  STUDY_LOG_CREATED @map("study_log_created")
+  BADGE_EARNED      @map("badge_earned")
+
+  @@map("activity_log_type")
+}
+
+model User {
+  id                String        @id @default(cuid())
+  displayName       String
+  email             String?       @unique
+  level             Int           @default(1)
+  totalPoints       Int           @default(0)
+  totalXp           Int           @default(0)
+  weeklyGoalMinutes Int           @default(600)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  activityLogs      ActivityLog[]
+  studyLogs         StudyLog[]
+  userBadges        UserBadge[]
+  userQuests        UserQuest[]
+
+  @@map("users")
+}
+
+model Quest {
+  id               String          @id @default(cuid())
+  title            String
+  description      String
+  category         String
+  difficulty       QuestDifficulty @default(EASY)
+  estimatedMinutes Int
+  acceptPoint      Int             @default(0)
+  clearPoint       Int             @default(0)
+  xpReward         Int             @default(0)
+  isActive         Boolean         @default(true)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  activityLogs     ActivityLog[]
+  studyLogs        StudyLog[]
+  userQuests       UserQuest[]
+
+  @@map("quests")
+}
+
+model UserQuest {
+  id          String          @id @default(cuid())
+  userId      String
+  questId     String
+  status      UserQuestStatus @default(IN_PROGRESS)
+  acceptedAt  DateTime        @default(now())
+  completedAt DateTime?
+  quest       Quest           @relation(fields: [questId], references: [id], onDelete: Cascade)
+  studyLogs   StudyLog[]
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questId])
+  @@index([questId])
+  @@map("user_quests")
+}
+
+model StudyLog {
+  id          String     @id @default(cuid())
+  userId      String
+  questId     String
+  userQuestId String?
+  minutes     Int
+  note        String?
+  studiedAt   DateTime   @default(now())
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  quest       Quest      @relation(fields: [questId], references: [id], onDelete: Cascade)
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userQuest   UserQuest? @relation(fields: [userQuestId], references: [id], onDelete: SetNull)
+
+  @@index([questId])
+  @@index([userId, studiedAt])
+  @@map("study_logs")
+}
+
+model Badge {
+  id                   String      @id @default(cuid())
+  name                 String
+  description          String
+  icon                 String?
+  conditionDescription String?
+  createdAt            DateTime    @default(now())
+  userBadges           UserBadge[]
+
+  @@map("badges")
+}
+
+model UserBadge {
+  id       String   @id @default(cuid())
+  userId   String
+  badgeId  String
+  earnedAt DateTime @default(now())
+  badge    Badge    @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badgeId])
+  @@index([badgeId])
+  @@map("user_badges")
+}
+
+model ActivityLog {
+  id        String          @id @default(cuid())
+  userId    String
+  questId   String?
+  type      ActivityLogType
+  message   String
+  createdAt DateTime        @default(now())
+  quest     Quest?          @relation(fields: [questId], references: [id], onDelete: SetNull)
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([questId])
+  @@index([userId, createdAt])
+  @@map("activity_logs")
+}

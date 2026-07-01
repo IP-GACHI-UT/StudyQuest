@@ -25,7 +25,7 @@ StudyQuestは、学習を小さなクエストとして受注し、継続を促�
 ```bash
 pnpm install
 cp .env.example .env
-pnpm dev:game
+pnpm dev:web
 ```
 
 `.env` を作成したら、`DATABASE_URL` をローカルのPostgreSQL接続先に合わせて変更してください。

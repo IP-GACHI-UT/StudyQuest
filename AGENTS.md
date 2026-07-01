@@ -47,6 +47,8 @@ MVPでは、主に以下を扱います。
 
 npm / yarn は使用しないでください。
 
+pnpmのバージョンは `package.json` の `packageManager` に従ってください。
+
 依存関係を追加するときは、pnpmを使用してください。
 
 ```bash
@@ -61,6 +63,7 @@ pnpm add -D <package-name>
 
 ```bash
 pnpm install
+pnpm dev:web
 pnpm biome:check
 pnpm lint:web
 pnpm typecheck:web
@@ -68,7 +71,7 @@ pnpm build:web
 pnpm check:web
 ```
 
-Prisma関連の作業をした場合は、必要に応じて以下も実行してください。
+Prisma関連ファイルを変更した場合は、可能な範囲で以下を実行してください。
 
 ```bash
 pnpm prisma validate
@@ -106,8 +109,10 @@ export async function POST() {}
 
 APIレスポンスは、`apps/web/src/lib/api-response.ts` の共通関数を使ってください。
 
-Prismaから取得したデータをAPIレスポンスとして返す場合は、必要に応じて `apps/web/src/lib/api-presenters.ts` のPresenterを使ってください。
+Prismaから取得したデータをAPIレスポンスとして返す場合は、原則として `apps/web/src/lib/api-presenters.ts` のPresenterを使ってください。
 DBモデルをそのまま返すのではなく、APIとして返してよい項目だけを明示してください。
+
+APIのレスポンス形式を変更した場合は、実装・Presenter・`docs/api/openapi.yaml` の3つが一致しているか確認してください。
 
 ## OpenAPIルール
 
@@ -129,7 +134,10 @@ API仕様の正本は `openapi.yaml` とします。
 
 Prisma Clientの生成物は手動編集しないでください。
 
-migrationは、タスクで明示された場合のみ作成・変更してください。
+`prisma/schema.prisma` を変更した場合は、migrationが必要か必ず判断してください。
+
+migrationを作成するかどうかは、タスクの指示に従ってください。
+migrationを含めない場合は、PR本文に「migrationは次PRで対応」などの理由を明記してください。
 
 migrationを作成する場合は、以下のようなコマンドを使用してください。
 
@@ -146,6 +154,12 @@ pnpm prisma migrate dev --name <migration-name>
 既存の仮ユーザーID取得処理は、後で本物の認証処理に差し替えやすい形を維持してください。
 
 タスクで明示されない限り、認証方式を勝手に導入しないでください。
+
+## 作業範囲
+
+タスクに関係ないリファクタリングや大規模な構成変更は行わないでください。
+
+必要だと判断した場合は、PR本文に理由を明記してください。
 
 ## コミットしてはいけないもの
 

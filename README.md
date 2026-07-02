@@ -19,6 +19,7 @@ StudyQuestは、学習を小さなクエストとして受注し、継続を促�
 - API仕様: `docs/api/openapi.yaml`
 - API仕様の見方: `docs/api/README.md`
 - DBモデル定義: `prisma/schema.prisma`
+- DB・Prisma運用手順: `docs/db.md`
 
 ## セットアップ
 

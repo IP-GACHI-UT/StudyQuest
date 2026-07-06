@@ -25,7 +25,8 @@ const devQuests = [
   {
     id: 'dev-quest-html-001',
     title: 'HTMLの基本タグを復習する',
-    description: '見出し、段落、リンク、リストのタグを使って小さな自己紹介ページを作る。',
+    description:
+      '見出し、段落、リンク、リストのタグを使って小さな自己紹介ページを作る。',
     category: 'プログラミング',
     difficulty: QuestDifficulty.EASY,
     estimatedMinutes: 15,
@@ -49,7 +50,8 @@ const devQuests = [
   {
     id: 'dev-quest-ts-001',
     title: 'TypeScriptの型注釈を練習する',
-    description: '文字列、数値、配列、オブジェクトに型を付ける小さな関数を書く。',
+    description:
+      '文字列、数値、配列、オブジェクトに型を付ける小さな関数を書く。',
     category: 'プログラミング',
     difficulty: QuestDifficulty.NORMAL,
     estimatedMinutes: 40,
@@ -61,7 +63,8 @@ const devQuests = [
   {
     id: 'dev-quest-next-001',
     title: 'Next.jsのRoute Handlerを読む',
-    description: '既存APIのRoute Handlerを1つ読み、入力、処理、レスポンス形式をメモする。',
+    description:
+      '既存APIのRoute Handlerを1つ読み、入力、処理、レスポンス形式をメモする。',
     category: 'プログラミング',
     difficulty: QuestDifficulty.HARD,
     estimatedMinutes: 60,

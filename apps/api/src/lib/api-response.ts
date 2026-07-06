@@ -15,7 +15,7 @@ type ErrorBody = {
  * @param status ステータスコード
  * @returns Response
  */
-export function jsonResponse(body: unknown, status = 200) {
+export function jsonResponse(body: unknown, status = 200): Response {
   return Response.json(body, { status });
 }
 
@@ -32,7 +32,7 @@ export function errorResponse(
   message: string,
   status = 500,
   details?: unknown,
-) {
+): Response {
   const body: ErrorBody = {
     error: {
       code,

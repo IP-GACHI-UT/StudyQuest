@@ -41,7 +41,7 @@ cp .env.example .env
 Prisma Client は `prisma/schema.prisma` をもとに生成します。
 
 ```bash
-pnpm prisma generate
+pnpm prisma:generate
 ```
 
 次の場合は Prisma Client を生成してください。
@@ -74,7 +74,7 @@ pnpm prisma migrate dev
 
 ```bash
 pnpm install
-pnpm prisma generate
+pnpm prisma:generate
 pnpm prisma migrate dev
 pnpm db:seed
 ```
@@ -100,7 +100,7 @@ DB構造を変更するIssueでは、`prisma/schema.prisma` を変更してか�
 2. Prisma schema を検証する。
 
 ```bash
-pnpm prisma validate
+pnpm prisma:validate
 ```
 
 3. migration を作成し、ローカルDBへ反映する。
@@ -112,7 +112,7 @@ pnpm prisma migrate dev --name add_badge_condition
 4. Prisma Client を生成する。
 
 ```bash
-pnpm prisma generate
+pnpm prisma:generate
 ```
 
 5. `prisma/schema.prisma` と作成された `prisma/migrations/**` を同じPRに含める。
@@ -143,8 +143,8 @@ Prisma が reset を求める表示を出した場合も、すぐに実行せず
 DB構造を変更したPRでは、少なくとも以下を確認します。
 
 ```bash
-pnpm prisma validate
-pnpm prisma generate
+pnpm prisma:validate
+pnpm prisma:generate
 ```
 
 migration を作成した場合は、ローカルDBへ反映できることも確認します。

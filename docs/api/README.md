@@ -6,6 +6,14 @@
 
 - `openapi.yaml`: APIのパス、リクエスト、レスポンス、エラー形式をまとめた契約書です。
 
+## 実装場所
+
+- API仕様の正本は `docs/api/openapi.yaml` です。
+- API実装は `apps/api` に置きます。
+- APIフレームワークは Hono です。
+- APIパスは `apps/api` 側でも `/api/quests` のように `/api` prefix を維持します。
+- OpenAPIのpathやレスポンス形式は、実装場所の移行だけでは変更しません。
+
 ## Swagger Editorで確認する手順
 
 1. ブラウザで <https://editor.swagger.io/> を開きます。

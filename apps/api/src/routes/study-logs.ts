@@ -1,7 +1,8 @@
-import { presentStudyLog } from '@/lib/api-presenters';
-import { errorResponse, jsonResponse } from '@/lib/api-response';
-import { getCurrentUserId } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import { Hono } from 'hono';
+import { prisma } from '@studyquest/db';
+import { errorResponse, jsonResponse } from '../lib/api-response.js';
+import { getCurrentUserId } from '../lib/auth.js';
+import { presentStudyLog } from '../presenters/api-presenters.js';
 
 type StudyLogRequestBody = {
   questId?: unknown;
@@ -10,11 +11,8 @@ type StudyLogRequestBody = {
   studiedAt?: unknown;
 };
 
-export const dynamic = 'force-dynamic';
-export const runtime = 'nodejs';
-
-export async function POST(request: Request) {
-  const body = await parseRequestBody(request);
+export const studyLogsRoute = new Hono().post('/', async (c) => {
+  const body = await parseRequestBody(c.req.raw);
 
   if (!body) {
     return errorResponse(
@@ -94,7 +92,7 @@ export async function POST(request: Request) {
       '学習記録の作成に失敗しました。',
     );
   }
-}
+});
 
 async function parseRequestBody(request: Request) {
   try {

@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@studyquest/db';
 
 export const DEVELOPMENT_USER_ID = 'dev-user-001';
 

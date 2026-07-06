@@ -1,4 +1,4 @@
-import type { Quest, StudyLog, UserQuest } from '@prisma/client';
+import type { Quest, StudyLog, UserQuest } from '@studyquest/db';
 
 /**
  * QuestをAPIレスポンス用に整形する

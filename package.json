@@ -4,15 +4,21 @@
   "private": true,
   "scripts": {
     "dev:web": "pnpm --filter @studyquest/web dev",
+    "dev:api": "pnpm --filter @studyquest/api dev",
     "db:seed": "node prisma/seed.js",
+    "prisma:validate": "prisma validate",
+    "prisma:generate": "prisma generate",
     "build:web": "pnpm --filter @studyquest/web build",
+    "build:api": "pnpm --filter @studyquest/db build && pnpm --filter @studyquest/api build",
     "lint:web": "pnpm --filter @studyquest/web lint",
     "typecheck:web": "pnpm --filter @studyquest/web typecheck",
+    "typecheck:api": "pnpm --filter @studyquest/db typecheck && pnpm --filter @studyquest/api typecheck",
     "biome:check": "biome check .",
     "biome:write": "biome check --write .",
     "format": "biome format --write .",
     "format:check": "biome format .",
-    "check:web": "pnpm lint:web && pnpm typecheck:web && pnpm build:web && pnpm biome:check"
+    "check:web": "pnpm lint:web && pnpm typecheck:web && pnpm build:web && pnpm biome:check",
+    "check:api": "pnpm typecheck:api && pnpm build:api"
   },
   "packageManager": "pnpm@10.13.1",
   "devDependencies": {

@@ -64,6 +64,34 @@ pnpm prisma migrate dev
 `prisma/migrations` が存在しない状態では、ローカルDBを migration だけで再現できません。
 初回 migration が必要な場合は、DB変更を扱うIssue/PRで migration を作成してください。
 
+## seed実行手順
+
+初回セットアップで migration を反映した後、またはDBリセット後に、開発用データが必要な場合はリポジトリルートで seed を実行します。
+実行前に `.env` の `DATABASE_URL` がローカルの PostgreSQL を指していることを確認してください。
+共有DB、本番DB、検証DBには実行しないでください。
+
+初回セットアップ後の実行例:
+
+```bash
+pnpm install
+pnpm prisma generate
+pnpm prisma migrate dev
+pnpm db:seed
+```
+
+DBリセット後に開発用データだけ入れ直す場合:
+
+```bash
+pnpm db:seed
+```
+
+seed では以下の開発用データを作成します。
+
+- 開発用ユーザー `dev-user-001`
+- 開発用クエスト8件
+
+開発用データは固定IDで upsert するため、複数回実行しても同じデータが重複して作成されません。
+
 ## migration作成手順
 
 DB構造を変更するIssueでは、`prisma/schema.prisma` を変更してから migration を作成します。
@@ -106,7 +134,7 @@ pnpm prisma migrate reset
 - `.env` の `DATABASE_URL` がローカルDBを指している。
 - 共有DB、本番DB、検証DBを指していない。
 - 消えて困るローカルデータがない。
-- seed が未実装の場合、リセット後の初期データは自動では用意されない。
+- リセット後に開発用データが必要な場合は `pnpm db:seed` を実行する。
 
 Prisma が reset を求める表示を出した場合も、すぐに実行せず、`DATABASE_URL` と削除対象のDBを確認してください。
 

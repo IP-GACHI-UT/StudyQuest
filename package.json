@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev:web": "pnpm --filter @studyquest/web dev",
+    "db:seed": "node prisma/seed.js",
     "build:web": "pnpm --filter @studyquest/web build",
     "lint:web": "pnpm --filter @studyquest/web lint",
     "typecheck:web": "pnpm --filter @studyquest/web typecheck",

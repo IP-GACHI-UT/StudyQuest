@@ -33,14 +33,34 @@ StudyQuestは、学習を小さなクエストとして受注し、継続を促�
 
 ## セットアップ
 
+事前に Docker Desktop などをインストールし、`docker compose` が使える状態にしてください。
+DBだけを Docker Compose で起動し、Next.js / Hono API は従来どおり pnpm で起動します。
+
 ```bash
 pnpm install
 cp .env.example .env
+docker compose up -d db
+pnpm prisma:generate
+pnpm prisma migrate dev
+pnpm db:seed
+pnpm dev:api
 pnpm dev:web
 ```
 
-`.env` を作成したら、`DATABASE_URL` をローカルのPostgreSQL接続先に合わせて変更してください。
+`pnpm dev:api` と `pnpm dev:web` は、それぞれ別のターミナルで実行してください。
+
+Windows PowerShell で `.env` をコピーする場合:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+`.env.example` の `DATABASE_URL` は、`compose.yml` のローカル開発用PostgreSQLに接続する固定値です。
 `.env` や `.env.local` には実際の接続情報や秘密情報が入るため、コミットしないでください。
 
-`.env.example` の `DATABASE_URL` は、PrismaがPostgreSQLへ接続するためのURLです。
-`USER` はDBユーザー名、`PASSWORD` はDBパスワード、`localhost:5432` はDBホストとポート、`studyquest` は接続先データベース名を表します。
+補足:
+
+- `docker compose up -d db` はPostgreSQLを起動するだけです。
+- テーブル作成は `pnpm prisma migrate dev` で行います。
+- 開発用データ投入は `pnpm db:seed` で行います。
+- アプリ本体はDockerではなく、`pnpm dev:api` / `pnpm dev:web` で起動します。

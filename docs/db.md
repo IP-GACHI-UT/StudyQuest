@@ -34,7 +34,73 @@ macOS / Linux / Git Bash:
 cp .env.example .env
 ```
 
-作成した `.env` の `DATABASE_URL` をローカルの PostgreSQL に合わせて変更します。
+`.env.example` の `DATABASE_URL` は、`compose.yml` のローカル開発用PostgreSQLに接続する固定値です。
+
+ローカルDBを起動します。
+
+```bash
+docker compose up -d db
+```
+
+テーブルを作成し、開発用データを投入します。
+
+```bash
+pnpm prisma:generate
+pnpm prisma migrate dev
+pnpm db:seed
+```
+
+アプリ本体はDockerではなく、従来どおり pnpm で起動します。
+
+```bash
+pnpm dev:api
+pnpm dev:web
+```
+
+`pnpm dev:api` と `pnpm dev:web` は、それぞれ別のターミナルで実行してください。
+
+## ローカルDB操作
+
+### DB起動
+
+```bash
+docker compose up -d db
+```
+
+### DB停止
+
+```bash
+docker compose down
+```
+
+### DBログ確認
+
+```bash
+docker compose logs -f db
+```
+
+### DB状態確認
+
+```bash
+docker compose ps
+```
+
+### DBの中にpsqlで入る
+
+```bash
+docker compose exec db psql -U studyquest -d studyquest
+```
+
+### DBを完全に作り直す
+
+```bash
+docker compose down -v
+docker compose up -d db
+pnpm prisma migrate dev
+pnpm db:seed
+```
+
+`docker compose down -v` はDBデータを削除します。ローカル開発用DB以外では使わないでください。
 
 ## Prisma Client生成
 

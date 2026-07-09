@@ -6,8 +6,8 @@ info:
     StudyQuest MVPで使うAPI仕様です。
     Swagger/OpenAPIをAPI契約書として扱い、フロントエンドとバックエンドの認識を合わせるために使います。
 servers:
-  - url: http://localhost:3000
-    description: ローカル開発環境
+  - url: http://localhost:3001
+    description: ローカルAPI開発環境
 tags:
   - name: Quests
     description: クエストの取得と受注に関するAPI

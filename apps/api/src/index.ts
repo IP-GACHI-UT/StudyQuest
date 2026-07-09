@@ -4,6 +4,7 @@ import { cors } from 'hono/cors';
 import { healthRoute } from './routes/health.js';
 import { questsRoute } from './routes/quests.js';
 import { studyLogsRoute } from './routes/study-logs.js';
+import { studySummaryRoute } from './routes/study-summary.js';
 import { userQuestsRoute } from './routes/user-quests.js';
 
 const DEFAULT_API_PORT = 3001;
@@ -39,6 +40,7 @@ app.route('/api/health', healthRoute);
 app.route('/api/quests', questsRoute);
 app.route('/api/my-quests', userQuestsRoute);
 app.route('/api/study-logs', studyLogsRoute);
+app.route('/api/study-summary', studySummaryRoute);
 
 const port = getApiPort();
 

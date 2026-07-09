@@ -138,8 +138,8 @@ paths:
       summary: 今週の学習状況を取得する
       description: |
         現在のユーザーの今週の学習時間、達成クエスト数、獲得XP、連続学習日数を取得します。
-        今回はAPI仕様のみ定義し、実装は後続タスクで行います。
-      x-implementation-status: planned
+        日別の学習時間は月曜始まりの7日分を返し、ログがない日は minutes: 0 を返します。
+      x-implementation-status: implemented
       responses:
         "200":
           description: 今週の学習状況の取得に成功しました。
@@ -453,7 +453,9 @@ components:
               description: 連続学習日数です。
             dailyStudyMinutes:
               type: array
-              description: 曜日ごとの学習時間です。
+              minItems: 7
+              maxItems: 7
+              description: 月曜始まりの7日分の日別学習時間です。ログがない日は minutes: 0 を返します。
               items:
                 type: object
                 required:

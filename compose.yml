@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres:16
+    container_name: studyquest-db
+    ports:
+      - "5432:5432"
+    environment:
+      # ローカル開発用の固定値です。本番環境では使用しないでください。
+      POSTGRES_USER: studyquest
+      POSTGRES_PASSWORD: studyquest
+      POSTGRES_DB: studyquest
+    volumes:
+      # コンテナを停止してもローカルDBのデータを保持します。
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U studyquest -d studyquest"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:

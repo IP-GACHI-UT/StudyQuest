@@ -137,7 +137,7 @@ paths:
         - Summary
       summary: 今週の学習状況を取得する
       description: |
-        現在のユーザーの今週の学習時間、達成クエスト数、獲得XP、連続学習日数を取得します。
+        現在のユーザーの今週の学習時間、達成クエスト数、獲得XP、今週内での最大連続学習日数を取得します。
         日別の学習時間は月曜始まりの7日分を返し、ログがない日は minutes: 0 を返します。
       x-implementation-status: implemented
       responses:
@@ -450,7 +450,7 @@ components:
               description: 今週獲得したXPです。
             streakDays:
               type: integer
-              description: 連続学習日数です。
+              description: 今週内での最大連続学習日数です。
             dailyStudyMinutes:
               type: array
               minItems: 7

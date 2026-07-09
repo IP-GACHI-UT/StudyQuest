@@ -1,0 +1,31 @@
+{
+  "name": "@studyquest/db",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/prisma.js",
+  "types": "./src/prisma.ts",
+  "exports": {
+    ".": {
+      "types": "./src/prisma.ts",
+      "import": "./dist/prisma.js"
+    },
+    "./prisma": {
+      "types": "./src/prisma.ts",
+      "import": "./dist/prisma.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit",
+    "check": "pnpm typecheck && pnpm build"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "dotenv": "^17.4.2"
+  },
+  "devDependencies": {
+    "typescript": "^5"
+  }
+}

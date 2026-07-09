@@ -1,0 +1,23 @@
+{
+  "name": "@studyquest/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter @studyquest/db build && tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "check": "pnpm typecheck && pnpm build"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.19.6",
+    "@studyquest/db": "workspace:*",
+    "hono": "^4.10.6"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "tsx": "^4.20.6",
+    "typescript": "^5"
+  }
+}

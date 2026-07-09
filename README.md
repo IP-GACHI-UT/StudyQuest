@@ -4,8 +4,11 @@ StudyQuestは、学習を小さなクエストとして受注し、継続を促�
 
 ## ディレクトリ構成
 
-- `apps/web`: Next.jsアプリ。画面とRoute HandlerによるAPIを含む
+- `apps/web`: フロントエンドアプリ。Next.jsで画面を実装する
+- `apps/api`: バックエンドAPIアプリ。HonoでAPIを実装する
+- `packages/db`: Prisma Client共有パッケージ
 - `docs`: 仕様・設計・開発ルール
+- `docs/api/openapi.yaml`: API仕様の正本
 - `prisma`: Prisma schemaとDB migrationを管理する
 
 ## 開発ルール
@@ -20,6 +23,13 @@ StudyQuestは、学習を小さなクエストとして受注し、継続を促�
 - API仕様の見方: `docs/api/README.md`
 - DBモデル定義: `prisma/schema.prisma`
 - DB・Prisma運用手順: `docs/db.md`
+- アーキテクチャ方針: `docs/architecture.md`
+
+## ローカル想定
+
+- フロントエンド: `http://localhost:3000`
+- バックエンドAPI: `http://localhost:3001`
+- APIパス: `apps/api` 側でも `/api/quests` のように `/api` prefix を維持する
 
 ## セットアップ
 

@@ -19,6 +19,9 @@
 - 認証実装までは開発用ユーザーで進める
 - DBは Prisma + PostgreSQL を前提にする
 - DB変更は Prisma migration を使う前提で管理する
+- APIは `apps/api` にHonoで実装する
+- APIパスは `/api/...` を維持する
+- フロント画面の修正はバックエンド移行作業に含めない
 - seedでは開発用クエストを5〜10件作成する
 - API確認は Thunder Client をメインにする
 - curl は補助・README記載用として使う
@@ -48,7 +51,7 @@
 
 API実装タスクは、以下を満たしたらDoneにする。
 
-- Route Handler が実装されている
+- `apps/api` にHonoのAPIルートが実装されている
 - 正常系レスポンスが返る
 - エラー時もJSONで返る
 - 必要なバリデーションがある

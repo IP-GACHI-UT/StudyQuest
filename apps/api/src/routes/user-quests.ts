@@ -1,12 +1,10 @@
-import { presentUserQuest } from '@/lib/api-presenters';
-import { errorResponse, jsonResponse } from '@/lib/api-response';
-import { getCurrentUserId } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@studyquest/db';
+import { Hono } from 'hono';
+import { errorResponse, jsonResponse } from '../lib/api-response.js';
+import { getCurrentUserId } from '../lib/auth.js';
+import { presentUserQuest } from '../presenters/api-presenters.js';
 
-export const dynamic = 'force-dynamic';
-export const runtime = 'nodejs';
-
-export async function GET() {
+export const userQuestsRoute = new Hono().get('/', async () => {
   const userId = await getCurrentUserId();
 
   try {
@@ -27,4 +25,4 @@ export async function GET() {
       'マイクエストの取得に失敗しました。',
     );
   }
-}
+});

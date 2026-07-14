@@ -88,11 +88,15 @@ prefix: 内容を日本語で記述
 
 ## Push前チェック
 
+リモートの最新状態を基準に、Push予定のブランチ全体を確認します。
+
 ```bash
 git status --short
 git branch --show-current
-git diff --cached --stat
-git log --oneline develop..HEAD
+git fetch origin
+git diff --stat origin/develop...HEAD
+git diff --name-only origin/develop...HEAD
+git log --oneline origin/develop..HEAD
 ```
 
 確認事項:
@@ -103,6 +107,15 @@ git log --oneline develop..HEAD
 - 関係ないファイルや秘密情報が含まれていない
 - 必要なテスト・lint・typecheck・buildを実行している
 - 実行できなかった確認と理由を説明できる
+- `origin/develop`の更新により競合や前提の変化が発生していない
+
+`git diff --cached`は未コミットのstage済み差分だけを表示するため、Push前の最終確認では上記の`origin/develop...HEAD`を使用してください。
+
+## 履歴の書き換え
+
+- `git push --force`および`git push --force-with-lease`は、ユーザーから明示的な指示がない限り実行しない。
+- 他のメンバーと共有済みのブランチでは、原則としてrebase、commitのamend、resetなどによる履歴の書き換えを行わない。
+- 共有前の作業ブランチでコミットを整理する場合も、変更内容を失わないことを確認する。
 
 ## Pull Request
 
@@ -110,4 +123,17 @@ git log --oneline develop..HEAD
 - マージ先は通常`develop`とする。
 - PR本文に変更概要、主な変更ファイル、確認方法、未実行の確認を記載する。
 - 大きすぎるPRは、独立してレビュー可能な機能単位へ分割する。
+- 原則としてMerge commitを使用し、作業内容ごとに分けたコミット履歴を残す。
+- Squash mergeは、PR内のコミットを1つにまとめても問題がない場合に限って使用する。
 - マージ後に作業ブランチを削除する。
+
+## GitHub側の保護設定
+
+文書ルールだけでは直接Pushを技術的に防げないため、`main`と`develop`にはGitHub Rulesetまたはブランチ保護を設定することを推奨します。
+
+最低限、次の設定を検討してください。
+
+- Pull Requestを経由しない変更を禁止する
+- 必須CIが成功するまでマージを禁止する
+- force pushを禁止する
+- ブランチ削除を禁止する

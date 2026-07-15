@@ -1,5 +1,27 @@
 import type { Prisma, Quest, StudyLog, UserQuest } from '@studyquest/db';
 
+export const profilePresenterSelect = {
+  id: true,
+  displayName: true,
+  level: true,
+  totalPoints: true,
+  totalXp: true,
+  userBadges: {
+    orderBy: [{ earnedAt: 'desc' }, { id: 'desc' }],
+    select: {
+      earnedAt: true,
+      badge: {
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          icon: true,
+        },
+      },
+    },
+  },
+} satisfies Prisma.UserSelect;
+
 export const activityPresenterSelect = {
   id: true,
   type: true,
@@ -22,6 +44,10 @@ type ActivityForPresenter = Prisma.ActivityLogGetPayload<{
   select: typeof activityPresenterSelect;
 }>;
 
+type ProfileForPresenter = Prisma.UserGetPayload<{
+  select: typeof profilePresenterSelect;
+}>;
+
 type ActivityType =
   | 'quest_accepted'
   | 'quest_completed'
@@ -34,6 +60,27 @@ const activityTypeMap = {
   STUDY_LOG_CREATED: 'study_log_created',
   BADGE_EARNED: 'badge_earned',
 } as const satisfies Record<ActivityForPresenter['type'], ActivityType>;
+
+export function presentProfile(
+  profile: ProfileForPresenter,
+  totalStudyMinutes: number,
+) {
+  return {
+    id: profile.id,
+    displayName: profile.displayName,
+    level: profile.level,
+    totalPoints: profile.totalPoints,
+    totalXp: profile.totalXp,
+    totalStudyMinutes,
+    badges: profile.userBadges.map((userBadge) => ({
+      id: userBadge.badge.id,
+      name: userBadge.badge.name,
+      description: userBadge.badge.description,
+      icon: userBadge.badge.icon,
+      earnedAt: userBadge.earnedAt,
+    })),
+  };
+}
 
 /**
  * QuestをAPIレスポンス用に整形する

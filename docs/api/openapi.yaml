@@ -16,7 +16,7 @@ tags:
   - name: Summary
     description: 学習状況の集計に関するAPI
   - name: Activities
-    description: みんなの活動と掲示板表示に関するAPI
+    description: ユーザーの活動と掲示板表示に関するAPI
   - name: Profile
     description: プロフィール表示に関するAPI
 paths:
@@ -153,14 +153,14 @@ paths:
     get:
       tags:
         - Activities
-      summary: みんなの活動を取得する
+      summary: ユーザーの活動を取得する
       description: |
         掲示板エリアに表示するため、全ユーザーの活動を新しい順に最大20件取得します。
         ユーザー情報はdisplayNameだけ、クエスト情報はidとtitleだけを返します。
       x-implementation-status: implemented
       responses:
         "200":
-          description: みんなの活動一覧の取得に成功しました。
+          description: ユーザーの活動一覧の取得に成功しました。
           content:
             application/json:
               schema:

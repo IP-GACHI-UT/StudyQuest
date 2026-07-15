@@ -1,6 +1,7 @@
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
+import { activitiesRoute } from './routes/activities.js';
 import { healthRoute } from './routes/health.js';
 import { questsRoute } from './routes/quests.js';
 import { studyLogsRoute } from './routes/study-logs.js';
@@ -37,6 +38,7 @@ app.use(
 );
 
 app.route('/api/health', healthRoute);
+app.route('/api/activities', activitiesRoute);
 app.route('/api/quests', questsRoute);
 app.route('/api/my-quests', userQuestsRoute);
 app.route('/api/study-logs', studyLogsRoute);

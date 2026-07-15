@@ -16,9 +16,6 @@ export const activitiesRoute = new Hono().get('/', async () => {
 
     return jsonResponse({ activities: activities.map(presentActivity) });
   } catch {
-    return errorResponse(
-      'INTERNAL_SERVER_ERROR',
-      '活動の取得に失敗しました。',
-    );
+    return errorResponse('INTERNAL_SERVER_ERROR', '活動の取得に失敗しました。');
   }
 });

@@ -15,8 +15,8 @@ tags:
     description: 学習記録に関するAPI
   - name: Summary
     description: 学習状況の集計に関するAPI
-  - name: ActivityLogs
-    description: 活動ログと掲示板表示に関するAPI
+  - name: Activities
+    description: みんなの活動と掲示板表示に関するAPI
   - name: Profile
     description: プロフィール表示に関するAPI
 paths:
@@ -149,22 +149,22 @@ paths:
                 $ref: "#/components/schemas/WeeklyStudySummaryResponse"
         "500":
           $ref: "#/components/responses/InternalServerError"
-  /api/activity-logs:
+  /api/activities:
     get:
       tags:
-        - ActivityLogs
-      summary: 活動ログを取得する
+        - Activities
+      summary: みんなの活動を取得する
       description: |
-        クエスト受注や学習記録など、ユーザーの活動ログを新しい順に取得します。
-        掲示板エリアや「今日の活動」表示に使う想定です。
-      x-implementation-status: planned
+        掲示板エリアに表示するため、全ユーザーの活動を新しい順に最大20件取得します。
+        ユーザー情報はdisplayNameだけ、クエスト情報はidとtitleだけを返します。
+      x-implementation-status: implemented
       responses:
         "200":
-          description: 活動ログ一覧の取得に成功しました。
+          description: みんなの活動一覧の取得に成功しました。
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ActivityLogListResponse"
+                $ref: "#/components/schemas/ActivityListResponse"
         "500":
           $ref: "#/components/responses/InternalServerError"
   /api/profile:
@@ -208,9 +208,9 @@ components:
         - in_progress
         - completed
         - canceled
-    ActivityLogType:
+    ActivityType:
       type: string
-      description: 活動ログの種類です。
+      description: 活動の種類です。
       enum:
         - quest_accepted
         - quest_completed
@@ -327,28 +327,47 @@ components:
           type: string
           format: date-time
           description: 記録を作成した日時です。
-    ActivityLog:
+    Activity:
       type: object
       required:
         - id
         - type
         - message
         - createdAt
+        - user
+        - quest
       properties:
         id:
           type: string
         type:
-          $ref: "#/components/schemas/ActivityLogType"
+          $ref: "#/components/schemas/ActivityType"
         message:
           type: string
           description: 画面に表示する活動内容です。
-        questId:
-          type: string
-          nullable: true
-          description: 関連するクエストIDです。
         createdAt:
           type: string
           format: date-time
+        user:
+          type: object
+          required:
+            - displayName
+          properties:
+            displayName:
+              type: string
+              description: 活動したユーザーの表示名です。
+        quest:
+          type: object
+          nullable: true
+          required:
+            - id
+            - title
+          properties:
+            id:
+              type: string
+              description: 関連するクエストIDです。
+            title:
+              type: string
+              description: 関連するクエスト名です。
     Badge:
       type: object
       required:
@@ -455,7 +474,7 @@ components:
               type: array
               minItems: 7
               maxItems: 7
-              description: 月曜始まりの7日分の日別学習時間です。ログがない日は minutes: 0 を返します。
+              description: "月曜始まりの7日分の日別学習時間です。ログがない日は minutes: 0 を返します。"
               items:
                 type: object
                 required:
@@ -467,15 +486,15 @@ components:
                     format: date
                   minutes:
                     type: integer
-    ActivityLogListResponse:
+    ActivityListResponse:
       type: object
       required:
-        - activityLogs
+        - activities
       properties:
-        activityLogs:
+        activities:
           type: array
           items:
-            $ref: "#/components/schemas/ActivityLog"
+            $ref: "#/components/schemas/Activity"
     ProfileResponse:
       type: object
       required:

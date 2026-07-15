@@ -175,7 +175,7 @@ paths:
       description: |
         現在のユーザーの名前、レベル、累計ポイント、累計XP、累計学習時間、獲得バッジを取得します。
         パスワードや認証トークンなどの秘密情報は返しません。
-      x-implementation-status: planned
+      x-implementation-status: implemented
       responses:
         "200":
           description: プロフィールの取得に成功しました。

@@ -1,4 +1,39 @@
-import type { Quest, StudyLog, UserQuest } from '@studyquest/db';
+import type { Prisma, Quest, StudyLog, UserQuest } from '@studyquest/db';
+
+export const activityPresenterSelect = {
+  id: true,
+  type: true,
+  message: true,
+  createdAt: true,
+  user: {
+    select: {
+      displayName: true,
+    },
+  },
+  quest: {
+    select: {
+      id: true,
+      title: true,
+    },
+  },
+} satisfies Prisma.ActivityLogSelect;
+
+type ActivityForPresenter = Prisma.ActivityLogGetPayload<{
+  select: typeof activityPresenterSelect;
+}>;
+
+type ActivityType =
+  | 'quest_accepted'
+  | 'quest_completed'
+  | 'study_log_created'
+  | 'badge_earned';
+
+const activityTypeMap = {
+  QUEST_ACCEPTED: 'quest_accepted',
+  QUEST_COMPLETED: 'quest_completed',
+  STUDY_LOG_CREATED: 'study_log_created',
+  BADGE_EARNED: 'badge_earned',
+} as const satisfies Record<ActivityForPresenter['type'], ActivityType>;
 
 /**
  * QuestをAPIレスポンス用に整形する
@@ -51,5 +86,28 @@ export function presentStudyLog(studyLog: StudyLog) {
     note: studyLog.note,
     studiedAt: studyLog.studiedAt,
     createdAt: studyLog.createdAt,
+  };
+}
+
+/**
+ * ActivityLogをAPIレスポンス用に整形する
+ * @param activity ActivityLog
+ * @returns APIレスポンス用のActivityオブジェクト
+ */
+export function presentActivity(activity: ActivityForPresenter) {
+  return {
+    id: activity.id,
+    type: activityTypeMap[activity.type],
+    message: activity.message,
+    createdAt: activity.createdAt,
+    user: {
+      displayName: activity.user.displayName,
+    },
+    quest: activity.quest
+      ? {
+          id: activity.quest.id,
+          title: activity.quest.title,
+        }
+      : null,
   };
 }

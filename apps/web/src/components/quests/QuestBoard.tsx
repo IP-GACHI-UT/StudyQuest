@@ -61,13 +61,13 @@ const quests: Quest[] = [
 export const QuestBoard = () => {
   return (
     <div className="space-y-4">
-    {quests.map((quest) => (
+      {quests.map((quest) => (
         <QuestBoardCard
-        key={quest.id}
-        quest={quest}
-        onAccept={() => alert('Accepting quest')}
+          key={quest.id}
+          quest={quest}
+          onAccept={() => alert('Accepting quest')}
         />
-    ))}
+      ))}
     </div>
   );
 };

@@ -1,5 +1,5 @@
-import { QuestBoard } from '@/components/quests/QuestBoard';
 import SectionHeader from '@/components/common/SectionHeader';
+import { QuestBoard } from '@/components/quests/QuestBoard';
 
 export default function BoardPage() {
   return (
@@ -9,7 +9,7 @@ export default function BoardPage() {
         jaTitle="クエスト掲示板"
         description="多くの学習者が取り組んでいるクエスト"
       />
-      <QuestBoard />;
+      <QuestBoard />
     </div>
   );
 }

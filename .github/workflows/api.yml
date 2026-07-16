@@ -1,4 +1,4 @@
-name: ci
+name: api
 
 on:
   pull_request:
@@ -6,10 +6,18 @@ on:
   push:
     branches: [develop, main]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  web:
-    name: web
+  api-static:
+    name: api-static
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     env:
       DATABASE_URL: postgresql://USER:PASSWORD@localhost:5432/studyquest?schema=public
 
@@ -38,17 +46,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Prisma validate
+        run: pnpm prisma:validate
+
       - name: Generate Prisma Client
-        run: pnpm prisma generate
+        run: pnpm prisma:generate
 
-      - name: Biome check
-        run: pnpm biome:check
+      - name: API typecheck
+        run: pnpm typecheck:api
 
-      - name: Web lint
-        run: pnpm lint:web
-
-      - name: Web typecheck
-        run: pnpm typecheck:web
-
-      - name: Web build
-        run: pnpm build:web
+      - name: API build
+        run: pnpm build:api

@@ -1,16 +1,7 @@
 import { serve } from '@hono/node-server';
-import { Hono } from 'hono';
-import { cors } from 'hono/cors';
-import { activitiesRoute } from './routes/activities.js';
-import { healthRoute } from './routes/health.js';
-import { profileRoute } from './routes/profile.js';
-import { questsRoute } from './routes/quests.js';
-import { studyLogsRoute } from './routes/study-logs.js';
-import { studySummaryRoute } from './routes/study-summary.js';
-import { userQuestsRoute } from './routes/user-quests.js';
+import { app } from './app.js';
 
 const DEFAULT_API_PORT = 3001;
-const DEFAULT_CORS_ORIGIN = 'http://localhost:3000';
 
 function getApiPort() {
   const rawPort = process.env.API_PORT;
@@ -27,24 +18,6 @@ function getApiPort() {
 
   return port;
 }
-
-const app = new Hono();
-const corsOrigin = process.env.CORS_ORIGIN ?? DEFAULT_CORS_ORIGIN;
-
-app.use(
-  '/api/*',
-  cors({
-    origin: corsOrigin,
-  }),
-);
-
-app.route('/api/health', healthRoute);
-app.route('/api/activities', activitiesRoute);
-app.route('/api/profile', profileRoute);
-app.route('/api/quests', questsRoute);
-app.route('/api/my-quests', userQuestsRoute);
-app.route('/api/study-logs', studyLogsRoute);
-app.route('/api/study-summary', studySummaryRoute);
 
 const port = getApiPort();
 

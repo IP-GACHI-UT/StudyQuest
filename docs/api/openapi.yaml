@@ -100,6 +100,7 @@ paths:
       summary: 学習記録を作成する
       description: |
         受注済みクエストに対して、学習した時間と任意のメモを記録します。
+        同じマイクエストに紐づく合計学習時間がクエストの想定時間以上になった場合、そのマイクエストは自動的に達成扱いになります。
         MVPでは学習タイマーや学習完了ボタンから呼び出す想定です。
       x-implementation-status: implemented
       requestBody:

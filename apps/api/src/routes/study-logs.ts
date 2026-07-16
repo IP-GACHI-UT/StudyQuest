@@ -3,6 +3,7 @@ import { Hono } from 'hono';
 import { errorResponse, jsonResponse } from '../lib/api-response.js';
 import { getCurrentUserId } from '../lib/auth.js';
 import { presentStudyLog } from '../presenters/api-presenters.js';
+import { completeUserQuestIfInProgress } from '../services/quest-completion.js';
 
 type StudyLogRequestBody = {
   questId?: unknown;
@@ -48,6 +49,7 @@ export const studyLogsRoute = new Hono().post('/', async (c) => {
         quest: {
           select: {
             title: true,
+            estimatedMinutes: true,
           },
         },
       },
@@ -81,6 +83,26 @@ export const studyLogsRoute = new Hono().post('/', async (c) => {
           message: `「${userQuest.quest.title}」の学習を${minutes}分記録しました。`,
         },
       });
+
+      const studyMinutes = await tx.studyLog.aggregate({
+        where: {
+          userId,
+          userQuestId: userQuest.id,
+        },
+        _sum: {
+          minutes: true,
+        },
+      });
+
+      const totalStudyMinutes = studyMinutes._sum.minutes ?? 0;
+
+      if (totalStudyMinutes >= userQuest.quest.estimatedMinutes) {
+        await completeUserQuestIfInProgress({
+          tx,
+          userId,
+          userQuestId: userQuest.id,
+        });
+      }
 
       return createdStudyLog;
     });

@@ -5,6 +5,7 @@
   "scripts": {
     "dev:web": "pnpm --filter @studyquest/web dev",
     "dev:api": "pnpm --filter @studyquest/api dev",
+    "test:api": "pnpm --filter @studyquest/api test",
     "db:seed": "node prisma/seed.js",
     "prisma:validate": "prisma validate",
     "prisma:generate": "prisma generate",

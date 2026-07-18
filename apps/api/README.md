@@ -27,3 +27,25 @@ DATABASE_URL=
 API_PORT=3001
 CORS_ORIGIN=http://localhost:3000
 ```
+
+## APIテスト
+
+1回だけテストを実行:
+
+```bash
+pnpm test:api
+```
+
+`apps/api`だけを対象に実行:
+
+```bash
+pnpm --filter @studyquest/api test
+```
+
+watch modeで実行:
+
+```bash
+pnpm --filter @studyquest/api test:watch
+```
+
+Phase 2のテストはPostgreSQLへ接続しません。現時点ではヘルスチェックの最小テストだけを実行し、DB結合テストは後続Phaseで追加します。

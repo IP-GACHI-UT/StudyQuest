@@ -10,4 +10,7 @@ export type Quest = {
   duration: string;
   acceptPoint: number;
   clearPoint: number;
+  acceptedToday?: number;
+  completedToday?: number;
+  completionRate?: number;
 };

@@ -67,11 +67,11 @@ pnpm test:api:db
 docker compose stop db-test
 ```
 
-空DBからmigrationを適用できることを確認する場合は、volumeを持たない`db-test`コンテナだけを削除して再作成します。
+空DBからmigrationを適用できることを確認する場合は、開発用DBの名前付きVolumeを共有しない`db-test`コンテナを、匿名Volumeを含めて削除し、空のDBとして再作成します。
 
 ```bash
 docker compose stop db-test
-docker compose rm -f db-test
+docker compose rm -f -v db-test
 docker compose up -d --wait db-test
 pnpm test:api:db
 ```

@@ -76,6 +76,7 @@ function main() {
     ...process.env,
     DATABASE_URL: testDatabaseUrl,
     NODE_ENV: 'test',
+    STUDYQUEST_DB_TEST: '1',
   };
 
   console.log('Using the dedicated local studyquest_test database.');

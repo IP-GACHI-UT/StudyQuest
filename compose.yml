@@ -18,5 +18,23 @@ services:
       timeout: 5s
       retries: 5
 
+  db-test:
+    image: postgres:16
+    container_name: studyquest-db-test
+    profiles:
+      - test
+    ports:
+      - "127.0.0.1:5433:5432"
+    environment:
+      # ローカルDB結合テスト専用の固定値です。
+      POSTGRES_USER: studyquest_test
+      POSTGRES_PASSWORD: studyquest_test
+      POSTGRES_DB: studyquest_test
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U studyquest_test -d studyquest_test"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
 volumes:
   postgres_data:

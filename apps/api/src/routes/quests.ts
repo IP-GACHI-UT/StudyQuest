@@ -36,6 +36,7 @@ export const questsRoute = new Hono()
         select: {
           id: true,
           title: true,
+          acceptPoint: true,
         },
       });
 
@@ -82,6 +83,15 @@ export const questsRoute = new Hono()
           },
           include: {
             quest: true,
+          },
+        });
+
+        await tx.user.update({
+          where: { id: userId },
+          data: {
+            totalPoints: {
+              increment: quest.acceptPoint,
+            },
           },
         });
 

@@ -45,7 +45,9 @@ paths:
       summary: クエストを受注する
       description: |
         指定したクエストを現在のユーザーのマイクエストに追加します。
+        初回受注時に、クエストのacceptPointをユーザーの累計ポイントへ加算します。
         同じユーザーが同じクエストを重複して受注することはできません。
+        重複受注が拒否された場合、受注ポイントは加算されません。
       x-implementation-status: implemented
       parameters:
         - name: questId

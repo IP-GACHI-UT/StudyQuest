@@ -3,6 +3,7 @@ import { afterAll, afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { app } from '../src/app.js';
 import { DEVELOPMENT_USER_ID } from '../src/lib/auth.js';
 
+const INITIAL_TOTAL_POINTS = 100;
 const TEST_QUEST = {
   id: 'test-quest-get-quests',
   title: 'DB結合テスト用クエスト',
@@ -26,6 +27,14 @@ async function deleteTestData() {
 
 beforeEach(async () => {
   await deleteTestData();
+  await prisma.user.create({
+    data: {
+      id: DEVELOPMENT_USER_ID,
+      displayName: 'クエストDB結合テスト用ユーザー',
+      email: 'quests-db-test@example.com',
+      totalPoints: INITIAL_TOTAL_POINTS,
+    },
+  });
   await prisma.quest.create({ data: TEST_QUEST });
 });
 
@@ -60,7 +69,7 @@ describe('GET /api/quests', () => {
 });
 
 describe('POST /api/quests/:questId/accept', () => {
-  it('rejects accepting the same quest twice without duplicating database records', async () => {
+  it('awards accept points only once when rejecting a duplicate acceptance', async () => {
     const firstResponse = await app.request(
       `/api/quests/${TEST_QUEST.id}/accept`,
       { method: 'POST' },
@@ -75,6 +84,14 @@ describe('POST /api/quests/:questId/accept', () => {
         }),
       }),
     );
+    await expect(
+      prisma.user.findUniqueOrThrow({
+        where: { id: DEVELOPMENT_USER_ID },
+        select: { totalPoints: true },
+      }),
+    ).resolves.toEqual({
+      totalPoints: INITIAL_TOTAL_POINTS + TEST_QUEST.acceptPoint,
+    });
 
     const secondResponse = await app.request(
       `/api/quests/${TEST_QUEST.id}/accept`,
@@ -107,5 +124,13 @@ describe('POST /api/quests/:questId/accept', () => {
         },
       }),
     ).resolves.toBe(1);
+    await expect(
+      prisma.user.findUniqueOrThrow({
+        where: { id: DEVELOPMENT_USER_ID },
+        select: { totalPoints: true },
+      }),
+    ).resolves.toEqual({
+      totalPoints: INITIAL_TOTAL_POINTS + TEST_QUEST.acceptPoint,
+    });
   });
 });

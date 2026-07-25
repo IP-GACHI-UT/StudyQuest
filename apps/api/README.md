@@ -59,7 +59,13 @@ docker compose up -d --wait db-test
 pnpm test:api:db
 ```
 
-`pnpm test:api:db`は、テスト専用DBへmigrationを適用し、Prisma Schemaとの差分がないことを確認してから、クエスト取得、重複受注防止、学習時間のバリデーション、クエスト達成報酬の二重加算防止に関するDB結合テストを実行します。開発用seedは使用しません。
+`pnpm test:api:db`は、テスト専用DBへmigrationを適用し、Prisma Schemaとの差分がないことを確認してから、
+- クエスト取得
+- 重複受注防止
+- 学習時間のバリデーション
+- クエスト達成報酬の二重加算防止
+
+に関するDB結合テストを実行します。開発用seedは使用しません。
 
 テスト終了後は、テスト専用DBだけを停止します。
 

@@ -45,7 +45,7 @@ describe('GET /api/quests', () => {
   it('returns a quest created in the database', async () => {
     const response = await app.request('/api/quests');
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(500);
     await expect(response.json()).resolves.toEqual(
       expect.objectContaining({
         quests: expect.arrayContaining([

@@ -59,7 +59,7 @@ docker compose up -d --wait db-test
 pnpm test:api:db
 ```
 
-`pnpm test:api:db`は、テスト専用DBへmigrationを適用し、Prisma Schemaとの差分がないことを確認してから、`GET /api/quests`のDB結合テストを実行します。開発用seedは使用しません。
+`pnpm test:api:db`は、テスト専用DBへmigrationを適用し、Prisma Schemaとの差分がないことを確認してから、クエスト取得、重複受注防止、学習時間のバリデーション、クエスト達成報酬の二重加算防止に関するDB結合テストを実行します。開発用seedは使用しません。
 
 テスト終了後は、テスト専用DBだけを停止します。
 
@@ -79,3 +79,9 @@ pnpm test:api:db
 DBテストは、既定で`127.0.0.1:5433`の`studyquest_test`だけを使用します。`TEST_DATABASE_URL`を指定する場合も、ローカルの5433番ポート、DB名とユーザー名が`studyquest_test`、Schemaが`public`でなければ実行を拒否します。既存の`DATABASE_URL`はDBテスト用URLとして使用しません。
 
 開発用DBのデータを削除しないため、DBテストの準備や終了に`docker compose down -v`や`prisma migrate reset`は使用しないでください。
+
+### GitHub Actions
+
+`develop`または`main`を対象とするPull Requestでは、GitHub Actionsの`api-db`ジョブがPostgreSQL 16を起動し、`pnpm test:api:db`を実行します。
+
+migrationまたはDB結合テストに失敗した場合、`api-db`ジョブも失敗します。

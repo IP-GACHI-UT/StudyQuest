@@ -25,9 +25,54 @@ type ApiStudyLogsResponse = {
   studyLogs: ApiStudyLog[];
 };
 
+type ApiProfile = {
+  id: string;
+  displayName: string;
+  level: number;
+  totalPoints: number;
+  totalXp: number;
+  totalStudyMinutes: number;
+  badges: Array<{
+    id: string;
+    name: string;
+    description: string;
+    icon: string;
+    earnedAt: string;
+  }>;
+};
+
+type ApiProfileResponse = {
+  profile: ApiProfile;
+};
+
 type LogItem = {
   created_at: Date;
   text: string;
+};
+
+type ApiMyQuest = {
+  id: string;
+  status: string;
+  acceptedAt: string;
+  completedAt: string | null;
+  quest: {
+    id: string;
+    title: string;
+    description: string;
+    category: string;
+    difficulty: string;
+    estimatedMinutes: number;
+    acceptPoint: number;
+    clearPoint: number;
+    xpReward: number;
+    isActive: boolean;
+    createdAt: string;
+    updatedAt: string;
+  };
+};
+
+type ApiMyQuestsResponse = {
+  userQuests: ApiMyQuest[];
 };
 
 const mapStudyLogsToLogItems = (studyLogs: ApiStudyLog[]): LogItem[] =>
@@ -39,61 +84,140 @@ const mapStudyLogsToLogItems = (studyLogs: ApiStudyLog[]): LogItem[] =>
         : `${log.minutes}分の学習を記録しました。`,
   }));
 
+const formatMinutesToStudyTime = (minutes: number): string => {
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+
+  if (hours === 0) {
+    return `${remainingMinutes}分`;
+  }
+
+  if (remainingMinutes === 0) {
+    return `${hours}時間`;
+  }
+
+  return `${hours}時間 ${remainingMinutes}分`;
+};
+
+const mapQuestStatusToDisplay = (
+  status: string,
+): '進行中' | '達成済み' | 'キャンセル済み' => {
+  switch (status) {
+    case 'completed':
+      return '達成済み';
+    case 'canceled':
+      return 'キャンセル済み';
+    default:
+      return '進行中';
+  }
+};
+
 export default function Home() {
   const [studyLogs, setStudyLogs] = useState<LogItem[]>([]);
   const [studyLogLoading, setStudyLogLoading] = useState(true);
   const [studyLogError, setStudyLogError] = useState<string | null>(null);
+  const [profile, setProfile] = useState<ApiProfile | null>(null);
+  const [profileLoading, setProfileLoading] = useState(true);
+  const [profileError, setProfileError] = useState<string | null>(null);
+  const [myQuests, setMyQuests] = useState<ApiMyQuest[]>([]);
+  const [myQuestsLoading, setMyQuestsLoading] = useState(true);
+  const [myQuestsError, setMyQuestsError] = useState<string | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
 
-    async function loadStudyLogs() {
+    async function loadDashboardData() {
       try {
-        const response = await fetch('http://localhost:3001/api/study-logs', {
-          signal: controller.signal,
-        });
+        const [profileResponse, studyLogsResponse, myQuestsResponse] =
+          await Promise.all([
+            fetch('http://localhost:3001/api/profile', {
+              signal: controller.signal,
+            }),
+            fetch('http://localhost:3001/api/study-logs', {
+              signal: controller.signal,
+            }),
+            fetch('http://localhost:3001/api/my-quests', {
+              signal: controller.signal,
+            }),
+          ]);
 
-        if (!response.ok) {
+        if (!profileResponse.ok) {
+          throw new Error('プロフィールの取得に失敗しました。');
+        }
+
+        if (!studyLogsResponse.ok) {
           throw new Error('学習ログの取得に失敗しました。');
         }
 
-        const data = (await response.json()) as ApiStudyLogsResponse;
-        setStudyLogs(mapStudyLogsToLogItems(data.studyLogs));
+        if (!myQuestsResponse.ok) {
+          throw new Error('マイクエストの取得に失敗しました。');
+        }
+
+        const profileData = (await profileResponse.json()) as ApiProfileResponse;
+        const studyLogsData = (await studyLogsResponse.json()) as ApiStudyLogsResponse;
+        const myQuestsData = (await myQuestsResponse.json()) as ApiMyQuestsResponse;
+
+        setProfile(profileData.profile);
+        setStudyLogs(mapStudyLogsToLogItems(studyLogsData.studyLogs));
+        setMyQuests(myQuestsData.userQuests);
       } catch (error) {
         if (controller.signal.aborted) {
           return;
         }
 
-        setStudyLogError(
+        const message =
           error instanceof Error
             ? error.message
-            : '学習ログの取得中にエラーが発生しました。',
-        );
+            : 'データ取得中にエラーが発生しました。';
+
+        setProfileError(message);
+        setStudyLogError(message);
+        setMyQuestsError(message);
       } finally {
         setStudyLogLoading(false);
+        setProfileLoading(false);
+        setMyQuestsLoading(false);
       }
     }
 
-    loadStudyLogs();
+    loadDashboardData();
 
     return () => controller.abort();
   }, []);
+
+  const featuredQuest = myQuests[0];
 
   return (
     <main>
       <SectionHeader
         enTitle="MY QUEST"
         jaTitle="いま達成を目指しているクエスト"
-        description="受注:1 / 3"
+        description={`受注:${myQuests.length}`}
       />
-      <MyQuestCard
-        status="進行中"
-        title="公式ドキュメントを10分読む"
-        category="プログラミング"
-        difficulty="easy"
-        buttonLabel="学習する"
-        onButtonClick={() => alert('Viewing quest details')}
-      />
+      {myQuestsLoading ? (
+        <p className="py-4 text-sm text-gray-500">読み込み中...</p>
+      ) : myQuestsError ? (
+        <p className="py-4 text-sm text-red-500">{myQuestsError}</p>
+      ) : featuredQuest ? (
+        <MyQuestCard
+          status={mapQuestStatusToDisplay(featuredQuest.status)}
+          title={featuredQuest.quest.title}
+          category={featuredQuest.quest.category}
+          difficulty={featuredQuest.quest.difficulty}
+          buttonLabel={
+            featuredQuest.status === 'completed'
+              ? '結果を見る'
+              : featuredQuest.status === 'canceled'
+                ? '再開する'
+                : '学習する'
+          }
+          onButtonClick={() => alert('Viewing quest details')}
+        />
+      ) : (
+        <p className="py-4 text-sm text-gray-500">
+          受注中のクエストはありません。
+        </p>
+      )}
 
       <SectionHeader
         enTitle="RECOMMENDED"
@@ -159,15 +283,22 @@ export default function Home() {
         ]}
       />
 
-      <ProfileCard
-        userName="学習者"
-        level={5}
-        totalPoints={1000}
-        totalXp={500}
-        totalStudyTime="2時間 30分"
-        icon={<div className="h-full w-full bg-gray-300" />}
-        onProfileClick={() => alert('Viewing profile')}
-      />
+      <div>
+        {profileError ? (
+          <p className="mb-4 text-sm text-red-500">{profileError}</p>
+        ) : null}
+        <ProfileCard
+          userName={profile?.displayName ?? (profileLoading ? '読み込み中' : '学習者')}
+          level={profile?.level ?? 0}
+          totalPoints={profile?.totalPoints ?? 0}
+          totalXp={profile?.totalXp ?? 0}
+          totalStudyTime={formatMinutesToStudyTime(
+            profile?.totalStudyMinutes ?? 0,
+          )}
+          icon={<div className="h-full w-full bg-gray-300" />}
+          onProfileClick={() => alert('Viewing profile')}
+        />
+      </div>
 
       <BadgeCard
         title="最近のバッジ"

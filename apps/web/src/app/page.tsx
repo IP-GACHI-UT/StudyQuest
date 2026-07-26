@@ -10,6 +10,7 @@ import { RecommendedQuestCard } from '@/components/cards/RecommendedQuestCard';
 import { StudyLogCard } from '@/components/cards/StudyLogCard';
 import { WeeklyStudyCard } from '@/components/cards/WeeklyStudyCard';
 import SectionHeader from '@/components/common/SectionHeader';
+import { acceptQuest } from '@/utils/acceptQuest';
 
 type ApiStudyLog = {
   id: string;
@@ -78,10 +79,9 @@ type ApiMyQuestsResponse = {
 const mapStudyLogsToLogItems = (studyLogs: ApiStudyLog[]): LogItem[] =>
   studyLogs.map((log) => ({
     created_at: new Date(log.createdAt),
-    text:
-      log.note && log.note.trim()
-        ? log.note
-        : `${log.minutes}分の学習を記録しました。`,
+    text: log.note?.trim()
+      ? log.note
+      : `${log.minutes}分の学習を記録しました。`,
   }));
 
 const formatMinutesToStudyTime = (minutes: number): string => {
@@ -153,9 +153,12 @@ export default function Home() {
           throw new Error('マイクエストの取得に失敗しました。');
         }
 
-        const profileData = (await profileResponse.json()) as ApiProfileResponse;
-        const studyLogsData = (await studyLogsResponse.json()) as ApiStudyLogsResponse;
-        const myQuestsData = (await myQuestsResponse.json()) as ApiMyQuestsResponse;
+        const profileData =
+          (await profileResponse.json()) as ApiProfileResponse;
+        const studyLogsData =
+          (await studyLogsResponse.json()) as ApiStudyLogsResponse;
+        const myQuestsData =
+          (await myQuestsResponse.json()) as ApiMyQuestsResponse;
 
         setProfile(profileData.profile);
         setStudyLogs(mapStudyLogsToLogItems(studyLogsData.studyLogs));
@@ -232,7 +235,13 @@ export default function Home() {
         duration="10分"
         acceptPoint={10}
         clearPoint={20}
-        onAccept={() => alert('Accepting quest')}
+        onAccept={() => {
+          void acceptQuest('1').catch((error) => {
+            alert(
+              error instanceof Error ? error.message : '受注に失敗しました',
+            );
+          });
+        }}
       />
       <RecommendedQuestCard
         title="英単語を10個覚える"
@@ -242,7 +251,13 @@ export default function Home() {
         duration="10分"
         acceptPoint={10}
         clearPoint={20}
-        onAccept={() => alert('Accepting quest')}
+        onAccept={() => {
+          void acceptQuest('2').catch((error) => {
+            alert(
+              error instanceof Error ? error.message : '受注に失敗しました',
+            );
+          });
+        }}
       />
 
       <SectionHeader
@@ -288,7 +303,9 @@ export default function Home() {
           <p className="mb-4 text-sm text-red-500">{profileError}</p>
         ) : null}
         <ProfileCard
-          userName={profile?.displayName ?? (profileLoading ? '読み込み中' : '学習者')}
+          userName={
+            profile?.displayName ?? (profileLoading ? '読み込み中' : '学習者')
+          }
           level={profile?.level ?? 0}
           totalPoints={profile?.totalPoints ?? 0}
           totalXp={profile?.totalXp ?? 0}

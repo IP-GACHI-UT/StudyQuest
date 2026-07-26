@@ -13,6 +13,7 @@ type RecommendedQuestCardProps = {
   duration: string;
   acceptPoint: number;
   clearPoint: number;
+  isAccepting?: boolean;
   onAccept: () => void;
 };
 
@@ -24,6 +25,7 @@ export const RecommendedQuestCard = ({
   duration,
   acceptPoint,
   clearPoint,
+  isAccepting = false,
   onAccept,
 }: RecommendedQuestCardProps) => {
   return (
@@ -50,10 +52,11 @@ export const RecommendedQuestCard = ({
 
       <button
         type="button"
-        className="mt-5 w-full rounded-lg bg-blue-600 px-4 py-2"
+        className="mt-5 w-full rounded-lg bg-blue-600 px-4 py-2 disabled:cursor-not-allowed disabled:bg-blue-400"
         onClick={onAccept}
+        disabled={isAccepting}
       >
-        クエスト受注
+        {isAccepting ? '受注中...' : 'クエスト受注'}
       </button>
     </Card>
   );

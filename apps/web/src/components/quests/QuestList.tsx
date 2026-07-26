@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { RecommendedQuestCard } from '@/components/cards/RecommendedQuestCard';
 import { FilterButton } from '@/components/common/FilterButton';
 import { CATEGORIES, type Category } from '@/constants/quest/category';
 import { DIFFICULTIES, type Difficulty } from '@/constants/quest/difficulty';
 import type { Quest } from '@/types/quest';
+import { acceptQuest } from '@/utils/acceptQuest';
 
 // API から返されるクエストデータの型定義。
 // Web 側では API の型とアプリ内表示用型を分けて扱います。
@@ -58,48 +59,53 @@ export const QuestList = () => {
     Difficulty | 'すべて'
   >('すべて');
   const [quests, setQuests] = useState<Quest[]>([]);
-  const [apiResponse, setApiResponse] = useState<ApiQuestsResponse | null>(
-    null,
-  );
+  const [, setApiResponse] = useState<ApiQuestsResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [acceptingQuestId, setAcceptingQuestId] = useState<number | null>(null);
+  const [acceptMessage, setAcceptMessage] = useState<string | null>(null);
+
+  const loadQuests = useCallback(async (signal?: AbortSignal) => {
+    try {
+      setError(null);
+      setIsLoading(true);
+
+      // 開発用に API を直接叩いてクエストを取得します。
+      const response = await fetch('http://localhost:3001/api/quests', {
+        signal,
+      });
+
+      if (!response.ok) {
+        throw new Error('APIからのクエスト取得に失敗しました。');
+      }
+
+      const data = (await response.json()) as ApiQuestsResponse;
+      setApiResponse(data);
+      setQuests(data.quests.map(mapApiQuestToQuest));
+    } catch (fetchError) {
+      if (signal?.aborted) {
+        return;
+      }
+
+      setError(
+        fetchError instanceof Error
+          ? fetchError.message
+          : 'クエスト一覧の取得中にエラーが発生しました。',
+      );
+    } finally {
+      if (!signal?.aborted) {
+        setIsLoading(false);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const controller = new AbortController();
 
-    async function loadQuests() {
-      try {
-        // 開発用に API を直接叩いてクエストを取得します。
-        const response = await fetch('http://localhost:3001/api/quests', {
-          signal: controller.signal,
-        });
-
-        if (!response.ok) {
-          throw new Error('APIからのクエスト取得に失敗しました。');
-        }
-
-        const data = (await response.json()) as ApiQuestsResponse;
-        setApiResponse(data);
-        setQuests(data.quests.map(mapApiQuestToQuest));
-      } catch (fetchError) {
-        if (controller.signal.aborted) {
-          return;
-        }
-
-        setError(
-          fetchError instanceof Error
-            ? fetchError.message
-            : 'クエスト一覧の取得中にエラーが発生しました。',
-        );
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    loadQuests();
+    void loadQuests(controller.signal);
 
     return () => controller.abort();
-  }, []);
+  }, [loadQuests]);
 
   // フィルターの選択状態に応じて表示するクエストを絞り込みます。
   const filteredQuests = useMemo(() => {
@@ -114,6 +120,25 @@ export const QuestList = () => {
       return categoryMatch && difficultyMatch;
     });
   }, [quests, selectedCategory, selectedDifficulty]);
+
+  const handleAcceptQuest = async (questId: number) => {
+    setAcceptingQuestId(questId);
+    setAcceptMessage(null);
+
+    try {
+      await acceptQuest(questId);
+      await loadQuests();
+      setAcceptMessage('クエストを受注しました。');
+    } catch (acceptError) {
+      setAcceptMessage(
+        acceptError instanceof Error
+          ? acceptError.message
+          : 'クエストの受注に失敗しました。',
+      );
+    } finally {
+      setAcceptingQuestId(null);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -156,6 +181,12 @@ export const QuestList = () => {
         </div>
       </div>
 
+      {acceptMessage ? (
+        <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-700">
+          {acceptMessage}
+        </div>
+      ) : null}
+
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
         {filteredQuests.map((quest) => (
           <RecommendedQuestCard
@@ -167,7 +198,8 @@ export const QuestList = () => {
             duration={quest.duration}
             acceptPoint={quest.acceptPoint}
             clearPoint={quest.clearPoint}
-            onAccept={() => alert('Accepting quest')}
+            isAccepting={acceptingQuestId === quest.id}
+            onAccept={() => void handleAcceptQuest(quest.id)}
           />
         ))}
       </div>

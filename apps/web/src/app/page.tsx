@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { BadgeCard } from '@/components/cards/BadgeCard';
 import { GoalCard } from '@/components/cards/GoalCard';
 import { MyQuestCard } from '@/components/cards/MyQuestCard';
@@ -10,7 +11,74 @@ import { StudyLogCard } from '@/components/cards/StudyLogCard';
 import { WeeklyStudyCard } from '@/components/cards/WeeklyStudyCard';
 import SectionHeader from '@/components/common/SectionHeader';
 
+type ApiStudyLog = {
+  id: string;
+  userId: string;
+  questId: string;
+  minutes: number;
+  note?: string | null;
+  studiedAt: string;
+  createdAt: string;
+};
+
+type ApiStudyLogsResponse = {
+  studyLogs: ApiStudyLog[];
+};
+
+type LogItem = {
+  created_at: Date;
+  text: string;
+};
+
+const mapStudyLogsToLogItems = (studyLogs: ApiStudyLog[]): LogItem[] =>
+  studyLogs.map((log) => ({
+    created_at: new Date(log.createdAt),
+    text:
+      log.note && log.note.trim()
+        ? log.note
+        : `${log.minutes}分の学習を記録しました。`,
+  }));
+
 export default function Home() {
+  const [studyLogs, setStudyLogs] = useState<LogItem[]>([]);
+  const [studyLogLoading, setStudyLogLoading] = useState(true);
+  const [studyLogError, setStudyLogError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function loadStudyLogs() {
+      try {
+        const response = await fetch('http://localhost:3001/api/study-logs', {
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error('学習ログの取得に失敗しました。');
+        }
+
+        const data = (await response.json()) as ApiStudyLogsResponse;
+        setStudyLogs(mapStudyLogsToLogItems(data.studyLogs));
+      } catch (error) {
+        if (controller.signal.aborted) {
+          return;
+        }
+
+        setStudyLogError(
+          error instanceof Error
+            ? error.message
+            : '学習ログの取得中にエラーが発生しました。',
+        );
+      } finally {
+        setStudyLogLoading(false);
+      }
+    }
+
+    loadStudyLogs();
+
+    return () => controller.abort();
+  }, []);
+
   return (
     <main>
       <SectionHeader
@@ -111,24 +179,9 @@ export default function Home() {
       />
 
       <StudyLogCard
-        logs={[
-          {
-            created_at: new Date(),
-            text: '「公式ドキュメントを10分読む」を達成',
-          },
-          {
-            created_at: new Date(2026, 5, 12),
-            text: '10分の学習セッションを記録',
-          },
-          {
-            created_at: new Date(2026, 5, 1),
-            text: '「TypeScriptの型を復習」を達成',
-          },
-          {
-            created_at: new Date(2025, 3, 1),
-            text: '「技術記事を1本読む」を達成',
-          },
-        ]}
+        logs={studyLogs}
+        isLoading={studyLogLoading}
+        error={studyLogError}
       />
     </main>
   );

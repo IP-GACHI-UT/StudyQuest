@@ -150,7 +150,10 @@ export default function Home() {
           setProfileError('プロフィールの取得に失敗しました。');
         }
 
-        if (studyLogsResult.status === 'fulfilled' && studyLogsResult.value.ok) {
+        if (
+          studyLogsResult.status === 'fulfilled' &&
+          studyLogsResult.value.ok
+        ) {
           const studyLogsData =
             (await studyLogsResult.value.json()) as ApiStudyLogsResponse;
           setStudyLogs(mapStudyLogsToLogItems(studyLogsData.studyLogs));

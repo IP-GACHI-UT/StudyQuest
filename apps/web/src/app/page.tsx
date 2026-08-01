@@ -128,8 +128,8 @@ export default function Home() {
 
     async function loadDashboardData() {
       try {
-        const [profileResponse, studyLogsResponse, myQuestsResponse] =
-          await Promise.all([
+        const [profileResult, studyLogsResult, myQuestsResult] =
+          await Promise.allSettled([
             fetch('http://localhost:3001/api/profile', {
               signal: controller.signal,
             }),
@@ -141,28 +141,32 @@ export default function Home() {
             }),
           ]);
 
-        if (!profileResponse.ok) {
-          throw new Error('プロフィールの取得に失敗しました。');
+        if (profileResult.status === 'fulfilled' && profileResult.value.ok) {
+          const profileData =
+            (await profileResult.value.json()) as ApiProfileResponse;
+          setProfile(profileData.profile);
+          setProfileError(null);
+        } else {
+          setProfileError('プロフィールの取得に失敗しました。');
         }
 
-        if (!studyLogsResponse.ok) {
-          throw new Error('学習ログの取得に失敗しました。');
+        if (studyLogsResult.status === 'fulfilled' && studyLogsResult.value.ok) {
+          const studyLogsData =
+            (await studyLogsResult.value.json()) as ApiStudyLogsResponse;
+          setStudyLogs(mapStudyLogsToLogItems(studyLogsData.studyLogs));
+          setStudyLogError(null);
+        } else {
+          setStudyLogError('学習ログの取得に失敗しました。');
         }
 
-        if (!myQuestsResponse.ok) {
-          throw new Error('マイクエストの取得に失敗しました。');
+        if (myQuestsResult.status === 'fulfilled' && myQuestsResult.value.ok) {
+          const myQuestsData =
+            (await myQuestsResult.value.json()) as ApiMyQuestsResponse;
+          setMyQuests(myQuestsData.userQuests);
+          setMyQuestsError(null);
+        } else {
+          setMyQuestsError('マイクエストの取得に失敗しました。');
         }
-
-        const profileData =
-          (await profileResponse.json()) as ApiProfileResponse;
-        const studyLogsData =
-          (await studyLogsResponse.json()) as ApiStudyLogsResponse;
-        const myQuestsData =
-          (await myQuestsResponse.json()) as ApiMyQuestsResponse;
-
-        setProfile(profileData.profile);
-        setStudyLogs(mapStudyLogsToLogItems(studyLogsData.studyLogs));
-        setMyQuests(myQuestsData.userQuests);
       } catch (error) {
         if (controller.signal.aborted) {
           return;
@@ -177,13 +181,15 @@ export default function Home() {
         setStudyLogError(message);
         setMyQuestsError(message);
       } finally {
-        setStudyLogLoading(false);
-        setProfileLoading(false);
-        setMyQuestsLoading(false);
+        if (!controller.signal.aborted) {
+          setStudyLogLoading(false);
+          setProfileLoading(false);
+          setMyQuestsLoading(false);
+        }
       }
     }
 
-    loadDashboardData();
+    void loadDashboardData();
 
     return () => controller.abort();
   }, []);

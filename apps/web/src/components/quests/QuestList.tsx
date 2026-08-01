@@ -102,9 +102,13 @@ export const QuestList = () => {
   useEffect(() => {
     const controller = new AbortController();
 
-    void loadQuests(controller.signal);
+    queueMicrotask(() => {
+      void loadQuests(controller.signal);
+    });
 
-    return () => controller.abort();
+    return () => {
+      controller.abort();
+    };
   }, [loadQuests]);
 
   // フィルターの選択状態に応じて表示するクエストを絞り込みます。

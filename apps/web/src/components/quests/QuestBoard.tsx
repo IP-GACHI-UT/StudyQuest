@@ -2,6 +2,7 @@
 
 import { QuestBoardCard } from '@/components/cards/QuestBoardCard';
 import type { Quest } from '@/types/quest';
+import { acceptQuest } from '@/utils/acceptQuest';
 
 const quests: Quest[] = [
   {
@@ -59,13 +60,26 @@ const quests: Quest[] = [
 ];
 
 export const QuestBoard = () => {
+  const handleAcceptQuest = async (questId: number) => {
+    try {
+      await acceptQuest(questId);
+      alert('クエストを受注しました。');
+    } catch (error) {
+      alert(
+        error instanceof Error
+          ? error.message
+          : 'クエストの受注に失敗しました。',
+      );
+    }
+  };
+
   return (
     <div className="space-y-4">
       {quests.map((quest) => (
         <QuestBoardCard
           key={quest.id}
           quest={quest}
-          onAccept={() => alert('Accepting quest')}
+          onAccept={() => void handleAcceptQuest(quest.id)}
         />
       ))}
     </div>

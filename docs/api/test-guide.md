@@ -72,7 +72,7 @@ curl例:
 curl http://localhost:3001/api/health
 ```
 
-## 6. 実装済みAPI4つの確認手順
+## 6. 実装済みAPI5つの確認手順
 
 ### A. クエスト一覧取得
 
@@ -258,6 +258,56 @@ JSONとして不正なBodyの確認例:
 curl -X POST http://localhost:3001/api/study-logs \
   -H "Content-Type: application/json" \
   -d '{ "questId": "dev-quest-html-001", "minutes": 10'
+```
+
+### E. 掲示板用クエスト一覧取得
+
+- Method: `GET`
+- URL: `http://localhost:3001/api/board/quests`
+- 目的: 掲示板に表示するクエストごとの全体集計と、開発用ユーザーの受注状態を取得します。
+
+Thunder Clientでの確認手順:
+
+1. Methodを `GET` にします。
+2. URLに `http://localhost:3001/api/board/quests` を入力します。
+3. `Send` を押します。
+
+正常系の期待内容:
+
+- ステータスコード `200` が返ります。
+- `quests` 配列が返ります。
+- 各要素の `quest` にクエスト情報が含まれます。
+- `statistics` に `acceptedToday`、`completedToday`、`completionRate` が含まれます。
+- `currentUser.isAccepted` は、開発用ユーザーが受注済みの場合だけ `true` になります。
+- 他ユーザーの受注数を表す `acceptedToday` が1以上でも、開発用ユーザーが未受注なら `currentUser.isAccepted` は `false` です。
+
+主要項目だけを抜粋したレスポンス例:
+
+```json
+{
+  "quests": [
+    {
+      "quest": {
+        "id": "dev-quest-html-001",
+        "title": "HTMLの基本を学ぶ"
+      },
+      "statistics": {
+        "acceptedToday": 1,
+        "completedToday": 0,
+        "completionRate": 50
+      },
+      "currentUser": {
+        "isAccepted": true
+      }
+    }
+  ]
+}
+```
+
+curl例:
+
+```bash
+curl http://localhost:3001/api/board/quests
 ```
 
 ## 7. よくある失敗

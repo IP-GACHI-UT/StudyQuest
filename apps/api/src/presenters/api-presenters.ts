@@ -104,6 +104,33 @@ export function presentQuest(quest: Quest) {
   };
 }
 
+type QuestBoardStatistics = {
+  acceptedToday: number;
+  completedToday: number;
+  completionRate: number;
+};
+
+/**
+ * 掲示板用クエストをAPIレスポンス用に整形する
+ * @param quest Quest
+ * @param statistics 全ユーザーを対象としたクエスト集計
+ * @param isAccepted 現在のユーザーが受注済みかどうか
+ * @returns APIレスポンス用の掲示板クエストオブジェクト
+ */
+export function presentQuestBoardQuest(
+  quest: Quest,
+  statistics: QuestBoardStatistics,
+  isAccepted: boolean,
+) {
+  return {
+    quest: presentQuest(quest),
+    statistics,
+    currentUser: {
+      isAccepted,
+    },
+  };
+}
+
 /**
  * UserQuestをAPIレスポンス用に整形する
  * @param userQuest UserQuest & { quest: Quest }

@@ -9,4 +9,16 @@ describe('app', () => {
     expect(response.headers.get('content-type')).toContain('application/json');
     await expect(response.json()).resolves.toEqual({ status: 'ok' });
   });
+
+  it('rejects access to a protected API without a session', async () => {
+    const response = await app.request('/api/profile');
+
+    expect(response.status).toBe(401);
+    await expect(response.json()).resolves.toEqual({
+      error: {
+        code: 'AUTHENTICATION_REQUIRED',
+        message: 'ログインが必要です。',
+      },
+    });
+  });
 });

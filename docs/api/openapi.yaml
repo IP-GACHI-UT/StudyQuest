@@ -38,6 +38,26 @@ paths:
                 $ref: "#/components/schemas/QuestListResponse"
         "500":
           $ref: "#/components/responses/InternalServerError"
+  /api/board/quests:
+    get:
+      tags:
+        - Quests
+      summary: 掲示板用クエスト一覧を取得する
+      description: |
+        掲示板に表示する有効なクエストと、全ユーザーを対象にした集計、現在ユーザーの受注状態を取得します。
+        acceptedTodayとcompletedTodayはAPIサーバーのローカル日付における当日分です。
+        completionRateは、全期間の受注数に対するcompletedAtが設定された受注数の割合を整数へ四捨五入した値です。
+        currentUser.isAcceptedは現在ユーザーのUserQuestが存在する場合にtrueとなり、全体集計からは判定しません。
+      x-implementation-status: implemented
+      responses:
+        "200":
+          description: 掲示板用クエスト一覧の取得に成功しました。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestBoardListResponse"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
   /api/quests/{questId}/accept:
     post:
       tags:
@@ -271,6 +291,47 @@ components:
         updatedAt:
           type: string
           format: date-time
+    QuestBoardStatistics:
+      type: object
+      required:
+        - acceptedToday
+        - completedToday
+        - completionRate
+      properties:
+        acceptedToday:
+          type: integer
+          minimum: 0
+          description: APIサーバーのローカル日付で本日受注された全ユーザーの人数です。
+        completedToday:
+          type: integer
+          minimum: 0
+          description: APIサーバーのローカル日付で本日達成した全ユーザーの人数です。
+        completionRate:
+          type: integer
+          minimum: 0
+          maximum: 100
+          description: 全期間の受注数に対する達成数の割合を整数へ四捨五入した値です。受注がない場合は0です。
+    QuestBoardCurrentUser:
+      type: object
+      required:
+        - isAccepted
+      properties:
+        isAccepted:
+          type: boolean
+          description: 現在ユーザーのUserQuestが存在するかどうかです。
+    QuestBoardItem:
+      type: object
+      required:
+        - quest
+        - statistics
+        - currentUser
+      properties:
+        quest:
+          $ref: "#/components/schemas/Quest"
+        statistics:
+          $ref: "#/components/schemas/QuestBoardStatistics"
+        currentUser:
+          $ref: "#/components/schemas/QuestBoardCurrentUser"
     UserQuest:
       type: object
       required:
@@ -404,6 +465,15 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Quest"
+    QuestBoardListResponse:
+      type: object
+      required:
+        - quests
+      properties:
+        quests:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuestBoardItem"
     UserQuestResponse:
       type: object
       required:

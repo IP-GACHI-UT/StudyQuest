@@ -8,7 +8,10 @@ info:
 servers:
   - url: http://localhost:3001
     description: ローカルAPI開発環境
+security: []
 tags:
+  - name: Auth
+    description: Better Authによる登録、ログイン、メール確認、パスワード再設定
   - name: Quests
     description: クエストの取得と受注に関するAPI
   - name: StudyLogs
@@ -20,6 +23,177 @@ tags:
   - name: Profile
     description: プロフィール表示に関するAPI
 paths:
+  /api/auth/sign-up/email:
+    post:
+      tags: [Auth]
+      summary: メールアドレスとパスワードで登録する
+      x-implementation-status: implemented
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmailSignUpRequest"
+      responses:
+        "200":
+          description: 登録を受け付け、確認メールを送信しました。
+        "400":
+          $ref: "#/components/responses/AuthRequestError"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+  /api/auth/sign-in/email:
+    post:
+      tags: [Auth]
+      summary: メールアドレスとパスワードでログインする
+      x-implementation-status: implemented
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EmailSignInRequest"
+      responses:
+        "200":
+          description: ログインに成功し、session Cookieを設定しました。
+        "401":
+          $ref: "#/components/responses/AuthRequestError"
+        "403":
+          $ref: "#/components/responses/AuthRequestError"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+  /api/auth/sign-in/social:
+    post:
+      tags: [Auth]
+      summary: Google OAuthログインを開始する
+      x-implementation-status: implemented
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SocialSignInRequest"
+      responses:
+        "200":
+          description: Googleの認可画面URLを返します。
+        "400":
+          $ref: "#/components/responses/AuthRequestError"
+  /api/auth/callback/google:
+    get:
+      tags: [Auth]
+      summary: Google OAuth callbackを処理する
+      x-implementation-status: implemented
+      responses:
+        "302":
+          description: 検証後、指定されたサイト内URLへリダイレクトします。
+        "400":
+          $ref: "#/components/responses/AuthRequestError"
+  /api/auth/get-session:
+    get:
+      tags: [Auth]
+      summary: 現在のsessionを取得する
+      x-implementation-status: implemented
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: 有効なsessionとユーザー、またはnullを返します。
+  /api/auth/sign-out:
+    post:
+      tags: [Auth]
+      summary: 現在のsessionからログアウトする
+      x-implementation-status: implemented
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: sessionを失効し、Cookieを削除しました。
+  /api/auth/send-verification-email:
+    post:
+      tags: [Auth]
+      summary: メールアドレス確認メールを再送する
+      x-implementation-status: implemented
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendVerificationEmailRequest"
+      responses:
+        "200":
+          description: 確認メールの送信を受け付けました。
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+  /api/auth/verify-email:
+    get:
+      tags: [Auth]
+      summary: メールアドレス確認トークンを検証する
+      x-implementation-status: implemented
+      parameters:
+        - name: token
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: callbackURL
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "302":
+          description: 確認結果とともに指定されたサイト内URLへリダイレクトします。
+  /api/auth/request-password-reset:
+    post:
+      tags: [Auth]
+      summary: パスワード再設定メールを要求する
+      description: アカウントの存在にかかわらず同じ成功レスポンスを返します。
+      x-implementation-status: implemented
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PasswordResetRequest"
+      responses:
+        "200":
+          description: 再設定メールの送信要求を受け付けました。
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
+  /api/auth/reset-password/{token}:
+    get:
+      tags: [Auth]
+      summary: パスワード再設定リンクを検証する
+      x-implementation-status: implemented
+      parameters:
+        - name: token
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: callbackURL
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "302":
+          description: 検証結果を付けて再設定画面へリダイレクトします。
+  /api/auth/reset-password:
+    post:
+      tags: [Auth]
+      summary: パスワードを再設定する
+      x-implementation-status: implemented
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResetPasswordRequest"
+      responses:
+        "200":
+          description: パスワードを変更し、既存sessionをすべて失効しました。
+        "400":
+          $ref: "#/components/responses/AuthRequestError"
   /api/quests:
     get:
       tags:
@@ -49,6 +223,8 @@ paths:
         completionRateは、全期間の受注数に対するcompletedAtが設定された受注数の割合を整数へ四捨五入した値です。
         currentUser.isAcceptedは現在ユーザーのUserQuestが存在する場合にtrueとなり、全体集計からは判定しません。
       x-implementation-status: implemented
+      security:
+        - cookieAuth: []
       responses:
         "200":
           description: 掲示板用クエスト一覧の取得に成功しました。
@@ -56,6 +232,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/QuestBoardListResponse"
+        "401":
+          $ref: "#/components/responses/AuthenticationRequired"
         "500":
           $ref: "#/components/responses/InternalServerError"
   /api/quests/{questId}/accept:
@@ -69,6 +247,8 @@ paths:
         同じユーザーが同じクエストを重複して受注することはできません。
         重複受注が拒否された場合、受注ポイントは加算されません。
       x-implementation-status: implemented
+      security:
+        - cookieAuth: []
       parameters:
         - name: questId
           in: path
@@ -83,6 +263,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UserQuestResponse"
+        "401":
+          $ref: "#/components/responses/AuthenticationRequired"
         "404":
           description: 指定されたクエストが存在しません。
           content:
@@ -106,6 +288,8 @@ paths:
         現在のユーザーが受注しているクエスト一覧を取得します。
         画面の「いま達成を目指しているクエスト」表示に使います。
       x-implementation-status: implemented
+      security:
+        - cookieAuth: []
       responses:
         "200":
           description: マイクエスト一覧の取得に成功しました。
@@ -113,6 +297,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MyQuestListResponse"
+        "401":
+          $ref: "#/components/responses/AuthenticationRequired"
         "500":
           $ref: "#/components/responses/InternalServerError"
   /api/study-logs:
@@ -125,6 +311,8 @@ paths:
         同じマイクエストに紐づく合計学習時間がクエストの想定時間以上になった場合、そのマイクエストは自動的に達成扱いになります。
         MVPでは学習タイマーや学習完了ボタンから呼び出す想定です。
       x-implementation-status: implemented
+      security:
+        - cookieAuth: []
       requestBody:
         required: true
         content:
@@ -146,6 +334,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/StudyLogResponse"
+        "401":
+          $ref: "#/components/responses/AuthenticationRequired"
         "400":
           description: 入力内容が不正、またはクエストをまだ受注していません。
           content:
@@ -163,6 +353,8 @@ paths:
         現在のユーザーの今週の学習時間、達成クエスト数、獲得XP、今週内での最大連続学習日数を取得します。
         日別の学習時間は月曜始まりの7日分を返し、ログがない日は minutes: 0 を返します。
       x-implementation-status: implemented
+      security:
+        - cookieAuth: []
       responses:
         "200":
           description: 今週の学習状況の取得に成功しました。
@@ -170,6 +362,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/WeeklyStudySummaryResponse"
+        "401":
+          $ref: "#/components/responses/AuthenticationRequired"
         "500":
           $ref: "#/components/responses/InternalServerError"
   /api/activities:
@@ -178,9 +372,11 @@ paths:
         - Activities
       summary: ユーザーの活動を取得する
       description: |
-        掲示板エリアに表示するため、全ユーザーの活動を新しい順に最大20件取得します。
+        現在のユーザーの活動を新しい順に最大20件取得します。
         ユーザー情報はdisplayNameだけ、クエスト情報はidとtitleだけを返します。
       x-implementation-status: implemented
+      security:
+        - cookieAuth: []
       responses:
         "200":
           description: ユーザーの活動一覧の取得に成功しました。
@@ -188,6 +384,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ActivityListResponse"
+        "401":
+          $ref: "#/components/responses/AuthenticationRequired"
         "500":
           $ref: "#/components/responses/InternalServerError"
   /api/profile:
@@ -199,6 +397,8 @@ paths:
         現在のユーザーの名前、レベル、累計ポイント、累計XP、累計学習時間、獲得バッジを取得します。
         パスワードや認証トークンなどの秘密情報は返しません。
       x-implementation-status: implemented
+      security:
+        - cookieAuth: []
       responses:
         "200":
           description: プロフィールの取得に成功しました。
@@ -206,10 +406,42 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ProfileResponse"
+        "401":
+          $ref: "#/components/responses/AuthenticationRequired"
         "500":
           $ref: "#/components/responses/InternalServerError"
 components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: studyquest.session_token
+      description: Better Authが発行するHttpOnly session Cookie。本番ではSecure属性を付与します。
   responses:
+    AuthenticationRequired:
+      description: 有効なsessionがありません。
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            error:
+              code: AUTHENTICATION_REQUIRED
+              message: ログインが必要です。
+    AuthRequestError:
+      description: Better Authによる認証要求の検証に失敗しました。
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: true
+    TooManyRequests:
+      description: 認証APIの試行回数が上限を超えました。
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: true
     InternalServerError:
       description: サーバー内部で予期しないエラーが発生しました。
       content:
@@ -217,6 +449,84 @@ components:
           schema:
             $ref: "#/components/schemas/ErrorResponse"
   schemas:
+    EmailSignUpRequest:
+      type: object
+      required: [name, email, password]
+      properties:
+        name:
+          type: string
+          maxLength: 80
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+          minLength: 15
+          maxLength: 128
+        callbackURL:
+          type: string
+          example: /dashboard
+    EmailSignInRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+        rememberMe:
+          type: boolean
+          default: true
+        callbackURL:
+          type: string
+          example: /dashboard
+    SocialSignInRequest:
+      type: object
+      required: [provider, callbackURL]
+      properties:
+        provider:
+          type: string
+          enum: [google]
+        callbackURL:
+          type: string
+          example: /dashboard
+        newUserCallbackURL:
+          type: string
+          example: /dashboard
+    SendVerificationEmailRequest:
+      type: object
+      required: [email]
+      properties:
+        email:
+          type: string
+          format: email
+        callbackURL:
+          type: string
+          example: /dashboard
+    PasswordResetRequest:
+      type: object
+      required: [email]
+      properties:
+        email:
+          type: string
+          format: email
+        redirectTo:
+          type: string
+          example: /reset-password
+    ResetPasswordRequest:
+      type: object
+      required: [token, newPassword]
+      properties:
+        token:
+          type: string
+        newPassword:
+          type: string
+          format: password
+          minLength: 15
+          maxLength: 128
     QuestDifficulty:
       type: string
       description: クエストの難易度です。

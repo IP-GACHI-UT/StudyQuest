@@ -1,10 +1,14 @@
 import { prisma } from '@studyquest/db';
 import { afterAll, afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { app } from '../src/app.js';
-import { DEVELOPMENT_USER_ID } from '../src/lib/auth.js';
+import {
+  authenticatedHeaders,
+  createAuthenticatedTestUser,
+} from './auth-test-helper.js';
 
 const INITIAL_TOTAL_POINTS = 100;
 const INITIAL_TOTAL_XP = 200;
+const TEST_USER_EMAIL = 'study-logs-db-test@example.com';
 const TEST_QUEST = {
   id: 'test-quest-study-logs',
   title: '学習記録DB結合テスト用クエスト',
@@ -16,10 +20,12 @@ const TEST_QUEST = {
   xpReward: 11,
   isActive: true,
 };
+let DEVELOPMENT_USER_ID = '';
+let authCookie = '';
 
 async function deleteTestData() {
   await prisma.user.deleteMany({
-    where: { id: DEVELOPMENT_USER_ID },
+    where: { email: TEST_USER_EMAIL },
   });
   await prisma.quest.deleteMany({
     where: { id: TEST_QUEST.id },
@@ -29,7 +35,7 @@ async function deleteTestData() {
 async function postStudyLog(minutes: number) {
   return app.request('/api/study-logs', {
     method: 'POST',
-    headers: { 'content-type': 'application/json' },
+    headers: authenticatedHeaders(authCookie, true),
     body: JSON.stringify({
       questId: TEST_QUEST.id,
       minutes,
@@ -40,11 +46,15 @@ async function postStudyLog(minutes: number) {
 
 beforeEach(async () => {
   await deleteTestData();
-  await prisma.user.create({
+  const authenticatedUser = await createAuthenticatedTestUser({
+    email: TEST_USER_EMAIL,
+    name: '学習記録DB結合テスト用ユーザー',
+  });
+  DEVELOPMENT_USER_ID = authenticatedUser.userId;
+  authCookie = authenticatedUser.cookie;
+  await prisma.user.update({
+    where: { id: DEVELOPMENT_USER_ID },
     data: {
-      id: DEVELOPMENT_USER_ID,
-      displayName: '学習記録DB結合テスト用ユーザー',
-      email: 'study-logs-db-test@example.com',
       totalPoints: INITIAL_TOTAL_POINTS,
       totalXp: INITIAL_TOTAL_XP,
     },

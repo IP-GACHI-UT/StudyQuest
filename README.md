@@ -24,6 +24,7 @@ StudyQuestは、学習を小さなクエストとして受注し、継続を促�
 - DBモデル定義: `prisma/schema.prisma`
 - DB・Prisma運用手順: `docs/db.md`
 - アーキテクチャ方針: `docs/architecture.md`
+- 認証設計・外部サービス設定: `docs/authentication.md`
 
 ## ローカル想定
 
@@ -34,12 +35,12 @@ StudyQuestは、学習を小さなクエストとして受注し、継続を促�
 ## セットアップ
 
 事前に Docker Desktop などをインストールし、`docker compose` が使える状態にしてください。
-DBだけを Docker Compose で起動し、Next.js / Hono API は従来どおり pnpm で起動します。
+DBと開発用メールサーバーMailpitをDocker Composeで起動し、Next.js / Hono APIは従来どおりpnpmで起動します。
 
 ```bash
 pnpm install
 cp .env.example .env
-docker compose up -d db
+docker compose up -d db mailpit
 pnpm prisma:generate
 pnpm prisma migrate dev
 pnpm db:seed
@@ -61,6 +62,9 @@ Copy-Item .env.example .env
 補足:
 
 - `docker compose up -d db` はPostgreSQLを起動するだけです。
+- Mailpitのメール確認画面は `http://localhost:8025` です。
 - テーブル作成は `pnpm prisma migrate dev` で行います。
 - 開発用データ投入は `pnpm db:seed` で行います。
 - アプリ本体はDockerではなく、`pnpm dev:api` / `pnpm dev:web` で起動します。
+
+メール登録、Google OAuth、パスワード再設定に必要な環境変数と外部サービス設定は `docs/authentication.md` を参照してください。

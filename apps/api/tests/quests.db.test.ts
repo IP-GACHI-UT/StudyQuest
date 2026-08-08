@@ -4,6 +4,10 @@ import { app } from '../src/app.js';
 import { DEVELOPMENT_USER_ID } from '../src/lib/auth.js';
 
 const INITIAL_TOTAL_POINTS = 100;
+const OTHER_USER_IDS = [
+  'test-quest-board-other-user-1',
+  'test-quest-board-other-user-2',
+] as const;
 const TEST_QUEST = {
   id: 'test-quest-get-quests',
   title: 'DB結合テスト用クエスト',
@@ -18,7 +22,7 @@ const TEST_QUEST = {
 
 async function deleteTestData() {
   await prisma.user.deleteMany({
-    where: { id: DEVELOPMENT_USER_ID },
+    where: { id: { in: [DEVELOPMENT_USER_ID, ...OTHER_USER_IDS] } },
   });
   await prisma.quest.deleteMany({
     where: { id: TEST_QUEST.id },
@@ -61,6 +65,114 @@ describe('GET /api/quests', () => {
           expect.objectContaining({
             id: TEST_QUEST.id,
             title: TEST_QUEST.title,
+          }),
+        ]),
+      }),
+    );
+  });
+});
+
+describe('GET /api/board/quests', () => {
+  it('returns zero statistics when nobody has accepted the quest', async () => {
+    const response = await app.request('/api/board/quests');
+
+    expect(response.status).toBe(200);
+    await expect(response.json()).resolves.toEqual(
+      expect.objectContaining({
+        quests: expect.arrayContaining([
+          {
+            quest: expect.objectContaining({
+              id: TEST_QUEST.id,
+              title: TEST_QUEST.title,
+            }),
+            statistics: {
+              acceptedToday: 0,
+              completedToday: 0,
+              completionRate: 0,
+            },
+            currentUser: {
+              isAccepted: false,
+            },
+          },
+        ]),
+      }),
+    );
+  });
+
+  it('keeps the current user unaccepted when only other users accepted today', async () => {
+    const now = new Date();
+
+    await prisma.user.createMany({
+      data: OTHER_USER_IDS.map((id, index) => ({
+        id,
+        displayName: `掲示板DB結合テスト用ユーザー${index + 1}`,
+        email: `quest-board-db-test-${index + 1}@example.com`,
+      })),
+    });
+    await prisma.userQuest.createMany({
+      data: [
+        {
+          userId: OTHER_USER_IDS[0],
+          questId: TEST_QUEST.id,
+          acceptedAt: now,
+        },
+        {
+          userId: OTHER_USER_IDS[1],
+          questId: TEST_QUEST.id,
+          status: 'COMPLETED',
+          acceptedAt: now,
+          completedAt: now,
+        },
+      ],
+    });
+
+    const response = await app.request('/api/board/quests');
+
+    expect(response.status).toBe(200);
+    await expect(response.json()).resolves.toEqual(
+      expect.objectContaining({
+        quests: expect.arrayContaining([
+          expect.objectContaining({
+            quest: expect.objectContaining({ id: TEST_QUEST.id }),
+            statistics: {
+              acceptedToday: 2,
+              completedToday: 1,
+              completionRate: 50,
+            },
+            currentUser: {
+              isAccepted: false,
+            },
+          }),
+        ]),
+      }),
+    );
+  });
+
+  it('returns the current user as accepted independently of today statistics', async () => {
+    await prisma.userQuest.create({
+      data: {
+        userId: DEVELOPMENT_USER_ID,
+        questId: TEST_QUEST.id,
+        acceptedAt: new Date('2000-01-01T00:00:00.000Z'),
+      },
+    });
+
+    const response = await app.request('/api/board/quests');
+
+    expect(response.status).toBe(200);
+    await expect(response.json()).resolves.toEqual(
+      expect.objectContaining({
+        quests: expect.arrayContaining([
+          expect.objectContaining({
+            quest: expect.objectContaining({ id: TEST_QUEST.id }),
+            statistics: {
+              acceptedToday: 0,
+              completedToday: 0,
+              completionRate: 0,
+            },
+            currentUser: {
+              isAccepted: true,
+            },
           }),
         ]),
       }),

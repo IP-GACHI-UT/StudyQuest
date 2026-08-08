@@ -7,6 +7,7 @@
     "dev:api": "pnpm --filter @studyquest/api dev",
     "test:api": "pnpm --filter @studyquest/api test",
     "test:api:db": "node scripts/run-api-db-test.mjs",
+    "test:e2e": "playwright test",
     "db:seed": "node prisma/seed.js",
     "prisma:validate": "prisma validate",
     "prisma:generate": "prisma generate",
@@ -25,6 +26,7 @@
   "packageManager": "pnpm@10.13.1",
   "devDependencies": {
     "@biomejs/biome": "2.4.16",
+    "@playwright/test": "^1.62.1",
     "@types/pg": "^8.20.0",
     "dotenv": "^17.4.2",
     "prisma": "^7.8.0"

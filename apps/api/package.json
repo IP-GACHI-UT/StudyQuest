@@ -15,10 +15,13 @@
   "dependencies": {
     "@hono/node-server": "^1.19.6",
     "@studyquest/db": "workspace:*",
-    "hono": "^4.10.6"
+    "better-auth": "^1.6.26",
+    "hono": "^4.10.6",
+    "nodemailer": "^9.0.5"
   },
   "devDependencies": {
     "@types/node": "^20",
+    "@types/nodemailer": "^8.0.1",
     "tsx": "^4.20.6",
     "typescript": "^5",
     "vitest": "^4.1.10"

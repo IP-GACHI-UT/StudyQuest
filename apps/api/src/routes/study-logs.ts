@@ -1,7 +1,7 @@
 import { prisma } from '@studyquest/db';
 import { Hono } from 'hono';
 import { errorResponse, jsonResponse } from '../lib/api-response.js';
-import { getCurrentUserId } from '../lib/auth.js';
+import { type AuthEnv, requireAuth } from '../lib/auth.js';
 import { presentStudyLog } from '../presenters/api-presenters.js';
 import { completeUserQuestIfInProgress } from '../services/quest-completion.js';
 
@@ -12,109 +12,111 @@ type StudyLogRequestBody = {
   studiedAt?: unknown;
 };
 
-export const studyLogsRoute = new Hono().post('/', async (c) => {
-  const body = await parseRequestBody(c.req.raw);
+export const studyLogsRoute = new Hono<AuthEnv>()
+  .use('*', requireAuth)
+  .post('/', async (c) => {
+    const body = await parseRequestBody(c.req.raw);
 
-  if (!body) {
-    return errorResponse(
-      'INVALID_REQUEST_BODY',
-      'リクエストボディはJSONで送信してください。',
-      400,
-    );
-  }
-
-  const validation = validateStudyLogRequest(body);
-
-  if (!validation.ok) {
-    return errorResponse(
-      'VALIDATION_ERROR',
-      '学習記録の入力内容を確認してください。',
-      400,
-      validation.details,
-    );
-  }
-
-  const userId = await getCurrentUserId();
-  const { questId, minutes, note, studiedAt } = validation.value;
-
-  try {
-    const userQuest = await prisma.userQuest.findUnique({
-      where: {
-        userId_questId: {
-          userId,
-          questId,
-        },
-      },
-      include: {
-        quest: {
-          select: {
-            title: true,
-            estimatedMinutes: true,
-          },
-        },
-      },
-    });
-
-    if (!userQuest) {
+    if (!body) {
       return errorResponse(
-        'QUEST_NOT_ACCEPTED',
-        '学習記録を作成するには、先にクエストを受注してください。',
+        'INVALID_REQUEST_BODY',
+        'リクエストボディはJSONで送信してください。',
         400,
       );
     }
 
-    const studyLog = await prisma.$transaction(async (tx) => {
-      const createdStudyLog = await tx.studyLog.create({
-        data: {
-          userId,
-          questId,
-          userQuestId: userQuest.id,
-          minutes,
-          note,
-          studiedAt,
-        },
-      });
+    const validation = validateStudyLogRequest(body);
 
-      await tx.activityLog.create({
-        data: {
-          userId,
-          questId,
-          type: 'STUDY_LOG_CREATED',
-          message: `「${userQuest.quest.title}」の学習を${minutes}分記録しました。`,
-        },
-      });
+    if (!validation.ok) {
+      return errorResponse(
+        'VALIDATION_ERROR',
+        '学習記録の入力内容を確認してください。',
+        400,
+        validation.details,
+      );
+    }
 
-      const studyMinutes = await tx.studyLog.aggregate({
+    const userId = c.var.user.id;
+    const { questId, minutes, note, studiedAt } = validation.value;
+
+    try {
+      const userQuest = await prisma.userQuest.findUnique({
         where: {
-          userId,
-          userQuestId: userQuest.id,
+          userId_questId: {
+            userId,
+            questId,
+          },
         },
-        _sum: {
-          minutes: true,
+        include: {
+          quest: {
+            select: {
+              title: true,
+              estimatedMinutes: true,
+            },
+          },
         },
       });
 
-      const totalStudyMinutes = studyMinutes._sum.minutes ?? 0;
-
-      if (totalStudyMinutes >= userQuest.quest.estimatedMinutes) {
-        await completeUserQuestIfInProgress({
-          tx,
-          userId,
-          userQuestId: userQuest.id,
-        });
+      if (!userQuest) {
+        return errorResponse(
+          'QUEST_NOT_ACCEPTED',
+          '学習記録を作成するには、先にクエストを受注してください。',
+          400,
+        );
       }
 
-      return createdStudyLog;
-    });
+      const studyLog = await prisma.$transaction(async (tx) => {
+        const createdStudyLog = await tx.studyLog.create({
+          data: {
+            userId,
+            questId,
+            userQuestId: userQuest.id,
+            minutes,
+            note,
+            studiedAt,
+          },
+        });
 
-    return jsonResponse({ studyLog: presentStudyLog(studyLog) }, 201);
-  } catch {
-    return errorResponse(
-      'INTERNAL_SERVER_ERROR',
-      '学習記録の作成に失敗しました。',
-    );
-  }
-});
+        await tx.activityLog.create({
+          data: {
+            userId,
+            questId,
+            type: 'STUDY_LOG_CREATED',
+            message: `「${userQuest.quest.title}」の学習を${minutes}分記録しました。`,
+          },
+        });
+
+        const studyMinutes = await tx.studyLog.aggregate({
+          where: {
+            userId,
+            userQuestId: userQuest.id,
+          },
+          _sum: {
+            minutes: true,
+          },
+        });
+
+        const totalStudyMinutes = studyMinutes._sum.minutes ?? 0;
+
+        if (totalStudyMinutes >= userQuest.quest.estimatedMinutes) {
+          await completeUserQuestIfInProgress({
+            tx,
+            userId,
+            userQuestId: userQuest.id,
+          });
+        }
+
+        return createdStudyLog;
+      });
+
+      return jsonResponse({ studyLog: presentStudyLog(studyLog) }, 201);
+    } catch {
+      return errorResponse(
+        'INTERNAL_SERVER_ERROR',
+        '学習記録の作成に失敗しました。',
+      );
+    }
+  });
 
 async function parseRequestBody(request: Request) {
   try {

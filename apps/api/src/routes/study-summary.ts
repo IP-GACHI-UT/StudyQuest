@@ -1,7 +1,7 @@
 import { prisma } from '@studyquest/db';
 import { Hono } from 'hono';
 import { errorResponse, jsonResponse } from '../lib/api-response.js';
-import { getCurrentUserId } from '../lib/auth.js';
+import { type AuthEnv, requireAuth } from '../lib/auth.js';
 
 const DAYS_IN_WEEK = 7;
 
@@ -15,71 +15,73 @@ type DailyStudyMinutes = {
   minutes: number;
 };
 
-export const studySummaryRoute = new Hono().get('/weekly', async () => {
-  const userId = await getCurrentUserId();
-  const weekStart = getStartOfWeek(new Date());
-  const weekEnd = addDays(weekStart, DAYS_IN_WEEK);
+export const studySummaryRoute = new Hono<AuthEnv>()
+  .use('*', requireAuth)
+  .get('/weekly', async (c) => {
+    const userId = c.var.user.id;
+    const weekStart = getStartOfWeek(new Date());
+    const weekEnd = addDays(weekStart, DAYS_IN_WEEK);
 
-  try {
-    const [studyLogs, completedUserQuests] = await Promise.all([
-      prisma.studyLog.findMany({
-        where: {
-          userId,
-          studiedAt: {
-            gte: weekStart,
-            lt: weekEnd,
-          },
-        },
-        select: {
-          minutes: true,
-          studiedAt: true,
-        },
-      }),
-      prisma.userQuest.findMany({
-        where: {
-          userId,
-          status: 'COMPLETED',
-          completedAt: {
-            gte: weekStart,
-            lt: weekEnd,
-          },
-        },
-        select: {
-          quest: {
-            select: {
-              xpReward: true,
+    try {
+      const [studyLogs, completedUserQuests] = await Promise.all([
+        prisma.studyLog.findMany({
+          where: {
+            userId,
+            studiedAt: {
+              gte: weekStart,
+              lt: weekEnd,
             },
           },
+          select: {
+            minutes: true,
+            studiedAt: true,
+          },
+        }),
+        prisma.userQuest.findMany({
+          where: {
+            userId,
+            status: 'COMPLETED',
+            completedAt: {
+              gte: weekStart,
+              lt: weekEnd,
+            },
+          },
+          select: {
+            quest: {
+              select: {
+                xpReward: true,
+              },
+            },
+          },
+        }),
+      ]);
+
+      const dailyStudyMinutes = buildDailyStudyMinutes(weekStart, studyLogs);
+      const studyMinutes = dailyStudyMinutes.reduce(
+        (total, daily) => total + daily.minutes,
+        0,
+      );
+      const earnedXp = completedUserQuests.reduce(
+        (total, userQuest) => total + userQuest.quest.xpReward,
+        0,
+      );
+
+      return jsonResponse({
+        summary: {
+          studyMinutes,
+          completedQuestCount: completedUserQuests.length,
+          earnedXp,
+          streakDays: calculateStreakDays(dailyStudyMinutes),
+          dailyStudyMinutes,
         },
-      }),
-    ]);
-
-    const dailyStudyMinutes = buildDailyStudyMinutes(weekStart, studyLogs);
-    const studyMinutes = dailyStudyMinutes.reduce(
-      (total, daily) => total + daily.minutes,
-      0,
-    );
-    const earnedXp = completedUserQuests.reduce(
-      (total, userQuest) => total + userQuest.quest.xpReward,
-      0,
-    );
-
-    return jsonResponse({
-      summary: {
-        studyMinutes,
-        completedQuestCount: completedUserQuests.length,
-        earnedXp,
-        streakDays: calculateStreakDays(dailyStudyMinutes),
-        dailyStudyMinutes,
-      },
-    });
-  } catch {
-    return errorResponse(
-      'INTERNAL_SERVER_ERROR',
-      '週間学習状況の取得に失敗しました。',
-    );
-  }
-});
+      });
+    } catch {
+      return errorResponse(
+        'INTERNAL_SERVER_ERROR',
+        '週間学習状況の取得に失敗しました。',
+      );
+    }
+  });
 
 function buildDailyStudyMinutes(
   weekStart: Date,

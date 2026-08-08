@@ -1,345 +1,137 @@
-'use client';
+import { ArrowRight, CheckCircle2, Compass, Flame, Trophy } from 'lucide-react';
+import Link from 'next/link';
 
-import { useEffect, useState } from 'react';
-import { BadgeCard } from '@/components/cards/BadgeCard';
-import { GoalCard } from '@/components/cards/GoalCard';
-import { MyQuestCard } from '@/components/cards/MyQuestCard';
-import { ProfileCard } from '@/components/cards/ProfileCard';
-import { QuestAcceptanceRateCard } from '@/components/cards/QuestAcceptanceRateCard';
-import { RecommendedQuestCard } from '@/components/cards/RecommendedQuestCard';
-import { StudyLogCard } from '@/components/cards/StudyLogCard';
-import { WeeklyStudyCard } from '@/components/cards/WeeklyStudyCard';
-import SectionHeader from '@/components/common/SectionHeader';
-import { acceptQuest } from '@/utils/acceptQuest';
+const features = [
+  {
+    icon: Compass,
+    title: '小さく始められる',
+    description:
+      'いまの時間と気分に合う学習クエストを選んで、すぐに一歩を踏み出せます。',
+  },
+  {
+    icon: Flame,
+    title: '続けた実感が見える',
+    description:
+      '学習時間や連続記録を可視化し、積み重ねを次の行動につなげます。',
+  },
+  {
+    icon: Trophy,
+    title: '達成が成果になる',
+    description:
+      'クエスト達成でポイントやXPを獲得。小さな成功を着実に残せます。',
+  },
+];
 
-type ApiStudyLog = {
-  id: string;
-  userId: string;
-  questId: string;
-  minutes: number;
-  note?: string | null;
-  studiedAt: string;
-  createdAt: string;
-};
-
-type ApiStudyLogsResponse = {
-  studyLogs: ApiStudyLog[];
-};
-
-type ApiProfile = {
-  id: string;
-  displayName: string;
-  level: number;
-  totalPoints: number;
-  totalXp: number;
-  totalStudyMinutes: number;
-  badges: Array<{
-    id: string;
-    name: string;
-    description: string;
-    icon: string;
-    earnedAt: string;
-  }>;
-};
-
-type ApiProfileResponse = {
-  profile: ApiProfile;
-};
-
-type LogItem = {
-  created_at: Date;
-  text: string;
-};
-
-type ApiMyQuest = {
-  id: string;
-  status: string;
-  acceptedAt: string;
-  completedAt: string | null;
-  quest: {
-    id: string;
-    title: string;
-    description: string;
-    category: string;
-    difficulty: string;
-    estimatedMinutes: number;
-    acceptPoint: number;
-    clearPoint: number;
-    xpReward: number;
-    isActive: boolean;
-    createdAt: string;
-    updatedAt: string;
-  };
-};
-
-type ApiMyQuestsResponse = {
-  userQuests: ApiMyQuest[];
-};
-
-const mapStudyLogsToLogItems = (studyLogs: ApiStudyLog[]): LogItem[] =>
-  studyLogs.map((log) => ({
-    created_at: new Date(log.createdAt),
-    text: log.note?.trim()
-      ? log.note
-      : `${log.minutes}分の学習を記録しました。`,
-  }));
-
-const formatMinutesToStudyTime = (minutes: number): string => {
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = minutes % 60;
-
-  if (hours === 0) {
-    return `${remainingMinutes}分`;
-  }
-
-  if (remainingMinutes === 0) {
-    return `${hours}時間`;
-  }
-
-  return `${hours}時間 ${remainingMinutes}分`;
-};
-
-const mapQuestStatusToDisplay = (
-  status: string,
-): '進行中' | '達成済み' | 'キャンセル済み' => {
-  switch (status) {
-    case 'completed':
-      return '達成済み';
-    case 'canceled':
-      return 'キャンセル済み';
-    default:
-      return '進行中';
-  }
-};
-
-export default function Home() {
-  const [studyLogs, setStudyLogs] = useState<LogItem[]>([]);
-  const [studyLogLoading, setStudyLogLoading] = useState(true);
-  const [studyLogError, setStudyLogError] = useState<string | null>(null);
-  const [profile, setProfile] = useState<ApiProfile | null>(null);
-  const [profileLoading, setProfileLoading] = useState(true);
-  const [profileError, setProfileError] = useState<string | null>(null);
-  const [myQuests, setMyQuests] = useState<ApiMyQuest[]>([]);
-  const [myQuestsLoading, setMyQuestsLoading] = useState(true);
-  const [myQuestsError, setMyQuestsError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    async function loadDashboardData() {
-      try {
-        const [profileResult, studyLogsResult, myQuestsResult] =
-          await Promise.allSettled([
-            fetch('http://localhost:3001/api/profile', {
-              signal: controller.signal,
-            }),
-            fetch('http://localhost:3001/api/study-logs', {
-              signal: controller.signal,
-            }),
-            fetch('http://localhost:3001/api/my-quests', {
-              signal: controller.signal,
-            }),
-          ]);
-
-        if (profileResult.status === 'fulfilled' && profileResult.value.ok) {
-          const profileData =
-            (await profileResult.value.json()) as ApiProfileResponse;
-          setProfile(profileData.profile);
-          setProfileError(null);
-        } else {
-          setProfileError('プロフィールの取得に失敗しました。');
-        }
-
-        if (
-          studyLogsResult.status === 'fulfilled' &&
-          studyLogsResult.value.ok
-        ) {
-          const studyLogsData =
-            (await studyLogsResult.value.json()) as ApiStudyLogsResponse;
-          setStudyLogs(mapStudyLogsToLogItems(studyLogsData.studyLogs));
-          setStudyLogError(null);
-        } else {
-          setStudyLogError('学習ログの取得に失敗しました。');
-        }
-
-        if (myQuestsResult.status === 'fulfilled' && myQuestsResult.value.ok) {
-          const myQuestsData =
-            (await myQuestsResult.value.json()) as ApiMyQuestsResponse;
-          setMyQuests(myQuestsData.userQuests);
-          setMyQuestsError(null);
-        } else {
-          setMyQuestsError('マイクエストの取得に失敗しました。');
-        }
-      } catch (error) {
-        if (controller.signal.aborted) {
-          return;
-        }
-
-        const message =
-          error instanceof Error
-            ? error.message
-            : 'データ取得中にエラーが発生しました。';
-
-        setProfileError(message);
-        setStudyLogError(message);
-        setMyQuestsError(message);
-      } finally {
-        if (!controller.signal.aborted) {
-          setStudyLogLoading(false);
-          setProfileLoading(false);
-          setMyQuestsLoading(false);
-        }
-      }
-    }
-
-    void loadDashboardData();
-
-    return () => controller.abort();
-  }, []);
-
-  const featuredQuest = myQuests[0];
-
+export default function LandingPage() {
   return (
-    <main>
-      <SectionHeader
-        enTitle="MY QUEST"
-        jaTitle="いま達成を目指しているクエスト"
-        description={`受注:${myQuests.length}`}
-      />
-      {myQuestsLoading ? (
-        <p className="py-4 text-sm text-gray-500">読み込み中...</p>
-      ) : myQuestsError ? (
-        <p className="py-4 text-sm text-red-500">{myQuestsError}</p>
-      ) : featuredQuest ? (
-        <MyQuestCard
-          status={mapQuestStatusToDisplay(featuredQuest.status)}
-          title={featuredQuest.quest.title}
-          category={featuredQuest.quest.category}
-          difficulty={featuredQuest.quest.difficulty}
-          buttonLabel={
-            featuredQuest.status === 'completed'
-              ? '結果を見る'
-              : featuredQuest.status === 'canceled'
-                ? '再開する'
-                : '学習する'
-          }
-          onButtonClick={() => alert('Viewing quest details')}
-        />
-      ) : (
-        <p className="py-4 text-sm text-gray-500">
-          受注中のクエストはありません。
-        </p>
-      )}
+    <div className="space-y-20 pb-12 pt-8 sm:pt-16">
+      <section className="relative overflow-hidden rounded-3xl bg-slate-950 px-6 py-16 text-white sm:px-12 lg:px-16 lg:py-24">
+        <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-blue-500/25 blur-3xl" />
+        <div className="absolute -bottom-32 left-1/3 h-72 w-72 rounded-full bg-cyan-400/15 blur-3xl" />
+        <div className="relative max-w-3xl">
+          <p className="mb-5 text-sm font-bold tracking-[0.2em] text-blue-300">
+            SMALL QUESTS. QUIET PROGRESS.
+          </p>
+          <h1 className="text-4xl font-black leading-tight tracking-tight sm:text-6xl">
+            今日の学びを、
+            <br />
+            ひとつのクエストに。
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
+            StudyQuestは、勉強を小さな挑戦に変える学習継続アプリです。
+            迷う時間を減らして、静かでも確かな前進を積み重ねましょう。
+          </p>
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <Link
+              href="/signup"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-500 px-6 py-3 font-bold text-white transition hover:bg-blue-400"
+            >
+              無料で始める
+              <ArrowRight aria-hidden="true" size={18} />
+            </Link>
+            <Link
+              href="/quests"
+              className="inline-flex items-center justify-center rounded-xl border border-slate-600 px-6 py-3 font-bold text-white transition hover:border-slate-400 hover:bg-white/5"
+            >
+              クエストを見る
+            </Link>
+          </div>
+        </div>
+      </section>
 
-      <SectionHeader
-        enTitle="RECOMMENDED"
-        jaTitle="おすすめクエスト"
-        description="今日受け取れるクエスト"
-      />
-      <RecommendedQuestCard
-        title="公式ドキュメントを10分読む"
-        difficulty="初級"
-        description="お気に入りのライブラリやフレームワークの公式ドキュメントを読んで理解を深めましょう"
-        category="アルゴリズム"
-        duration="10分"
-        acceptPoint={10}
-        clearPoint={20}
-        onAccept={() => {
-          void acceptQuest('1').catch((error) => {
-            alert(
-              error instanceof Error ? error.message : '受注に失敗しました',
-            );
-          });
-        }}
-      />
-      <RecommendedQuestCard
-        title="英単語を10個覚える"
-        difficulty="初級"
-        description="毎日10個の新しい英単語を学び、記憶に定着させましょう"
-        category="英語"
-        duration="10分"
-        acceptPoint={10}
-        clearPoint={20}
-        onAccept={() => {
-          void acceptQuest('2').catch((error) => {
-            alert(
-              error instanceof Error ? error.message : '受注に失敗しました',
-            );
-          });
-        }}
-      />
+      <section aria-labelledby="features-heading">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-sm font-bold tracking-widest text-blue-600">
+            WHY STUDYQUEST
+          </p>
+          <h2
+            id="features-heading"
+            className="mt-3 text-3xl font-black text-slate-900"
+          >
+            続けるための仕組みを、シンプルに
+          </h2>
+        </div>
+        <div className="mt-10 grid gap-5 md:grid-cols-3">
+          {features.map(({ icon: Icon, title, description }) => (
+            <article
+              key={title}
+              className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm"
+            >
+              <span className="inline-flex rounded-xl bg-blue-50 p-3 text-blue-600">
+                <Icon aria-hidden="true" size={24} />
+              </span>
+              <h3 className="mt-5 text-xl font-bold text-slate-900">{title}</h3>
+              <p className="mt-3 leading-7 text-slate-600">{description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
 
-      <SectionHeader
-        enTitle="BOARD"
-        jaTitle="今日の活動"
-        description="多くの学習者が取り組んでいるクエスト"
-      />
-      <QuestAcceptanceRateCard
-        title="公式ドキュメントを10分読む"
-        category="プログラミング"
-        acceptedCount={15}
-        completedCount={10}
-      />
-
-      <GoalCard
-        tag="目標"
-        title="1週間で10時間学習する"
-        description="毎日1時間学習することで、1週間で10時間の学習を達成します。"
-        deadline="2023-12-31"
-        progress={70}
-        questCount={5}
-      />
-
-      <WeeklyStudyCard
-        studyHours={7}
-        weeklyGoalHours={10}
-        completedQuests={3}
-        earnedXp={500}
-        streakDays={5}
-        chartData={[
-          { day: '月', hours: 2 },
-          { day: '火', hours: 1 },
-          { day: '水', hours: 3 },
-          { day: '木', hours: 1 },
-          { day: '金', hours: 2 },
-          { day: '土', hours: 0 },
-          { day: '日', hours: 0 },
-        ]}
-      />
-
-      <div>
-        {profileError ? (
-          <p className="mb-4 text-sm text-red-500">{profileError}</p>
-        ) : null}
-        <ProfileCard
-          userName={
-            profile?.displayName ?? (profileLoading ? '読み込み中' : '学習者')
-          }
-          level={profile?.level ?? 0}
-          totalPoints={profile?.totalPoints ?? 0}
-          totalXp={profile?.totalXp ?? 0}
-          totalStudyTime={formatMinutesToStudyTime(
-            profile?.totalStudyMinutes ?? 0,
-          )}
-          icon={<div className="h-full w-full bg-gray-300" />}
-          onProfileClick={() => alert('Viewing profile')}
-        />
-      </div>
-
-      <BadgeCard
-        title="最近のバッジ"
-        badges={[
-          { id: '1', icon: '🏆', description: '初学者' },
-          { id: '2', icon: '⭐', description: 'エキスパート' },
-          { id: '3', icon: '🔥', description: '熱心な学習者' },
-        ]}
-      />
-
-      <StudyLogCard
-        logs={studyLogs}
-        isLoading={studyLogLoading}
-        error={studyLogError}
-      />
-    </main>
+      <section className="grid items-center gap-10 rounded-3xl bg-blue-50 px-6 py-12 sm:px-10 lg:grid-cols-2">
+        <div>
+          <p className="text-sm font-bold tracking-widest text-blue-700">
+            HOW IT WORKS
+          </p>
+          <h2 className="mt-3 text-3xl font-black text-slate-900">
+            3ステップで学習を記録
+          </h2>
+          <ol className="mt-7 space-y-5">
+            {[
+              '興味や目標に合うクエストを探す',
+              'クエストを受注して学習に取り組む',
+              '学習時間を記録して達成を積み重ねる',
+            ].map((step) => (
+              <li
+                key={step}
+                className="flex items-center gap-3 font-semibold text-slate-700"
+              >
+                <CheckCircle2
+                  aria-hidden="true"
+                  className="shrink-0 text-blue-600"
+                  size={21}
+                />
+                {step}
+              </li>
+            ))}
+          </ol>
+        </div>
+        <div className="rounded-2xl bg-white p-8 shadow-sm">
+          <p className="text-sm font-semibold text-slate-500">今日のおすすめ</p>
+          <h3 className="mt-3 text-2xl font-black text-slate-900">
+            公式ドキュメントを10分読む
+          </h3>
+          <p className="mt-3 leading-7 text-slate-600">
+            まとまった時間がなくても大丈夫。まずは10分のクエストから始められます。
+          </p>
+          <Link
+            href="/quests"
+            className="mt-6 inline-flex items-center gap-2 font-bold text-blue-700 hover:text-blue-800"
+          >
+            公開クエストを探す
+            <ArrowRight aria-hidden="true" size={17} />
+          </Link>
+        </div>
+      </section>
+    </div>
   );
 }

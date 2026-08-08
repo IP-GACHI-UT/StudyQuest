@@ -1,17 +1,19 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { RecommendedQuestCard } from '@/components/cards/RecommendedQuestCard';
 import { FilterButton } from '@/components/common/FilterButton';
 import { CATEGORIES, type Category } from '@/constants/quest/category';
 import { DIFFICULTIES, type Difficulty } from '@/constants/quest/difficulty';
+import { authClient } from '@/lib/auth-client';
 import type { Quest } from '@/types/quest';
 import { acceptQuest } from '@/utils/acceptQuest';
 
 // API から返されるクエストデータの型定義。
 // Web 側では API の型とアプリ内表示用型を分けて扱います。
 type ApiQuest = {
-  id: number;
+  id: string;
   title: string;
   description: string;
   category: string;
@@ -47,6 +49,8 @@ const mapApiQuestToQuest = (quest: ApiQuest): Quest => ({
 });
 
 export const QuestList = () => {
+  const router = useRouter();
+  const { data: session } = authClient.useSession();
   const categoryOptions: Array<Category | 'すべて'> = ['すべて', ...CATEGORIES];
   const difficultyOptions: Array<Difficulty | 'すべて'> = [
     'すべて',
@@ -62,7 +66,7 @@ export const QuestList = () => {
   const [, setApiResponse] = useState<ApiQuestsResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [acceptingQuestId, setAcceptingQuestId] = useState<number | null>(null);
+  const [acceptingQuestId, setAcceptingQuestId] = useState<string | null>(null);
   const [acceptMessage, setAcceptMessage] = useState<string | null>(null);
 
   const loadQuests = useCallback(async (signal?: AbortSignal) => {
@@ -70,8 +74,8 @@ export const QuestList = () => {
       setError(null);
       setIsLoading(true);
 
-      // 開発用に API を直接叩いてクエストを取得します。
-      const response = await fetch('http://localhost:3001/api/quests', {
+      const response = await fetch('/api/quests', {
+        credentials: 'include',
         signal,
       });
 
@@ -125,7 +129,12 @@ export const QuestList = () => {
     });
   }, [quests, selectedCategory, selectedDifficulty]);
 
-  const handleAcceptQuest = async (questId: number) => {
+  const handleAcceptQuest = async (questId: string) => {
+    if (!session) {
+      router.push('/login?next=/quests');
+      return;
+    }
+
     setAcceptingQuestId(questId);
     setAcceptMessage(null);
 
@@ -203,6 +212,7 @@ export const QuestList = () => {
             acceptPoint={quest.acceptPoint}
             clearPoint={quest.clearPoint}
             isAccepting={acceptingQuestId === quest.id}
+            buttonLabel={session ? 'クエスト受注' : 'ログインして受注'}
             onAccept={() => void handleAcceptQuest(quest.id)}
           />
         ))}

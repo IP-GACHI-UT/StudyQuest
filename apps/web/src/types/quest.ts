@@ -13,4 +13,5 @@ export type Quest = {
   acceptedToday?: number;
   completedToday?: number;
   completionRate?: number;
+  isAccepted?: boolean;
 };

@@ -1,5 +1,13 @@
 import { prisma } from '@studyquest/db';
-import { afterAll, afterEach, beforeEach, describe, expect, it } from 'vitest';
+import {
+  afterAll,
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest';
 import { app } from '../src/app.js';
 import {
   authenticatedHeaders,
@@ -53,6 +61,7 @@ beforeEach(async () => {
 });
 
 afterEach(async () => {
+  vi.useRealTimers();
   await deleteTestData();
 });
 
@@ -83,6 +92,52 @@ describe('GET /api/quests', () => {
 });
 
 describe('GET /api/board/quests', () => {
+  it('counts today from JST midnight inclusive to next midnight exclusive', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date('2026-01-13T15:30:00Z'));
+    await prisma.user.createMany({
+      data: OTHER_USER_IDS.map((id, index) => ({
+        id,
+        displayName: '境界ダミー',
+        email: `quest-board-boundary-${index}@example.com`,
+      })),
+    });
+    await prisma.userQuest.createMany({
+      data: [
+        {
+          userId: currentUserId,
+          questId: TEST_QUEST.id,
+          status: 'COMPLETED',
+          acceptedAt: new Date('2026-01-13T14:59:59.999Z'),
+          completedAt: new Date('2026-01-13T14:59:59.999Z'),
+        },
+        {
+          userId: OTHER_USER_IDS[0],
+          questId: TEST_QUEST.id,
+          status: 'COMPLETED',
+          acceptedAt: new Date('2026-01-13T15:00:00Z'),
+          completedAt: new Date('2026-01-13T15:00:00Z'),
+        },
+        {
+          userId: OTHER_USER_IDS[1],
+          questId: TEST_QUEST.id,
+          status: 'COMPLETED',
+          acceptedAt: new Date('2026-01-14T15:00:00Z'),
+          completedAt: new Date('2026-01-14T15:00:00Z'),
+        },
+      ],
+    });
+    const response = await app.request('/api/board/quests', {
+      headers: authenticatedHeaders(authCookie),
+    });
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(
+      body.quests.find(
+        (item: { quest: { id: string } }) => item.quest.id === TEST_QUEST.id,
+      ).statistics,
+    ).toEqual({ acceptedToday: 1, completedToday: 1, completionRate: 100 });
+  });
   it('returns zero statistics when nobody has accepted the quest', async () => {
     const response = await app.request('/api/board/quests', {
       headers: authenticatedHeaders(authCookie),

@@ -1,14 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useRef, useState } from 'react';
 import { QuestBoardCard } from '@/components/cards/QuestBoardCard';
+import { ResourceNotice } from '@/components/common/ResourceNotice';
 import { CATEGORIES, type Category } from '@/constants/quest/category';
 import type { Difficulty } from '@/constants/quest/difficulty';
-import {
-  AuthenticationRequiredError,
-  apiRequest,
-  currentLoginHref,
-} from '@/lib/api';
+import { useApiResource } from '@/hooks/useApiResource';
+import { AuthenticationRequiredError, currentLoginHref } from '@/lib/api';
 import type { Quest } from '@/types/quest';
 import { acceptQuest } from '@/utils/acceptQuest';
 
@@ -59,87 +58,74 @@ function mapBoardQuest(item: ApiBoardQuest): Quest {
   };
 }
 
-async function fetchBoardQuests(): Promise<Quest[]> {
-  const data = await apiRequest<{ quests: ApiBoardQuest[] }>('/board/quests');
-  return data.quests.map(mapBoardQuest);
-}
-
-function getLoadErrorMessage(error: unknown): string {
-  return error instanceof Error
-    ? error.message
-    : '掲示板を取得できませんでした。';
-}
-
 export const QuestBoard = () => {
-  const [quests, setQuests] = useState<Quest[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let active = true;
-
-    void fetchBoardQuests().then(
-      (nextQuests) => {
-        if (active) {
-          setQuests(nextQuests);
-          setLoading(false);
-        }
-      },
-      (loadError: unknown) => {
-        if (active) {
-          if (loadError instanceof AuthenticationRequiredError) {
-            window.location.assign(currentLoginHref());
-            return;
-          }
-          setError(getLoadErrorMessage(loadError));
-          setLoading(false);
-        }
-      },
-    );
-
-    return () => {
-      active = false;
-    };
-  }, []);
+  const resource = useApiResource<{ quests: ApiBoardQuest[] }>('/board/quests');
+  const [acceptingId, setAcceptingId] = useState<string | null>(null);
+  const [acceptError, setAcceptError] = useState<string | null>(null);
+  const [acceptedIds, setAcceptedIds] = useState<Set<string>>(new Set());
+  const [acceptMessage, setAcceptMessage] = useState<string | null>(null);
+  const acceptLock = useRef(false);
+  const quests = resource.data?.quests.map(mapBoardQuest) ?? [];
 
   const handleAcceptQuest = async (questId: string) => {
+    if (acceptLock.current || resource.loading || resource.error) return;
+    acceptLock.current = true;
+    setAcceptingId(questId);
+    setAcceptError(null);
+    setAcceptMessage(null);
     try {
-      setLoading(true);
-      setError(null);
       await acceptQuest(questId);
-      setQuests(await fetchBoardQuests());
+      setAcceptedIds((current) => new Set([...current, questId]));
+      setAcceptMessage('クエストを受注しました。');
+      resource.reload();
     } catch (acceptError) {
       if (acceptError instanceof AuthenticationRequiredError) {
         window.location.assign(currentLoginHref());
         return;
       }
-      setError(
+      setAcceptError(
         acceptError instanceof Error
           ? acceptError.message
           : 'クエストの受注に失敗しました。',
       );
+      // 応答だけ失われた場合も、取得で最新の受注状態を確認する。
+      resource.reload();
     } finally {
-      setLoading(false);
+      acceptLock.current = false;
+      setAcceptingId(null);
     }
   };
 
-  if (loading) {
-    return (
-      <p className="py-8 text-center text-slate-500">掲示板を読み込み中です…</p>
-    );
-  }
-
   return (
     <div className="space-y-4">
-      {error ? (
+      <ResourceNotice {...resource} />
+      {acceptError ? (
         <p role="alert" className="rounded-lg bg-red-50 p-4 text-red-700">
-          {error}
+          {acceptError}
         </p>
+      ) : null}
+      {acceptMessage ? (
+        <p role="status" className="rounded-lg bg-blue-50 p-4 text-blue-800">
+          {acceptMessage}{' '}
+          <Link href="/my-quest" className="underline">
+            マイクエストへ
+          </Link>
+        </p>
+      ) : null}
+      {!resource.loading && !resource.error && quests.length === 0 ? (
+        <p>現在、掲示板に表示するクエストはありません。</p>
       ) : null}
       {quests.map((quest) => (
         <QuestBoardCard
           key={quest.id}
-          quest={quest}
+          quest={{
+            ...quest,
+            isAccepted: quest.isAccepted || acceptedIds.has(quest.id),
+          }}
+          disabled={
+            acceptingId !== null || resource.loading || !!resource.error
+          }
+          isAccepting={acceptingId === quest.id}
           onAccept={(id) => void handleAcceptQuest(id)}
         />
       ))}

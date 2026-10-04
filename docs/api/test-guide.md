@@ -284,6 +284,7 @@ Thunder Clientでの確認手順:
 - `quests` 配列が返ります。
 - 各要素の `quest` にクエスト情報が含まれます。
 - `statistics` に `acceptedToday`、`completedToday`、`completionRate` が含まれます。
+- 今日の件数は日本時間00:00以上、翌日00:00未満。達成率は全期間の受注に対する達成済みの割合です。
 - `currentUser.isAccepted` は、ログインユーザーが受注済みの場合だけ `true` になります。
 - 他ユーザーの受注数を表す `acceptedToday` が1以上でも、ログインユーザーが未受注なら `currentUser.isAccepted` は `false` です。
 

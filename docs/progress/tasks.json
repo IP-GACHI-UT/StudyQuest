@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-04T20:15:04.385781+00:00",
+  "updatedAt": "2026-10-04T20:20:56.988146+00:00",
   "snapshotLabel": "2026-10-05 / STEP 02・03のローカル検証 / 未マージ",
   "baseRevision": "b9d3ca8",
   "currentStep": 4,
   "currentTaskId": "04.1.1",
-  "activity": "STEP 02のPR #65はOpen。STEP 03は既存認証PRを統合し、単体13件・実DB24件・認証E2E3件が成功。PR準備中。次は配置候補・費用・復元を確認。",
+  "activity": "STEP 02のPR #65・STEP 03のPR #67はOpen・未マージ。STEP 03の405fcfeでquality・web・api-static・api-db・認証E2EのCIがすべて成功。次はSTEP 04の配置候補・費用・復元を確認。",
   "runtime": "専用のローカルPostgreSQL 16とMailpitを使用。実セッション・二つのChromium context・期限切れ後の保存復帰、PCとスマートフォン幅390を確認。外部登録・本番送信・実端末・本番配置は未実施。",
   "steps": [
     {
@@ -145,7 +145,7 @@
               "title": "認証ブランチを評価して統合順を決める",
               "acceptance": "codex/auth-*の実装・仕様・検証結果を確認し、方式、統合元、依存順を記録する。",
               "status": "done",
-              "evidence": ["E07"],
+              "evidence": ["E07", "E08"],
               "issue": 66
             },
             {
@@ -153,7 +153,7 @@
               "title": "登録・ログイン・ログアウトを統合する",
               "acceptance": "選んだ認証方式をAPIと画面に接続し、固定IDを本番で使用しない。認証の正本を更新する。",
               "status": "done",
-              "evidence": ["E07"],
+              "evidence": ["E07", "E08"],
               "issue": 66
             }
           ]
@@ -167,7 +167,7 @@
               "title": "全APIの本人認可を確認する",
               "acceptance": "セッションから本人を特定し、未ログイン・他人の対象ID・偽のuserIdを拒否する。Presenterの公開項目を維持する。",
               "status": "done",
-              "evidence": ["E07"],
+              "evidence": ["E07", "E08"],
               "issue": 66
             },
             {
@@ -175,7 +175,7 @@
               "title": "期限切れ・再ログインと別ユーザーを検証する",
               "acceptance": "別ブラウザの2ユーザーで読み書き分離を確認。期限切れ・ログアウト後の拒否と再ログイン後の復帰を検証する。",
               "status": "done",
-              "evidence": ["E07"],
+              "evidence": ["E07", "E08"],
               "issue": 66
             }
           ]
@@ -623,6 +623,22 @@
         "apps/api/tests/auth.db.test.ts",
         "e2e/authentication.spec.ts",
         "https://github.com/IP-GACHI-UT/StudyQuest/issues/66"
+      ]
+    },
+    {
+      "id": "E08",
+      "title": "STEP 03のOpen PRとGitHub CI",
+      "date": "2026-10-05",
+      "revision": "405fcfe59176e8a248be0c98f7c4a0f6e87f60a2",
+      "method": "gh pr viewでPR #67の状態・head・CheckRunを確認",
+      "result": "PR #67はOpen、STEP 02のPR #65に依存。quality・web・api-static・api-db・authentication-e2eの5チェックがすべて成功。",
+      "limit": "このコミットのGitHub CI結果。developへのマージ、Google・本番SMTP・サイト公開ではない。",
+      "sources": [
+        "https://github.com/IP-GACHI-UT/StudyQuest/pull/67",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37231543392",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37231543390",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37231543378",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37231543366"
       ]
     }
   ],

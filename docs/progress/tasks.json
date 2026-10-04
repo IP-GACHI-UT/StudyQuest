@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-04T13:35:11.154Z",
-  "snapshotLabel": "2026-10-04 / コード・Issueの棚卸し",
-  "baseRevision": "8600867",
-  "currentStep": 2,
-  "currentTaskId": "02.1.1",
-  "activity": "次に進めるのは、受注したクエストを学習して記録する導線。主要APIは存在し、タイマー・週間表示の実データ接続が残っています。",
-  "runtime": "コードとIssueを照合。今回の棚卸しではアプリ・実DBの主要導線は再実行していません。",
+  "updatedAt": "2026-10-04T19:37:15.261655Z",
+  "snapshotLabel": "2026-10-05 / STEP 02のローカル検証 / 未マージ",
+  "baseRevision": "13792d4",
+  "currentStep": 3,
+  "currentTaskId": "03.1.1",
+  "activity": "STEP 02のPR #65はOpen・未マージ。ローカル検証とGitHub CIの4チェックが成功。次はSTEP 03の認証統合。",
+  "runtime": "ローカルの専用PostgreSQL 16、APIとWebを実行。PC 1280×900・スマートフォン幅390×844で保存失敗からの復帰と実データ表示を確認。本認証・実端末・本番配置は未確認。",
   "steps": [
     {
       "id": 1,
@@ -68,32 +68,32 @@
               "id": "02.1.1",
               "title": "マイクエストから学習へ進める",
               "acceptance": "専用画面に本人の受注一覧・状態を表示し、学習対象へ移動できる。空・取得失敗を扱う。",
-              "status": "todo",
-              "evidence": [],
+              "status": "done",
+              "evidence": ["E05", "E06"],
               "issue": 52
             },
             {
               "id": "02.1.2",
               "title": "タイマーと学習ログ保存をつなぐ",
               "acceptance": "開始・一時停止・終了から正しいクエストと時間を保存する。二重送信を防ぎ、保存失敗後も内容を保持して再試行できる。",
-              "status": "todo",
-              "evidence": [],
+              "status": "done",
+              "evidence": ["E05", "E06"],
               "issue": null
             },
             {
               "id": "02.1.3",
               "title": "週間表示とおすすめを実データへ接続する",
               "acceptance": "週間APIの値とDBのログが一致する。おすすめは実在するクエストIDを使い、目標・バッジ等の未提供表示を整理する。",
-              "status": "todo",
-              "evidence": [],
+              "status": "done",
+              "evidence": ["E05", "E06"],
               "issue": null
             },
             {
               "id": "02.1.4",
               "title": "学習ログ取得の契約とAPIを整合させる",
               "acceptance": "ホームが呼ぶGET /api/study-logsの本人限定の取得契約・OpenAPI・Presenter・実装を揃える。空・エラーと保存後の再取得を検証する。",
-              "status": "todo",
-              "evidence": [],
+              "status": "done",
+              "evidence": ["E05", "E06"],
               "issue": null
             }
           ]
@@ -106,24 +106,24 @@
               "id": "02.2.1",
               "title": "達成・XP・受注ポイントの実DB検証",
               "acceptance": "閾値の前後、受注重複、達成時の二重加算防止を現版で実DB検証し、コマンドと対象版を記録する。",
-              "status": "verify",
-              "evidence": ["E01"],
+              "status": "done",
+              "evidence": ["E05", "E06"],
               "issue": 18
             },
             {
               "id": "02.2.2",
               "title": "週間APIの集計境界を確認する",
               "acceptance": "日付・週境界・空の週・本人の分離を実DBで確認し、画面との対応を記録する。",
-              "status": "verify",
-              "evidence": ["E01"],
+              "status": "done",
+              "evidence": ["E05", "E06"],
               "issue": 15
             },
             {
               "id": "02.2.3",
               "title": "PC・スマホで基本体験を完走する",
               "acceptance": "一覧→受注→学習→保存→達成→週間表示を確認。正常・空・待機・失敗・再試行と既定のWeb/APIチェックを記録する。",
-              "status": "todo",
-              "evidence": [],
+              "status": "done",
+              "evidence": ["E05", "E06"],
               "issue": null
             }
           ]
@@ -577,6 +577,37 @@
         "apps/api/tests/app.test.ts",
         "apps/api/tests/study-logs.db.test.ts"
       ]
+    },
+    {
+      "id": "E05",
+      "title": "STEP 02の実装・API/実DB・PC/モバイル検証",
+      "date": "2026-10-05",
+      "revision": "13792d4 / feature/64-step02-learning-flow（未マージ）",
+      "method": "所定のWeb/APIチェック、API単体12件・実DB18件、実ブラウザーの受注→タイマー→保存失敗→再試行→達成→週間表示、空/取得失敗/再試行を確認。",
+      "result": "本人ログGET、UUIDで再送防止、同時保存の閾値、キャンセル拒否、日本時間の週/日境界・空週・本人分離が成功。画面の20分・2件達成・45XPとAPI/DBが一致。新しい画面のビルドと横幅も確認。",
+      "limit": "専用作業ブランチのローカル結果。GitHubのマージ、認証の二人分離、実スマートフォン、長時間離席、本番公開ではない。分数は保存前に修正して閾値を検証。",
+      "sources": [
+        "docs/progress/review/step02.md",
+        "apps/api/tests/study-logs.db.test.ts",
+        "apps/api/tests/study-summary.db.test.ts",
+        "apps/web/src/app/study/[questId]/page.tsx",
+        "https://github.com/IP-GACHI-UT/StudyQuest/issues/64"
+      ]
+    },
+    {
+      "id": "E06",
+      "title": "STEP 02のPRとGitHub CI",
+      "date": "2026-10-05",
+      "revision": "4f81589911d9890975719eaecb047be1e84537f8",
+      "method": "gh pr view / gh pr checksでPR #65の状態と各CheckRunを確認",
+      "result": "PR #65はOpen。quality、web、api-static（単体テスト含む）、api-dbが全て成功。",
+      "limit": "このコミットのGitHub CI結果。マージ・外部公開・本認証・本番配置の合格ではない。",
+      "sources": [
+        "https://github.com/IP-GACHI-UT/StudyQuest/pull/65",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37228733918",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37228733947",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37228733978"
+      ]
     }
   ],
   "phases": [
@@ -637,48 +668,48 @@
     {
       "id": "R01",
       "screen": "ホーム / マイクエスト",
-      "route": "/ → GET /api/my-quests",
-      "status": "取得実装あり、学習ボタンはalert",
-      "next": "専用画面 #52・タイマーへ接続",
+      "route": "/ → /my-quest → /study/{questId}",
+      "status": "本人一覧・状態・空・取得失敗・再試行をローカル確認",
+      "next": "STEP 03でセッション認可を確認",
       "step": 2
     },
     {
       "id": "R02",
       "screen": "クエスト一覧 / 受注",
       "route": "/quests → GET /api/quests、POST /api/quests/{questId}/accept",
-      "status": "一覧取得・受注の実装あり",
-      "next": "実DBと本人認可を通して確認",
+      "status": "実在IDで受注し、PC/モバイルから学習へ移動",
+      "next": "STEP 03で本人認可を確認",
       "step": 2
     },
     {
       "id": "R03",
       "screen": "学習タイマー / 保存",
-      "route": "画面未接続 → POST /api/study-logs",
-      "status": "保存・達成判定APIあり、タイマー導線が残件",
-      "next": "終了→保存→達成表示、失敗復帰",
+      "route": "/study/{questId} → POST /api/study-logs",
+      "status": "開始/停止/終了、入力確認、保存失敗・同じキーの再試行を確認",
+      "next": "認証・配置環境で再確認",
       "step": 2
     },
     {
       "id": "R04",
       "screen": "ホーム / 週間状況",
       "route": "/ → GET /api/study-summary/weekly",
-      "status": "APIあり、ホームは固定値",
-      "next": "実データへ接続し週境界を確認",
+      "status": "日本時間の実データ接続。週・日境界と空週を実DB確認",
+      "next": "配置環境で再確認",
       "step": 2
     },
     {
       "id": "R05",
       "screen": "ホーム / 学習ログ",
-      "route": "/ → GET /api/study-logs",
-      "status": "画面fetchあり、基準版のAPIはPOSTのみ",
-      "next": "GETの契約・実装を整合させ取得を確認",
+      "route": "/ と /study/{questId} → GET /api/study-logs",
+      "status": "本人のログGETを実装。空/失敗/保存後の再取得を確認",
+      "next": "STEP 03で二人分離を確認",
       "step": 2
     },
     {
       "id": "R06",
       "screen": "ホーム / プロフィール",
       "route": "/ → GET /api/profile",
-      "status": "取得実装あり、詳細操作はalert",
+      "status": "実データ表示。仮の実績値と詳細alertを除去",
       "next": "公開版は必要な表示のみ",
       "step": 2
     },
@@ -693,9 +724,9 @@
     {
       "id": "R08",
       "screen": "目標 / バッジ",
-      "route": "/ の固定カード、GET /api/profile のbadges",
-      "status": "目標とバッジカードは固定値",
-      "next": "無料βは非表示または未提供を明示",
+      "route": "/ の目標は非表示、バッジはGET /api/profile",
+      "status": "固定の目標・架空バッジを除去。実際の獲得情報だけ表示",
+      "next": "高度なバッジ判定は対象外",
       "step": 5
     },
     {
@@ -726,8 +757,8 @@
         },
         {
           "title": "実DBの基本体験とPC・スマホ",
-          "status": "未確認",
-          "note": "受注→タイマー→保存→達成・XP→週間表示と失敗復帰を確認する。"
+          "status": "ローカル確認済み / 配置未確認",
+          "note": "STEP 02・13792d4で実DBとPC/モバイル幅の導線、失敗復帰を確認。認証導入後・配置先では再確認する。"
         },
         {
           "title": "配置・費用・バックアップ復元",

@@ -310,6 +310,31 @@ curl例:
 curl http://localhost:3001/api/board/quests
 ```
 
+### I. 本人の学習記録一覧と保存の再試行（STEP 02）
+
+- Method: `GET`
+- URL: `http://localhost:3001/api/study-logs`
+- 正常系: `200` と `{ "studyLogs": [] }` または本人の記録。`studiedAt` 降順、同時刻は `id` 降順。
+- エラー系: DB障害は安全なメッセージの `500`。クライアントの `userId` 指定で対象者は変わらない。
+
+```bash
+curl http://localhost:3001/api/study-logs
+```
+
+保存時は `POST /api/study-logs` のBodyに `requestId`（任意のUUID v4）を含める。受注済みのIDを使い、`minutes` は1〜1440の整数、`studiedAt` はタイムゾーン付きISO日時で指定する。Thunder Clientで同じBodyを2回送り、両方 `201`・同じ `studyLog.id`・一覧の増加が1件・報酬が1回であることを確認する。内容を変えて同じキーで送ると `409 REQUEST_ID_CONFLICT`。キーを省略すると毎回別の記録になる。キャンセル済みは `400 QUEST_CANCELED`。
+
+```json
+{
+  "requestId": "a22b8d86-35aa-4bca-8b74-d88a871bfae8",
+  "questId": "dev-quest-html-001",
+  "minutes": 15,
+  "note": "基本タグを復習した",
+  "studiedAt": "2026-10-05T09:00:00+09:00"
+}
+```
+
+週間APIは日本時間の月曜00:00以上、翌月曜00:00未満を対象にする。学習しない日も7日分を返す。閾値・同時保存・本人分離・日本時間の境界は `pnpm test:api:db` で専用DBに限定して検証する。ブラウザーの失敗復帰・PC/スマホの確認は [STEP 02確認記録](../progress/review/step02.md) を参照。
+
 ## 7. よくある失敗
 
 - APIサーバーが起動していない場合、接続エラーになります。`pnpm dev:api` を実行してください。

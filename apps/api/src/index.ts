@@ -24,6 +24,7 @@ const port = getApiPort();
 serve({
   fetch: app.fetch,
   port,
+  hostname: process.env.API_HOST ?? '127.0.0.1',
 });
 
 console.log(`StudyQuest API listening on http://localhost:${port}`);

@@ -14,9 +14,14 @@ export const WeeklyStudyChart = ({ data }: WeeklyStudyChartProps) => {
     <div className="h-48 w-full min-w-0">
       <ResponsiveContainer width="100%" height={200}>
         <BarChart data={data}>
-          <XAxis dataKey="day" />
+          <XAxis dataKey="day" stroke="#cbd5e1" />
 
-          <Tooltip formatter={(value) => [`${value}時間`, '学習時間']} />
+          <Tooltip
+            formatter={(value) => [
+              `${Math.round(Number(value) * 60)}分`,
+              '学習時間',
+            ]}
+          />
 
           <Bar dataKey="hours" radius={[4, 4, 0, 0]} fill="#3B82F6" />
         </BarChart>

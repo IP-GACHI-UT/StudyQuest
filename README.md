@@ -51,6 +51,10 @@ pnpm dev:web
 
 `pnpm dev:api` と `pnpm dev:web` は、それぞれ別のターミナルで実行してください。
 
+STEP 02の基本体験は `/quests` → `/my-quest` → `/study/{questId}` → `/` で確認します。タイマー終了後は端数を1分へ切り上げ、時間とメモを確認して保存します。保存失敗時はその画面を保ったまま「保存を再試行」で同じ内容を送れます。画面を離れると未保存のタイマー・入力は失われます。
+
+APIの待受は `API_HOST`（既定 `127.0.0.1`）と `API_PORT`、許可するWebのoriginは `CORS_ORIGIN` で指定します。Webの接続先を変える場合は `apps/web/.env.local` に `NEXT_PUBLIC_API_URL=http://localhost:3001` を設定するか、Web起動・ビルド時の環境変数として渡してください。Next.jsはリポジトリルートの `.env` をWebの設定として読みません。`NEXT_PUBLIC_` の値はブラウザーに公開されるので秘密値を入れません。現在は開発用固定ユーザーで、複数人への公開前にSTEP 03の認証が必要です。
+
 Windows PowerShell で `.env` をコピーする場合:
 
 ```powershell

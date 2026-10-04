@@ -58,6 +58,9 @@ jobs:
       - name: API build
         run: pnpm build:api
 
+      - name: API unit tests
+        run: pnpm test:api
+
   api-db:
     name: api-db
     runs-on: ubuntu-latest

@@ -1,14 +1,12 @@
+import { formatStudyMinutes } from '@/lib/api';
 import { WeeklyStudyChart } from '../charts/WeeklyStudyChart';
 import { Card } from '../common/Card';
-import { ProgressBar } from '../common/ProgressBar';
 
 type WeeklyStudyCardProps = {
-  studyHours: number;
+  studyMinutes: number;
   completedQuests: number;
   earnedXp: number;
   streakDays: number;
-
-  weeklyGoalHours: number;
 
   chartData: {
     day: string;
@@ -17,11 +15,10 @@ type WeeklyStudyCardProps = {
 };
 
 export const WeeklyStudyCard = ({
-  studyHours,
+  studyMinutes,
   completedQuests,
   earnedXp,
   streakDays,
-  weeklyGoalHours,
   chartData,
 }: WeeklyStudyCardProps) => {
   return (
@@ -32,36 +29,35 @@ export const WeeklyStudyCard = ({
 
       <div className="space-y-3">
         <div className="flex justify-between">
-          <span className="text-sm text-gray-500">学習時間</span>
+          <span className="text-sm text-gray-300">学習時間</span>
 
-          <span className="font-medium">{studyHours}時間</span>
+          <span className="font-medium">
+            {formatStudyMinutes(studyMinutes)}
+          </span>
         </div>
 
         <div className="flex justify-between">
-          <span className="text-sm text-gray-500">達成クエスト</span>
+          <span className="text-sm text-gray-300">達成クエスト</span>
 
           <span className="font-medium">{completedQuests}件</span>
         </div>
 
         <div className="flex justify-between">
-          <span className="text-sm text-gray-500">獲得XP</span>
+          <span className="text-sm text-gray-300">獲得XP</span>
 
           <span className="font-medium">{earnedXp.toLocaleString()} XP</span>
         </div>
 
         <div className="flex justify-between">
-          <span className="text-sm text-gray-500">連続学習日数</span>
+          <span className="text-sm text-gray-300">今週の最長連続学習日数</span>
 
           <span className="font-medium">{streakDays}日</span>
         </div>
       </div>
 
-      <div className="mt-6">
-        <ProgressBar
-          label="週間目標時間"
-          value={Math.round((studyHours / weeklyGoalHours) * 100)}
-        />
-      </div>
+      <p className="mt-4 text-xs text-gray-300">
+        日本時間・月曜始まり。グラフの単位は時間です。
+      </p>
 
       <div className="mt-6">
         <WeeklyStudyChart data={chartData} />

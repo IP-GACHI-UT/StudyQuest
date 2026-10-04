@@ -26,13 +26,14 @@ async function deleteTestData() {
   });
 }
 
-async function postStudyLog(minutes: number) {
+async function postStudyLog(minutes: number, requestId?: string) {
   return app.request('/api/study-logs', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
       questId: TEST_QUEST.id,
       minutes,
+      requestId,
       studiedAt: '2026-01-15T09:00:00.000Z',
     }),
   });
@@ -71,6 +72,144 @@ afterAll(async () => {
 });
 
 describe('POST /api/study-logs', () => {
+  it('accepts ISO timestamps with higher fractional precision and stores milliseconds', async () => {
+    const response = await app.request('/api/study-logs', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        questId: TEST_QUEST.id,
+        minutes: 1,
+        studiedAt: '2026-01-15T09:00:00.1234567Z',
+      }),
+    });
+    expect(response.status).toBe(201);
+    await expect(response.json()).resolves.toHaveProperty(
+      'studyLog.studiedAt',
+      '2026-01-15T09:00:00.123Z',
+    );
+  });
+  it('rejects canceled quests without creating logs or awarding rewards', async () => {
+    await prisma.userQuest.updateMany({
+      where: { userId: DEVELOPMENT_USER_ID },
+      data: { status: 'CANCELED' },
+    });
+    const response = await postStudyLog(15);
+    expect(response.status).toBe(400);
+    await expect(response.json()).resolves.toHaveProperty(
+      'error.code',
+      'QUEST_CANCELED',
+    );
+    await expect(
+      prisma.studyLog.count({ where: { userId: DEVELOPMENT_USER_ID } }),
+    ).resolves.toBe(0);
+    await expect(
+      prisma.user.findUniqueOrThrow({
+        where: { id: DEVELOPMENT_USER_ID },
+        select: { totalXp: true },
+      }),
+    ).resolves.toEqual({ totalXp: INITIAL_TOTAL_XP });
+  });
+  it('completes only after the accumulated minutes reach the threshold', async () => {
+    expect((await postStudyLog(14)).status).toBe(201);
+    await expect(
+      prisma.userQuest.findFirst({
+        where: { userId: DEVELOPMENT_USER_ID },
+        select: { status: true },
+      }),
+    ).resolves.toEqual({ status: 'IN_PROGRESS' });
+    await expect(
+      prisma.user.findUniqueOrThrow({
+        where: { id: DEVELOPMENT_USER_ID },
+        select: { totalXp: true },
+      }),
+    ).resolves.toEqual({ totalXp: INITIAL_TOTAL_XP });
+    expect((await postStudyLog(1)).status).toBe(201);
+    await expect(
+      prisma.userQuest.findFirst({
+        where: { userId: DEVELOPMENT_USER_ID },
+        select: { status: true },
+      }),
+    ).resolves.toEqual({ status: 'COMPLETED' });
+  });
+  it('serializes concurrent minutes so the completion threshold is not missed', async () => {
+    const responses = await Promise.all([postStudyLog(8), postStudyLog(8)]);
+    expect(responses.map((response) => response.status)).toEqual([201, 201]);
+    await expect(
+      prisma.userQuest.findFirst({
+        where: { userId: DEVELOPMENT_USER_ID },
+        select: { status: true },
+      }),
+    ).resolves.toEqual({ status: 'COMPLETED' });
+    await expect(
+      prisma.user.findUniqueOrThrow({
+        where: { id: DEVELOPMENT_USER_ID },
+        select: { totalXp: true },
+      }),
+    ).resolves.toEqual({ totalXp: INITIAL_TOTAL_XP + TEST_QUEST.xpReward });
+  });
+  it('returns one log and one reward when identical requests are concurrent or retried', async () => {
+    const requestId = 'a22b8d86-35aa-4bca-8b74-d88a871bfae8';
+    const responses = await Promise.all([
+      postStudyLog(15, requestId),
+      postStudyLog(15, requestId),
+    ]);
+    expect(responses.map((response) => response.status)).toEqual([201, 201]);
+    expect(await responses[0].json()).toEqual(await responses[1].json());
+    expect((await postStudyLog(15, requestId)).status).toBe(201);
+    expect((await postStudyLog(16, requestId)).status).toBe(409);
+    await expect(
+      prisma.studyLog.count({ where: { userId: DEVELOPMENT_USER_ID } }),
+    ).resolves.toBe(1);
+    await expect(
+      prisma.activityLog.count({
+        where: { userId: DEVELOPMENT_USER_ID, type: 'STUDY_LOG_CREATED' },
+      }),
+    ).resolves.toBe(1);
+    await expect(
+      prisma.activityLog.count({
+        where: { userId: DEVELOPMENT_USER_ID, type: 'QUEST_COMPLETED' },
+      }),
+    ).resolves.toBe(1);
+    await expect(
+      prisma.user.findUniqueOrThrow({
+        where: { id: DEVELOPMENT_USER_ID },
+        select: { totalXp: true, totalPoints: true },
+      }),
+    ).resolves.toEqual({
+      totalXp: INITIAL_TOTAL_XP + TEST_QUEST.xpReward,
+      totalPoints: INITIAL_TOTAL_POINTS + TEST_QUEST.clearPoint,
+    });
+  });
+  it('rejects a requestId owned by another user without returning their record', async () => {
+    const otherId = 'study-log-key-other';
+    await prisma.user.create({
+      data: { id: otherId, displayName: '別ユーザー' },
+    });
+    try {
+      await prisma.studyLog.create({
+        data: {
+          id: 'study-a22b8d86-35aa-4bca-8b74-d88a871bfae8',
+          userId: otherId,
+          questId: TEST_QUEST.id,
+          minutes: 15,
+        },
+      });
+      const response = await postStudyLog(
+        15,
+        'a22b8d86-35aa-4bca-8b74-d88a871bfae8',
+      );
+      expect(response.status).toBe(409);
+      await expect(response.json()).resolves.toHaveProperty(
+        'error.code',
+        'REQUEST_ID_CONFLICT',
+      );
+      await expect(
+        prisma.studyLog.count({ where: { userId: DEVELOPMENT_USER_ID } }),
+      ).resolves.toBe(0);
+    } finally {
+      await prisma.user.delete({ where: { id: otherId } });
+    }
+  });
   it.each([
     0, -1,
   ])('rejects minutes=%i without changing database state', async (minutes) => {

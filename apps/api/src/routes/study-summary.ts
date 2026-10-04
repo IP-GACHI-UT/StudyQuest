@@ -4,6 +4,8 @@ import { errorResponse, jsonResponse } from '../lib/api-response.js';
 import { getCurrentUserId } from '../lib/auth.js';
 
 const DAYS_IN_WEEK = 7;
+const DAY_MS = 86_400_000;
+const JAPAN_OFFSET_MS = 9 * 60 * 60 * 1000;
 
 type StudyLogForSummary = {
   minutes: number;
@@ -127,27 +129,22 @@ function calculateStreakDays(dailyStudyMinutes: DailyStudyMinutes[]) {
 }
 
 function getStartOfWeek(date: Date) {
+  const japanDate = new Date(date.getTime() + JAPAN_OFFSET_MS);
   const startOfDay = new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate(),
+    Date.UTC(
+      japanDate.getUTCFullYear(),
+      japanDate.getUTCMonth(),
+      japanDate.getUTCDate(),
+    ) - JAPAN_OFFSET_MS,
   );
-  const daysSinceMonday = (startOfDay.getDay() + 6) % DAYS_IN_WEEK;
-
+  const daysSinceMonday = (japanDate.getUTCDay() + 6) % DAYS_IN_WEEK;
   return addDays(startOfDay, -daysSinceMonday);
 }
 
 function addDays(date: Date, days: number) {
-  const nextDate = new Date(date);
-  nextDate.setDate(nextDate.getDate() + days);
-
-  return nextDate;
+  return new Date(date.getTime() + days * DAY_MS);
 }
 
 function formatDate(date: Date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-
-  return `${year}-${month}-${day}`;
+  return new Date(date.getTime() + JAPAN_OFFSET_MS).toISOString().slice(0, 10);
 }

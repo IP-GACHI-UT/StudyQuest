@@ -1,17 +1,19 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { RecommendedQuestCard } from '@/components/cards/RecommendedQuestCard';
 import { FilterButton } from '@/components/common/FilterButton';
 import { CATEGORIES, type Category } from '@/constants/quest/category';
 import { DIFFICULTIES, type Difficulty } from '@/constants/quest/difficulty';
+import { apiRequest } from '@/lib/api';
 import type { Quest } from '@/types/quest';
 import { acceptQuest } from '@/utils/acceptQuest';
 
 // API から返されるクエストデータの型定義。
 // Web 側では API の型とアプリ内表示用型を分けて扱います。
 type ApiQuest = {
-  id: number;
+  id: string;
   title: string;
   description: string;
   category: string;
@@ -33,7 +35,7 @@ const difficultyMap: Record<ApiQuest['difficulty'], Difficulty> = {
 };
 
 // API から取得したデータを、既存の Quest 型に整形します。
-const mapApiQuestToQuest = (quest: ApiQuest): Quest => ({
+const mapApiQuestToQuest = (quest: ApiQuest): Quest<string> => ({
   id: quest.id,
   title: quest.title,
   difficulty: difficultyMap[quest.difficulty],
@@ -58,11 +60,12 @@ export const QuestList = () => {
   const [selectedDifficulty, setSelectedDifficulty] = useState<
     Difficulty | 'すべて'
   >('すべて');
-  const [quests, setQuests] = useState<Quest[]>([]);
+  const [quests, setQuests] = useState<Quest<string>[]>([]);
   const [, setApiResponse] = useState<ApiQuestsResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [acceptingQuestId, setAcceptingQuestId] = useState<number | null>(null);
+  const [acceptingQuestId, setAcceptingQuestId] = useState<string | null>(null);
+  const acceptLock = useRef(false);
   const [acceptMessage, setAcceptMessage] = useState<string | null>(null);
 
   const loadQuests = useCallback(async (signal?: AbortSignal) => {
@@ -70,16 +73,9 @@ export const QuestList = () => {
       setError(null);
       setIsLoading(true);
 
-      // 開発用に API を直接叩いてクエストを取得します。
-      const response = await fetch('http://localhost:3001/api/quests', {
+      const data = await apiRequest<ApiQuestsResponse>('/quests', {
         signal,
       });
-
-      if (!response.ok) {
-        throw new Error('APIからのクエスト取得に失敗しました。');
-      }
-
-      const data = (await response.json()) as ApiQuestsResponse;
       setApiResponse(data);
       setQuests(data.quests.map(mapApiQuestToQuest));
     } catch (fetchError) {
@@ -125,7 +121,9 @@ export const QuestList = () => {
     });
   }, [quests, selectedCategory, selectedDifficulty]);
 
-  const handleAcceptQuest = async (questId: number) => {
+  const handleAcceptQuest = async (questId: string) => {
+    if (acceptLock.current) return;
+    acceptLock.current = true;
     setAcceptingQuestId(questId);
     setAcceptMessage(null);
 
@@ -140,6 +138,7 @@ export const QuestList = () => {
           : 'クエストの受注に失敗しました。',
       );
     } finally {
+      acceptLock.current = false;
       setAcceptingQuestId(null);
     }
   };
@@ -149,6 +148,13 @@ export const QuestList = () => {
       {error ? (
         <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
           {error}
+          <button
+            type="button"
+            onClick={() => void loadQuests()}
+            className="ml-3 rounded border px-3 py-1"
+          >
+            再試行
+          </button>
         </div>
       ) : isLoading ? (
         <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700">
@@ -186,8 +192,14 @@ export const QuestList = () => {
       </div>
 
       {acceptMessage ? (
-        <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-700">
+        <div
+          role="status"
+          className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-700"
+        >
           {acceptMessage}
+          <Link href="/my-quest" className="ml-3 underline">
+            マイクエストへ
+          </Link>
         </div>
       ) : null}
 
@@ -202,11 +214,14 @@ export const QuestList = () => {
             duration={quest.duration}
             acceptPoint={quest.acceptPoint}
             clearPoint={quest.clearPoint}
-            isAccepting={acceptingQuestId === quest.id}
+            isAccepting={acceptingQuestId !== null}
             onAccept={() => void handleAcceptQuest(quest.id)}
           />
         ))}
       </div>
+      {!isLoading && !error && filteredQuests.length === 0 && (
+        <p>条件に合うクエストはありません。</p>
+      )}
     </div>
   );
 };

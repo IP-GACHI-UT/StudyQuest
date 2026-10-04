@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex,nofollow">
+    <meta http-equiv="Content-Security-Policy" content="{{CSP}}">
+    <title>StudyQuest｜実装の全体像と進捗</title>
+    <link rel="icon" href="data:,">
+    <style>/* {{STYLE}} */</style>
+  </head>
+  <body>
+    <a class="skip" href="#main">本文へ移動する</a>
+    <header class="status-header">
+      <div class="status-top">
+        <a class="brand" href="#main"><span class="brand-mark" aria-hidden="true">S</span><span>StudyQuest <span class="brand-light">開発進捗</span></span></a>
+        <div class="overall">
+          <div class="overall-label"><span>全計画の進捗</span><strong id="overall-value">—</strong><span id="overall-count"></span></div>
+          <progress id="overall-bar" max="100" value="0" aria-label="全計画の完了率"></progress>
+        </div>
+        <div class="local-label"><span class="local-dot" aria-hidden="true"></span><span>ローカルの作業記録</span><span id="header-step-count"></span></div>
+      </div>
+      <nav id="step-strip" class="step-strip" aria-label="工程ごとの進捗"></nav>
+    </header>
+    <div class="layout">
+      <aside class="sidebar" aria-label="工程ナビゲーション">
+        <p class="eyebrow">開発ロードマップ</p><h2>実装の全体像</h2>
+        <nav id="sidebar-steps" aria-label="工程へ移動"></nav>
+        <div class="sidebar-note"><p>まず無料βを公開し、AIの価値と加入意向を確かめてから有料提供へ進みます。</p><p>完了率は小項目の件数です。工数や公開までの日数を表しません。</p><p>アプリ画面は今回変更していません。</p></div>
+      </aside>
+      <main id="main" tabindex="-1">
+        <div class="page-heading"><div><p class="eyebrow">StudyQuestの現在地</p><h1>実装の全体像と進捗</h1><p class="intro">今ある学習体験を、まず使ってもらう。<br>無料βの公開から、AIクエストと課金需要の検証までを追います。</p></div><button type="button" class="quiet-button" id="reload">最新の記録を読み直す</button></div>
+        <div class="snapshot-line"><span id="updated"></span><span id="revision"></span><span id="snapshot"></span></div>
+        <section class="beta-line" aria-label="無料βまでの進捗"><div><strong>無料βまで</strong><span id="beta-count"></span></div><progress id="beta-bar" max="100" value="0" aria-label="無料βまでの完了率"></progress><p>STEP 01〜05。公開前の確認は別タブに記録しています。</p></section>
+        <div class="summary-grid" id="summary" aria-label="状態別の件数"></div>
+        <section class="focus-panel" aria-labelledby="focus-title"><div class="focus-main"><p class="eyebrow light">次に進める工程</p><h2 id="focus-title"></h2><p id="activity"></p><button type="button" class="focus-link" id="go-current">この工程の小項目を見る</button></div><div class="next-panel"><span class="small-label">次に進める作業</span><ol id="next-tasks"></ol><p id="runtime"></p></div></section>
+        <nav class="view-tabs" aria-label="表示の切り替え"><button type="button" data-view="tasks" aria-pressed="true" aria-controls="tasks-view">タスク進捗</button><button type="button" data-view="flows" aria-pressed="false" aria-controls="flows-view">実装順と体験</button><button type="button" data-view="routes" aria-pressed="false" aria-controls="routes-view">画面・API対応</button><button type="button" data-view="gates" aria-pressed="false" aria-controls="gates-view">公開前の確認</button><button type="button" data-view="evidence" aria-pressed="false" aria-controls="evidence-view">根拠と更新方法</button></nav>
+        <section id="tasks-view" class="view" aria-label="タスク進捗"><div class="toolbar"><label class="search-box"><span>タスクを検索</span><input id="task-search" type="search" placeholder="例：タイマー、認証、02.1、XP" autocomplete="off"></label><div class="expand-buttons"><button type="button" class="quiet-button" id="expand-all">すべて展開</button><button type="button" class="quiet-button" id="collapse-all">すべて折りたたむ</button></div></div><div class="filter-row" id="filters" aria-label="タスクの状態で絞り込む"></div><div class="list-heading"><p id="result-count" role="status" aria-live="polite"></p><p>大項目 → 中項目 → 小項目</p></div><div id="task-list"></div></section>
+        <section id="flows-view" class="view" aria-label="実装順と体験" hidden></section>
+        <section id="routes-view" class="view" aria-label="画面とAPIの対応" hidden></section>
+        <section id="gates-view" class="view" aria-label="公開前の確認" hidden></section>
+        <section id="evidence-view" class="view" aria-label="根拠と更新方法" hidden></section>
+        <footer class="page-footer">記録された対象版と確認範囲の進捗です。実装の存在、実DB検証、外部接続、公開を分けて確認します。</footer>
+        <noscript><p class="empty">表示にはJavaScriptを有効にしてください。計画の本文はdocs/roadmap.md、状態はdocs/progress/tasks.jsonで確認できます。</p></noscript>
+      </main>
+    </div>
+    <script id="progress-data" type="application/json">"{{DATA}}"</script>
+    <script>/* {{CLIENT}} */</script>
+  </body>
+</html>

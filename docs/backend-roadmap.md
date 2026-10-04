@@ -1,236 +1,32 @@
-# StudyQuest バックエンド専用タスクロードマップ
+# StudyQuest バックエンド作業ロードマップ
 
-## 目的
+更新日: 2026-10-04。全体の実装順は[公開・価値検証ロードマップ](roadmap.md)、現在の小項目・証拠は[進捗表](progress/index.html)を参照する。旧資料の「認証は最後」「本認証はMVP後」は、複数人向け公開の順序には適用しない。
 
-このドキュメントは、StudyQuest のバックエンド担当が作業前に見返して、次に進める Issue を判断するためのロードマップです。
+## 現在の実装とIssue
 
-詳細な作業内容・完了条件は GitHub Issue に記載し、このロードマップでは以下だけを管理します。
+基準版`8600867`のコードと2026-10-04のIssue状態を照合。ClosedはGitHub上の状態であり、今回の実DB再検証を意味しない。
 
-- バックエンド全体の進行順
-- 現在のDone / 未Done
-- どのIssueを次に進めるべきか
-- MVPまでに必要なバックエンド作業の範囲
+| 対象 | 状態 | 根拠・残る確認 |
+| --- | --- | --- |
+| 起動・DB運用・seed・API確認手順 | 文書・コードあり / #11〜#14 Closed | README、docs/db.md、prisma/seed.js、docs/api/test-guide.md。現環境での再実行は別検証 |
+| クエスト一覧・受注・マイクエスト・学習記録作成 | API実装あり | apps/api/src/routes。UIから一連の保存を検証する |
+| 学習ログの一覧取得 | 画面呼び出しとAPIが不整合 | ホームはGET /api/study-logsを呼ぶが、基準版のルート・OpenAPIはPOSTのみ。STEP 02で解消 |
+| 週間集計 | API実装あり / #15 Closed | study-summary.ts。ホームの固定値を実データへ接続する必要あり |
+| 活動・プロフィール | API実装あり / #16・#17 Closed | activities.ts、profile.ts。公開に不要な拡張は後回し |
+| 達成判定・XP・受注ポイント | API実装あり / #18・#47 Closed | quest-completion.ts、quests.ts。二重加算・境界条件を実DBで再確認 |
+| 掲示板の本人受注状態 | API修正あり / #48 Closed | quest-board.ts。フロント接続 #54はOpen、公開必須ではない |
+| 本認証 | 基準版は開発用固定ID | codex/auth-*の既存作業を確認し、方式・統合順・検証範囲を決める |
 
----
+## 次の作業
 
-## 前提
+1. STEP 02: #52と学習タイマー→学習記録API→達成/XP→週間表示のフロント連携を支援する。`study_logs`で集計、`user_quests`で進行、`activity_logs`で活動を分け、既存のJSON形式とPresenterを維持する。
+2. STEP 03: 既存認証ブランチを調査して本認証を統合する。全更新APIでセッションから本人を特定し、未ログイン・他人の対象ID・期限切れを拒否する。認証は無料βの公開前に必要。
+3. STEP 04〜05: API URL/CORS/秘密値/DB接続/復元/ログを配置環境で確認する。Prisma/PostgreSQLを維持できる低コスト構成を先に検証する。
+4. STEP 06以降: 目標→クエスト生成の最小契約、AI入力と費用上限、本人所有権を定義してから実装する。生成・採用・学習ログの責務を混ぜない。
+5. STEP 09〜10: 需要確認後に計画・再計画と決済へ進む。Webhookの署名、重複・順不同、購読状態と権限、解約を検証する。
 
-- 認証は最後に追加する
-- 認証実装までは開発用ユーザーで進める
-- DBは Prisma + PostgreSQL を前提にする
-- DB変更は Prisma migration を使う前提で管理する
-- APIは `apps/api` にHonoで実装する
-- APIパスは `/api/...` を維持する
-- フロント画面の修正はバックエンド移行作業に含めない
-- seedでは開発用クエストを5〜10件作成する
-- API確認は Thunder Client をメインにする
-- curl は補助・README記載用として使う
-- 掲示板は `activity_logs` の取得APIまで作る
-- プロフィールは最低限の取得APIまで作る
-- バッジはMVPでは表示・取得までにする
-- 高度なバッジ判定はMVP後に回す
+AI・認証・決済のAPIやDB構造はこの文書だけで追加しない。対象Issueで[OpenAPI](api/openapi.yaml)、[Prisma](../prisma/schema.prisma)を更新し、[DB手順](db.md)と[リポジトリの検証規約](../AGENTS.md)に従う。
 
----
+## 更新とレビュー
 
-## ステータス定義
-
-| ステータス | 意味 |
-| --- | --- |
-| Done | 実装・確認・必要なドキュメント更新まで完了 |
-| Review | PR作成済み、レビュー待ち |
-| In Progress | 作業中 |
-| Ready | 仕様が明確で、すぐ着手できる |
-| Todo | やる必要はあるが、まだ着手前 |
-| Later | MVP後、または主要導線完成後でよい |
-
----
-
-## バックエンドのDone条件
-
-バックエンドタスクは、コードを書いただけではDoneにしない。
-
-API実装タスクは、以下を満たしたらDoneにする。
-
-- `apps/api` にHonoのAPIルートが実装されている
-- 正常系レスポンスが返る
-- エラー時もJSONで返る
-- 必要なバリデーションがある
-- PrismaでDBアクセスしている
-- OpenAPI仕様とレスポンス形式が大きくズレていない
-- Thunder Client または curl で動作確認済み
-- PRに確認方法が書かれている
-- 必要なら README または docs が更新されている
-- develop ブランチにマージ済み
-
-DB関連タスクは、以下を満たしたらDoneにする。
-
-- Prisma schema が更新されている
-- 必要な migration が作成されている
-- ローカルDBに反映できる
-- Prisma Client を生成できる
-- seedが必要な場合はseedも更新されている
-- README または docs に実行手順がある
-- develop ブランチにマージ済み
-
----
-
-## 現在Doneにしてよいもの
-
-| 分類 | タスク | 状態 | 備考 |
-| --- | --- | --- | --- |
-| DB | Prisma schema作成 | Done | 主要モデル定義済み |
-| API仕様 | OpenAPI初版作成 | Done | MVP API仕様あり |
-| API | クエスト一覧取得API | Done | `GET /api/quests` |
-| API | クエスト受注API | Done | `POST /api/quests/{questId}/accept` |
-| API | マイクエスト取得API | Done | `GET /api/my-quests` |
-| API | 学習記録作成API | Done | `POST /api/study-logs` |
-| 認証 | 開発用ユーザー取得 | Done | 仮対応。本認証ではない |
-
----
-
-## 現在進めるIssue
-
-詳細な作業内容・完了条件は各Issueを参照する。
-
-| 優先順 | Issue | タスク | 現在状態 | 目的 |
-| --- | --- | --- | --- | --- |
-| 1 | [#11](https://github.com/IP-GACHI-UT/StudyQuest/issues/11) | READMEのバックエンド起動手順を修正する | Ready | 新しく参加した人が正しい手順で起動できるようにする |
-| 2 | [#12](https://github.com/IP-GACHI-UT/StudyQuest/issues/12) | Prisma migration運用手順を整理する | Ready | DB変更時の手順をチームで統一する |
-| 3 | [#13](https://github.com/IP-GACHI-UT/StudyQuest/issues/13) | seedで開発用クエストを作成する | Ready | API確認・フロント連携で使う初期データを用意する |
-| 4 | [#14](https://github.com/IP-GACHI-UT/StudyQuest/issues/14) | Thunder ClientでAPI確認手順を作成する | Ready | 実装済みAPIを誰でも確認できるようにする |
-| 5 | [#15](https://github.com/IP-GACHI-UT/StudyQuest/issues/15) | 週間学習状況APIを実装する | Todo | 今週の学習時間・曜日別学習時間を返す |
-| 6 | [#16](https://github.com/IP-GACHI-UT/StudyQuest/issues/16) | 活動ログ取得APIを実装する | Todo | 掲示板エリア用に活動ログを返す |
-| 7 | [#17](https://github.com/IP-GACHI-UT/StudyQuest/issues/17) | プロフィール取得APIを実装する | Todo | プロフィール表示に必要な情報を返す |
-| 8 | [#18](https://github.com/IP-GACHI-UT/StudyQuest/issues/18) | 学習記録APIにクエスト達成判定を追加する | Todo | 学習時間が条件を満たしたらクエストを完了にする |
-
----
-
-## 作業順
-
-### Step 1：バックエンド作業の土台を整える
-
-まずは以下を進める。
-
-- [#11](https://github.com/IP-GACHI-UT/StudyQuest/issues/11) READMEのバックエンド起動手順を修正する
-- [#12](https://github.com/IP-GACHI-UT/StudyQuest/issues/12) Prisma migration運用手順を整理する
-- [#13](https://github.com/IP-GACHI-UT/StudyQuest/issues/13) seedで開発用クエストを作成する
-- [#14](https://github.com/IP-GACHI-UT/StudyQuest/issues/14) Thunder ClientでAPI確認手順を作成する
-
-このStepの目的は、実装済みAPIをチーム内で確認できる状態にすること。
-
-### Step 2：週間学習状況APIを作る
-
-次に以下を進める。
-
-- [#15](https://github.com/IP-GACHI-UT/StudyQuest/issues/15) 週間学習状況APIを実装する
-
-このAPIができると、フロントの「今週の学習状況」表示と連携できる。
-
-### Step 3：掲示板・プロフィール用APIを作る
-
-次に以下を進める。
-
-- [#16](https://github.com/IP-GACHI-UT/StudyQuest/issues/16) 活動ログ取得APIを実装する
-- [#17](https://github.com/IP-GACHI-UT/StudyQuest/issues/17) プロフィール取得APIを実装する
-
-このStepで、掲示板エリアとプロフィール画面の最低限のAPIが揃う。
-
-### Step 4：クエスト達成判定を追加する
-
-次に以下を進める。
-
-- [#18](https://github.com/IP-GACHI-UT/StudyQuest/issues/18) 学習記録APIにクエスト達成判定を追加する
-
-このStepで、MVPの主要導線がよりアプリらしくなる。
-
-流れは以下。
-
-```text
-クエスト一覧を見る
-→ クエストを受注する
-→ マイクエストに表示される
-→ 学習記録を作成する
-→ 条件達成でクエスト完了になる
-→ 活動ログや週間学習状況に反映される
-```
-
-### Step 5：認証を追加する
-
-認証は最後に追加する。
-
-主要導線が一通り動くまでは、開発用ユーザーで進める。
-
-認証で検討すること。
-
-- Auth.js / NextAuth を使うか
-- GitHubログインにするか
-- メールログインにするか
-- セッション方式にするか
-- JWT方式にするか
-- `getCurrentUserId()` をどう差し替えるか
-- 未ログイン時にAPIで401を返すか
-
-認証Issueは、主要導線完成後に別途作成する。
-
----
-
-## 今週のおすすめ作業
-
-今週は、新しいAPIを増やす前にバックエンドの土台を整える。
-
-優先順は以下。
-
-1. [#11](https://github.com/IP-GACHI-UT/StudyQuest/issues/11) READMEのバックエンド起動手順を修正する
-2. [#12](https://github.com/IP-GACHI-UT/StudyQuest/issues/12) Prisma migration運用手順を整理する
-3. [#13](https://github.com/IP-GACHI-UT/StudyQuest/issues/13) seedで開発用クエストを作成する
-4. [#14](https://github.com/IP-GACHI-UT/StudyQuest/issues/14) Thunder ClientでAPI確認手順を作成する
-5. 余裕があれば [#15](https://github.com/IP-GACHI-UT/StudyQuest/issues/15) 週間学習状況APIに着手する
-
----
-
-## MVPまでにバックエンドで完成させるもの
-
-### 必須
-
-- クエスト一覧取得
-- クエスト受注
-- マイクエスト取得
-- 学習記録作成
-- 週間学習状況取得
-- 活動ログ取得
-- プロフィール取得
-- seedデータ
-- migration運用
-- API確認手順
-
-### できればやる
-
-- クエスト達成判定
-- ポイント・XP加算
-- 最低限のバッジ取得
-- APIエラー形式の統一
-
-### 後回し
-
-- 本認証
-- 高度なバッジ判定
-- 通知
-- ランキング
-- フレンド機能
-- 課金
-
----
-
-## ロードマップ更新ルール
-
-Issueが進んだら、このロードマップでは詳細を書き換えず、状態だけを更新する。
-
-例：
-
-- Issueが作業中になったら `Ready` から `In Progress` にする
-- PRを出したら `Review` にする
-- developにマージしたら `Done` にする
-- 仕様変更が出たら、詳細はIssue側に追記する
-
-このロードマップに細かい実装手順を書きすぎない。
-詳細はIssueに集約する。
+小項目の状態・証拠は[progress/tasks.json](progress/tasks.json)へ記録し、`pnpm progress:build`と`pnpm progress:check`でHTMLへ反映する。この文書は作業順や担当範囲が変わったときに更新する。詳細な実装相談とPR/マージ状態はIssueで管理し、既存IssueのClosedを未着手へ戻さない。

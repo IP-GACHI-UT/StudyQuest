@@ -18,6 +18,7 @@ app.use(
   '/api/*',
   cors({
     origin: corsOrigin,
+    credentials: true,
   }),
 );
 

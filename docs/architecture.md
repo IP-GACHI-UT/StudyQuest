@@ -28,3 +28,7 @@
 
 - `apps/web`: `http://localhost:3000`
 - `apps/api`: `http://localhost:3001`
+
+APIは `API_HOST` の既定値 `127.0.0.1` でローカルだけを待ち受ける。Webの接続先は `NEXT_PUBLIC_API_URL`、APIの許可originは `CORS_ORIGIN` とする。配置時の待受・HTTPS・秘密値はSTEP 04で別途確認する。
+
+STEP 02の学習記録は、任意のUUID v4 `requestId` を `study-` 付きの既存主キーに保存する。同じキー・内容の再送は確定した記録を返す。クエストごとに `user_quests` 行をトランザクション内でロックして、同時保存による達成閾値の見落としを防ぐ。DB構造は追加しない。週間集計は日本時間の月曜00:00から翌月曜00:00未満。

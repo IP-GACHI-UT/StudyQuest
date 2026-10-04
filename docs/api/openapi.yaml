@@ -116,6 +116,23 @@ paths:
         "500":
           $ref: "#/components/responses/InternalServerError"
   /api/study-logs:
+    get:
+      tags:
+        - StudyLogs
+      summary: 本人の学習記録を取得する
+      description: |
+        現在のユーザーの記録のみを studiedAt 降順、同時刻なら id 降順で返します。
+        ログがない場合は空配列を返します。userId等のクライアント指定で対象者は変更しません。
+      x-implementation-status: implemented
+      responses:
+        "200":
+          description: 本人の学習記録を取得しました。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudyLogListResponse"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
     post:
       tags:
         - StudyLogs
@@ -123,7 +140,10 @@ paths:
       description: |
         受注済みクエストに対して、学習した時間と任意のメモを記録します。
         同じマイクエストに紐づく合計学習時間がクエストの想定時間以上になった場合、そのマイクエストは自動的に達成扱いになります。
-        MVPでは学習タイマーや学習完了ボタンから呼び出す想定です。
+        学習タイマーの終了後、確認した整数の分数で保存します。
+        任意のrequestId（UUID v4）を同じ内容で再送した場合、同じ記録を201で返し、ログ・活動・報酬を重複作成しません。
+        requestIdを省略した場合は毎回別の記録です。別の内容・ユーザーでの再利用は409です。
+        requestIdは study- を付けて既存のStudyLog.idに格納し、一意制約とトランザクションで同時送信も防ぎます。
       x-implementation-status: implemented
       requestBody:
         required: true
@@ -147,7 +167,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/StudyLogResponse"
         "400":
-          description: 入力内容が不正、またはクエストをまだ受注していません。
+          description: 入力内容が不正、未受注、またはキャンセル済みです。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "409":
+          description: 同じrequestIdで異なる記録を保存しようとしました（REQUEST_ID_CONFLICT）。
           content:
             application/json:
               schema:
@@ -161,7 +187,8 @@ paths:
       summary: 今週の学習状況を取得する
       description: |
         現在のユーザーの今週の学習時間、達成クエスト数、獲得XP、今週内での最大連続学習日数を取得します。
-        日別の学習時間は月曜始まりの7日分を返し、ログがない日は minutes: 0 を返します。
+        日本時間（Asia/Tokyo）の月曜00:00以上、翌月曜00:00未満を集計します。サーバーのタイムゾーンには依存しません。
+        日別の学習時間は日本時間の月曜始まりの7日分を返し、ログがない日は minutes: 0 を返します。
       x-implementation-status: implemented
       responses:
         "200":
@@ -496,20 +523,34 @@ components:
         - questId
         - minutes
       properties:
+        requestId:
+          type: string
+          format: uuid
+          description: 任意のUUID v4。保存を再試行する際は、同じ値と同じ内容を送ります。
         questId:
           type: string
           description: 学習記録を紐づけるクエストIDです。
         minutes:
           type: integer
           minimum: 1
-          description: 学習時間です。1以上の整数を指定します。
+          maximum: 1440
+          description: 学習時間です。1〜1440の整数で指定します。タイマーでは端数を切り上げ、保存前に確認・修正できます。
         note:
           type: string
           description: 任意の学習メモです。
         studiedAt:
           type: string
           format: date-time
-          description: 学習した日時です。省略時はAPI実行時刻を使います。
+          description: タイムゾーン付きISO 8601の学習日時です。省略時はAPI実行時刻を使います。
+    StudyLogListResponse:
+      type: object
+      required:
+        - studyLogs
+      properties:
+        studyLogs:
+          type: array
+          items:
+            $ref: "#/components/schemas/StudyLog"
     StudyLogResponse:
       type: object
       required:

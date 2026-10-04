@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-04T19:31:32.601608Z",
+  "updatedAt": "2026-10-04T19:37:15.261655Z",
   "snapshotLabel": "2026-10-05 / STEP 02のローカル検証 / 未マージ",
   "baseRevision": "13792d4",
   "currentStep": 3,
   "currentTaskId": "03.1.1",
-  "activity": "STEP 02の学習導線を専用ブランチで検証。PR作成中・未マージ。次は既存の認証PRを評価し、STEP 03へ統合します。",
+  "activity": "STEP 02のPR #65はOpen・未マージ。ローカル検証とGitHub CIの4チェックが成功。次はSTEP 03の認証統合。",
   "runtime": "ローカルの専用PostgreSQL 16、APIとWebを実行。PC 1280×900・スマートフォン幅390×844で保存失敗からの復帰と実データ表示を確認。本認証・実端末・本番配置は未確認。",
   "steps": [
     {
@@ -69,7 +69,7 @@
               "title": "マイクエストから学習へ進める",
               "acceptance": "専用画面に本人の受注一覧・状態を表示し、学習対象へ移動できる。空・取得失敗を扱う。",
               "status": "done",
-              "evidence": ["E05"],
+              "evidence": ["E05", "E06"],
               "issue": 52
             },
             {
@@ -77,7 +77,7 @@
               "title": "タイマーと学習ログ保存をつなぐ",
               "acceptance": "開始・一時停止・終了から正しいクエストと時間を保存する。二重送信を防ぎ、保存失敗後も内容を保持して再試行できる。",
               "status": "done",
-              "evidence": ["E05"],
+              "evidence": ["E05", "E06"],
               "issue": null
             },
             {
@@ -85,7 +85,7 @@
               "title": "週間表示とおすすめを実データへ接続する",
               "acceptance": "週間APIの値とDBのログが一致する。おすすめは実在するクエストIDを使い、目標・バッジ等の未提供表示を整理する。",
               "status": "done",
-              "evidence": ["E05"],
+              "evidence": ["E05", "E06"],
               "issue": null
             },
             {
@@ -93,7 +93,7 @@
               "title": "学習ログ取得の契約とAPIを整合させる",
               "acceptance": "ホームが呼ぶGET /api/study-logsの本人限定の取得契約・OpenAPI・Presenter・実装を揃える。空・エラーと保存後の再取得を検証する。",
               "status": "done",
-              "evidence": ["E05"],
+              "evidence": ["E05", "E06"],
               "issue": null
             }
           ]
@@ -107,7 +107,7 @@
               "title": "達成・XP・受注ポイントの実DB検証",
               "acceptance": "閾値の前後、受注重複、達成時の二重加算防止を現版で実DB検証し、コマンドと対象版を記録する。",
               "status": "done",
-              "evidence": ["E05"],
+              "evidence": ["E05", "E06"],
               "issue": 18
             },
             {
@@ -115,7 +115,7 @@
               "title": "週間APIの集計境界を確認する",
               "acceptance": "日付・週境界・空の週・本人の分離を実DBで確認し、画面との対応を記録する。",
               "status": "done",
-              "evidence": ["E05"],
+              "evidence": ["E05", "E06"],
               "issue": 15
             },
             {
@@ -123,7 +123,7 @@
               "title": "PC・スマホで基本体験を完走する",
               "acceptance": "一覧→受注→学習→保存→達成→週間表示を確認。正常・空・待機・失敗・再試行と既定のWeb/APIチェックを記録する。",
               "status": "done",
-              "evidence": ["E05"],
+              "evidence": ["E05", "E06"],
               "issue": null
             }
           ]
@@ -592,6 +592,21 @@
         "apps/api/tests/study-summary.db.test.ts",
         "apps/web/src/app/study/[questId]/page.tsx",
         "https://github.com/IP-GACHI-UT/StudyQuest/issues/64"
+      ]
+    },
+    {
+      "id": "E06",
+      "title": "STEP 02のPRとGitHub CI",
+      "date": "2026-10-05",
+      "revision": "4f81589911d9890975719eaecb047be1e84537f8",
+      "method": "gh pr view / gh pr checksでPR #65の状態と各CheckRunを確認",
+      "result": "PR #65はOpen。quality、web、api-static（単体テスト含む）、api-dbが全て成功。",
+      "limit": "このコミットのGitHub CI結果。マージ・外部公開・本認証・本番配置の合格ではない。",
+      "sources": [
+        "https://github.com/IP-GACHI-UT/StudyQuest/pull/65",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37228733918",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37228733947",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37228733978"
       ]
     }
   ],

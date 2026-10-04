@@ -52,3 +52,7 @@ DBテストでは、14分で未達成・1分追加で達成、同時に8分ず�
 - 未保存の時間・入力の保持はその画面を保っている間。離脱・再読み込み後の下書き復旧は提供しない。
 - 実スマートフォン、長時間離席・OS休止、本認証の二人分離、Google OAuth、本番配置は未確認。
 - 外部登録・課金・サイト公開は行っていない。PRはユーザーの確認までOpenで維持する。
+
+## PRとCI
+
+[PR #65](https://github.com/IP-GACHI-UT/StudyQuest/pull/65)はOpen。4f81589のquality・web・api-static・api-dbは全成功。[APIと実DBの実行](https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37228733918)、[quality](https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37228733947)、[Web](https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37228733978)。マージはユーザーが確認後に実施する。

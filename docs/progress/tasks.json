@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-04T19:37:15.261655Z",
-  "snapshotLabel": "2026-10-05 / STEP 02のローカル検証 / 未マージ",
-  "baseRevision": "13792d4",
-  "currentStep": 3,
-  "currentTaskId": "03.1.1",
-  "activity": "STEP 02のPR #65はOpen・未マージ。ローカル検証とGitHub CIの4チェックが成功。次はSTEP 03の認証統合。",
-  "runtime": "ローカルの専用PostgreSQL 16、APIとWebを実行。PC 1280×900・スマートフォン幅390×844で保存失敗からの復帰と実データ表示を確認。本認証・実端末・本番配置は未確認。",
+  "updatedAt": "2026-10-04T20:15:04.385781+00:00",
+  "snapshotLabel": "2026-10-05 / STEP 02・03のローカル検証 / 未マージ",
+  "baseRevision": "b9d3ca8",
+  "currentStep": 4,
+  "currentTaskId": "04.1.1",
+  "activity": "STEP 02のPR #65はOpen。STEP 03は既存認証PRを統合し、単体13件・実DB24件・認証E2E3件が成功。PR準備中。次は配置候補・費用・復元を確認。",
+  "runtime": "専用のローカルPostgreSQL 16とMailpitを使用。実セッション・二つのChromium context・期限切れ後の保存復帰、PCとスマートフォン幅390を確認。外部登録・本番送信・実端末・本番配置は未実施。",
   "steps": [
     {
       "id": 1,
@@ -144,17 +144,17 @@
               "id": "03.1.1",
               "title": "認証ブランチを評価して統合順を決める",
               "acceptance": "codex/auth-*の実装・仕様・検証結果を確認し、方式、統合元、依存順を記録する。",
-              "status": "todo",
-              "evidence": [],
-              "issue": null
+              "status": "done",
+              "evidence": ["E07"],
+              "issue": 66
             },
             {
               "id": "03.1.2",
               "title": "登録・ログイン・ログアウトを統合する",
               "acceptance": "選んだ認証方式をAPIと画面に接続し、固定IDを本番で使用しない。認証の正本を更新する。",
-              "status": "todo",
-              "evidence": [],
-              "issue": null
+              "status": "done",
+              "evidence": ["E07"],
+              "issue": 66
             }
           ]
         },
@@ -166,17 +166,17 @@
               "id": "03.2.1",
               "title": "全APIの本人認可を確認する",
               "acceptance": "セッションから本人を特定し、未ログイン・他人の対象ID・偽のuserIdを拒否する。Presenterの公開項目を維持する。",
-              "status": "todo",
-              "evidence": [],
-              "issue": null
+              "status": "done",
+              "evidence": ["E07"],
+              "issue": 66
             },
             {
               "id": "03.2.2",
               "title": "期限切れ・再ログインと別ユーザーを検証する",
               "acceptance": "別ブラウザの2ユーザーで読み書き分離を確認。期限切れ・ログアウト後の拒否と再ログイン後の復帰を検証する。",
-              "status": "todo",
-              "evidence": [],
-              "issue": null
+              "status": "done",
+              "evidence": ["E07"],
+              "issue": 66
             }
           ]
         }
@@ -608,6 +608,22 @@
         "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37228733947",
         "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37228733978"
       ]
+    },
+    {
+      "id": "E07",
+      "title": "STEP 03の認証統合・本人分離・期限切れ復帰",
+      "date": "2026-10-05",
+      "revision": "b9d3ca82c362b657cf5c28d3839c3ae79f264e16 / feature/66-step03-auth-integration（未マージ）",
+      "method": "既存認証PR #55〜#60を確認・ローカル統合。Web/API/Prismaチェック、単体13件、実DB24件、認証E2E3件、PC/スマートフォン表示を実行。",
+      "result": "固定IDをセッション本人へ置換。保護画面・全個人APIの未認証拒否、他人のログとXPの分離、偽userIdの無視、再設定による失効、期限切れ→別タブ再ログイン→重複なし保存が成功。",
+      "limit": "専用作業ブランチのローカル結果。Chromiumの分離contextを使用。Google実OAuth、本番SMTP、実端末、HTTPS配置・外部公開・マージは未確認。",
+      "sources": [
+        "docs/progress/review/step03.md",
+        "docs/authentication.md",
+        "apps/api/tests/auth.db.test.ts",
+        "e2e/authentication.spec.ts",
+        "https://github.com/IP-GACHI-UT/StudyQuest/issues/66"
+      ]
     }
   ],
   "phases": [
@@ -667,48 +683,48 @@
   "routes": [
     {
       "id": "R01",
-      "screen": "ホーム / マイクエスト",
-      "route": "/ → /my-quest → /study/{questId}",
-      "status": "本人一覧・状態・空・取得失敗・再試行をローカル確認",
-      "next": "STEP 03でセッション認可を確認",
+      "screen": "ダッシュボード / マイクエスト",
+      "route": "/dashboard → /my-quest → /study/{questId}",
+      "status": "本人の一覧・状態を実セッションで確認",
+      "next": "配置環境で再確認",
       "step": 2
     },
     {
       "id": "R02",
       "screen": "クエスト一覧 / 受注",
       "route": "/quests → GET /api/quests、POST /api/quests/{questId}/accept",
-      "status": "実在IDで受注し、PC/モバイルから学習へ移動",
-      "next": "STEP 03で本人認可を確認",
+      "status": "セッションの本人へ受注。未ログインとOriginなしを拒否",
+      "next": "配置環境で再確認",
       "step": 2
     },
     {
       "id": "R03",
       "screen": "学習タイマー / 保存",
       "route": "/study/{questId} → POST /api/study-logs",
-      "status": "開始/停止/終了、入力確認、保存失敗・同じキーの再試行を確認",
-      "next": "認証・配置環境で再確認",
+      "status": "期限切れの401でも入力保持、別タブ再ログイン後に1件だけ保存",
+      "next": "配置環境で再確認",
       "step": 2
     },
     {
       "id": "R04",
-      "screen": "ホーム / 週間状況",
-      "route": "/ → GET /api/study-summary/weekly",
+      "screen": "ダッシュボード / 週間状況",
+      "route": "/dashboard → GET /api/study-summary/weekly",
       "status": "日本時間の実データ接続。週・日境界と空週を実DB確認",
       "next": "配置環境で再確認",
       "step": 2
     },
     {
       "id": "R05",
-      "screen": "ホーム / 学習ログ",
-      "route": "/ と /study/{questId} → GET /api/study-logs",
-      "status": "本人のログGETを実装。空/失敗/保存後の再取得を確認",
-      "next": "STEP 03で二人分離を確認",
+      "screen": "ダッシュボード / 学習ログ",
+      "route": "/dashboard と /study/{questId} → GET /api/study-logs",
+      "status": "セッション本人のログのみ。二つのユーザーで分離確認",
+      "next": "配置環境で再確認",
       "step": 2
     },
     {
       "id": "R06",
-      "screen": "ホーム / プロフィール",
-      "route": "/ → GET /api/profile",
+      "screen": "ダッシュボード / プロフィール",
+      "route": "/dashboard → GET /api/profile",
       "status": "実データ表示。仮の実績値と詳細alertを除去",
       "next": "公開版は必要な表示のみ",
       "step": 2
@@ -717,7 +733,7 @@
       "id": "R07",
       "screen": "掲示板",
       "route": "/board → GET /api/board/quests、GET /api/activities",
-      "status": "APIあり、画面は固定配列、#54 Open",
+      "status": "既存認証PRのAPI接続を取り込み。公開版の仮表示と失敗復帰はSTEP 05で確認",
       "next": "後回し。公開時は未接続を整理",
       "step": 5
     },
@@ -732,16 +748,16 @@
     {
       "id": "R09",
       "screen": "登録 / ログイン",
-      "route": "認証契約は既存ブランチ確認後に決定",
-      "status": "基準版は開発用固定ID",
-      "next": "本人認証・全API認可・期限切れ復帰",
+      "route": "/signup → メール確認 → /login → /dashboard",
+      "status": "Better Auth / DBセッション / 保護レイアウト・Hono認可をローカル確認",
+      "next": "Google・本番SMTP・配置は確認待ち",
       "step": 3
     },
     {
       "id": "R10",
       "screen": "AI目標 / Plus / 決済",
       "route": "後続IssueでOpenAPIとPrismaを定義",
-      "status": "計画のみ。今回はアプリを変更しない",
+      "status": "未実装。価値・需要・有料提供は検証待ち",
       "next": "価値→需要→有料提供を順に検証",
       "step": 6
     }
@@ -752,13 +768,13 @@
       "items": [
         {
           "title": "本認証と他人の読書き拒否",
-          "status": "未確認",
-          "note": "STEP 03を配置環境でも確認。開発用固定IDのまま複数人に公開しない。"
+          "status": "ローカル確認済み / 配置未確認",
+          "note": "STEP 03・b9d3ca8で実セッションと二人分離・期限切れ復帰を確認。Google・本番SMTPと配置環境は未確認。"
         },
         {
           "title": "実DBの基本体験とPC・スマホ",
           "status": "ローカル確認済み / 配置未確認",
-          "note": "STEP 02・13792d4で実DBとPC/モバイル幅の導線、失敗復帰を確認。認証導入後・配置先では再確認する。"
+          "note": "STEP 02の基本体験を確認し、STEP 03の認証導入後にも実DB・E2EとPC/モバイル幅を確認。配置先では再確認する。"
         },
         {
           "title": "配置・費用・バックアップ復元",

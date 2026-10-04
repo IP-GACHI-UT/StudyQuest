@@ -4,7 +4,7 @@
 
 ## レビュー順と変更
 
-PR #65 → #67 → #69 → STEP 05のPRの順。STEP 05の差分基準は`docs/68-step04-release-preparation`。全PRをOpenに保ち、ユーザー確認後にマージする。
+[PR #65](https://github.com/IP-GACHI-UT/StudyQuest/pull/65) → [#67](https://github.com/IP-GACHI-UT/StudyQuest/pull/67) → [#69](https://github.com/IP-GACHI-UT/StudyQuest/pull/69) → [#71](https://github.com/IP-GACHI-UT/StudyQuest/pull/71)の順。STEP 05の差分基準は`docs/68-step04-release-preparation`。全PRをOpenに保ち、ユーザー確認後にマージする。
 
 - 掲示板の固定アバター・「匿名の学習者が取り組み中」を除去。実APIの今日の受注・今日の達成・累計達成率を表示する。
 - 取得の待機・失敗・再試行・空表示を共通部品へ揃え、受注中の連続操作を止める。成功後に受注状態と件数を読み直し、マイクエストへのリンクを表示する。
@@ -40,6 +40,7 @@ PR #65 → #67 → #69 → STEP 05のPRの順。STEP 05の差分基準は`docs/6
 - E2Eの最初の起動は手動Webサーバーの同じ作業ツリーを使用中で失敗。自分の手動サーバーを停止し、再実行で3件成功した。テスト先は安全ガード付き専用DB、SMTPはローカルMailpitだけ。
 - 進捗生成・一致、Markdownのローカル参照44件（欠落0）、Git差分を確認。GitHub CIはPRのChecksで対象headと照合する。
 - 進捗HTMLは18/42（43%）・無料β18/23（78%）を表示。05.1.2の検索・詳細展開、要判断4件のフィルター、全件への復帰を確認。幅1280/390で横あふれなし（文書幅1265/375）。
+- PR #71のhead `6317382df846503a477ab25c4238054d37205ff0`でGitHub CIのquality・web・api-static・api-db・authentication-e2eがすべて成功。これはそのコミットの結果で、外部配置の確認ではない。
 - 未確認: 実配置・Functions入口・HTTPS・実proxy・本番SMTP・Google、窓口の外部受信/返信・運営者名称、実参加者・日程・同意・聞き取り、公開承認。
 
 05.1.2は計測定義・ローカル検証・実験案まで完了。05.1.1はSTEP 04の実配置と公開版確認が残るため検証待ち。05.2.1・05.2.2は公開と協力者確認待ちとして保留し、募集・外部登録・メール送信・DNS変更・公開・マージは行っていない。

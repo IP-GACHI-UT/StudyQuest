@@ -2,6 +2,8 @@
 
 このドキュメントでは、StudyQuest のローカルDBと Prisma migration の運用手順をまとめます。
 
+バックアップ・別DB復元、取得周期・保持・担当の案は[backup.md](backup.md)を参照してください。クラウドへの本番配置と定期取得は未実施です。
+
 ## 前提
 
 - DBは PostgreSQL を使用します。

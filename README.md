@@ -27,6 +27,9 @@ StudyQuestは、学習を小さなクエストとして受注し、継続を促�
 - DB・Prisma運用手順: `docs/db.md`
 - アーキテクチャ方針: `docs/architecture.md`
 - 認証設計・外部サービス設定: `docs/authentication.md`
+- 配置候補・費用上限・公開残件: `docs/release.md`
+- バックアップ・別DB復元: `docs/backup.md`
+- 無料βの公開案内原稿: `docs/beta-notice.md`
 
 ## ローカル想定
 

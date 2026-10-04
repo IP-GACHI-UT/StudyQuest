@@ -47,9 +47,11 @@ Mailpitの確認画面は`http://localhost:8025`です。メール確認とパ�
 - `SMTP_USER`: Resendが案内するSMTPユーザー
 - `SMTP_PASSWORD`: Resend API key。Gitへ保存しない
 - `MAIL_FROM`: `StudyQuest <no-reply@mail.gtowell.dev>`
-- `MAIL_REPLY_TO`: `admin@gtowell.dev`
+- `MAIL_REPLY_TO`: `info@gtowell.dev`を予定。外部受信・返信の確認待ち
 
 DNS検証、本番URL、Privacy Policy、Terms、Googleブランド情報が確定するまでGoogle OAuthをProductionへ切り替えません。
+
+配置・費用・ドメインと実proxyの残件は[release.md](release.md)、提供範囲・問い合わせ原稿は[beta-notice.md](beta-notice.md)を参照してください。`info@`は専用受信箱とは未確認で、既存アカウントへの配送機能を使う案です。既存Google向けMXは変更していません。`.env.example`とPrivacy/Terms画面の旧窓口は、受信・返信確認後の公開版タスクで揃えます。
 
 ## セキュリティ上の決定
 

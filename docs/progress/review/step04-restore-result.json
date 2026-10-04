@@ -1,0 +1,35 @@
+{
+  "result": "match",
+  "source": {
+    "users": 2,
+    "quests": 8,
+    "user_quests": 2,
+    "study_logs": 1,
+    "activity_logs": 4,
+    "accounts": 1,
+    "sessions": 2,
+    "migrations": 2,
+    "minutes": 5,
+    "study_logs_hash": "55083d5574525d8bcef17194e3b0202c",
+    "user_quests_hash": "488ea44538fd814dca5c429bfe8ca579",
+    "profile_hash": "666f439c3e16db87d7e24d9f30c0b77a",
+    "activity_hash": "011a8fcbdff586c76e711bff3b5471a1"
+  },
+  "restored": {
+    "users": 2,
+    "quests": 8,
+    "user_quests": 2,
+    "study_logs": 1,
+    "activity_logs": 4,
+    "accounts": 1,
+    "sessions": 2,
+    "migrations": 2,
+    "minutes": 5,
+    "study_logs_hash": "55083d5574525d8bcef17194e3b0202c",
+    "user_quests_hash": "488ea44538fd814dca5c429bfe8ca579",
+    "profile_hash": "666f439c3e16db87d7e24d9f30c0b77a",
+    "activity_hash": "011a8fcbdff586c76e711bff3b5471a1"
+  },
+  "dump_bytes": 27841,
+  "dump_sha256": "198fcb473bd738320eced4da3405b2c3f758f393c06706e1a218527fc62d61bf"
+}

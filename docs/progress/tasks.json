@@ -1,0 +1,775 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-10-04T13:35:11.154Z",
+  "snapshotLabel": "2026-10-04 / コード・Issueの棚卸し",
+  "baseRevision": "8600867",
+  "currentStep": 2,
+  "currentTaskId": "02.1.1",
+  "activity": "次に進めるのは、受注したクエストを学習して記録する導線。主要APIは存在し、タイマー・週間表示の実データ接続が残っています。",
+  "runtime": "コードとIssueを照合。今回の棚卸しではアプリ・実DBの主要導線は再実行していません。",
+  "steps": [
+    {
+      "id": 1,
+      "short": "現在地・作業基準",
+      "title": "現在地と作業基準を揃える",
+      "outcome": "実装の存在、未接続の画面、未検証の動作を区別する。",
+      "groups": [
+        {
+          "id": "01.1",
+          "title": "基準版の棚卸し",
+          "tasks": [
+            {
+              "id": "01.1.1",
+              "title": "主要API・DB・仕様の存在を照合する",
+              "acceptance": "Honoの登録ルート、OpenAPI、Prismaと役割を照合し、実動作を確認した範囲と区別する。",
+              "status": "done",
+              "evidence": ["E01"],
+              "issue": null
+            },
+            {
+              "id": "01.1.2",
+              "title": "画面とAPIの接続・仮表示を棚卸しする",
+              "acceptance": "ホーム・クエスト・掲示板について、取得API、固定値、仮の操作を記録する。",
+              "status": "done",
+              "evidence": ["E02"],
+              "issue": null
+            },
+            {
+              "id": "01.1.3",
+              "title": "Issueと既存認証ブランチを確認する",
+              "acceptance": "旧Issueの状態、未完了Issue、認証の別ブランチの存在を記録する。統合済みとは扱わない。",
+              "status": "done",
+              "evidence": ["E03"],
+              "issue": null
+            },
+            {
+              "id": "01.1.4",
+              "title": "既存の検証コマンドとCI定義を照合する",
+              "acceptance": "package.jsonとCI定義、APIテストの配置を確認する。テスト成功の証拠とは区別する。",
+              "status": "done",
+              "evidence": ["E04"],
+              "issue": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "short": "学習の主要導線",
+      "title": "受注から学習・達成までをつなぐ",
+      "outcome": "受注→学習→保存→達成・XP→週間表示を実DBで通す。",
+      "groups": [
+        {
+          "id": "02.1",
+          "title": "学習する画面と保存",
+          "tasks": [
+            {
+              "id": "02.1.1",
+              "title": "マイクエストから学習へ進める",
+              "acceptance": "専用画面に本人の受注一覧・状態を表示し、学習対象へ移動できる。空・取得失敗を扱う。",
+              "status": "todo",
+              "evidence": [],
+              "issue": 52
+            },
+            {
+              "id": "02.1.2",
+              "title": "タイマーと学習ログ保存をつなぐ",
+              "acceptance": "開始・一時停止・終了から正しいクエストと時間を保存する。二重送信を防ぎ、保存失敗後も内容を保持して再試行できる。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            },
+            {
+              "id": "02.1.3",
+              "title": "週間表示とおすすめを実データへ接続する",
+              "acceptance": "週間APIの値とDBのログが一致する。おすすめは実在するクエストIDを使い、目標・バッジ等の未提供表示を整理する。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            },
+            {
+              "id": "02.1.4",
+              "title": "学習ログ取得の契約とAPIを整合させる",
+              "acceptance": "ホームが呼ぶGET /api/study-logsの本人限定の取得契約・OpenAPI・Presenter・実装を揃える。空・エラーと保存後の再取得を検証する。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            }
+          ]
+        },
+        {
+          "id": "02.2",
+          "title": "APIと実操作の確認",
+          "tasks": [
+            {
+              "id": "02.2.1",
+              "title": "達成・XP・受注ポイントの実DB検証",
+              "acceptance": "閾値の前後、受注重複、達成時の二重加算防止を現版で実DB検証し、コマンドと対象版を記録する。",
+              "status": "verify",
+              "evidence": ["E01"],
+              "issue": 18
+            },
+            {
+              "id": "02.2.2",
+              "title": "週間APIの集計境界を確認する",
+              "acceptance": "日付・週境界・空の週・本人の分離を実DBで確認し、画面との対応を記録する。",
+              "status": "verify",
+              "evidence": ["E01"],
+              "issue": 15
+            },
+            {
+              "id": "02.2.3",
+              "title": "PC・スマホで基本体験を完走する",
+              "acceptance": "一覧→受注→学習→保存→達成→週間表示を確認。正常・空・待機・失敗・再試行と既定のWeb/APIチェックを記録する。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "short": "本認証・本人分離",
+      "title": "複数人向けの本認証を統合する",
+      "outcome": "固定の開発用ユーザーを公開環境で使わず、本人のデータだけを操作できる。",
+      "groups": [
+        {
+          "id": "03.1",
+          "title": "方式と既存作業",
+          "tasks": [
+            {
+              "id": "03.1.1",
+              "title": "認証ブランチを評価して統合順を決める",
+              "acceptance": "codex/auth-*の実装・仕様・検証結果を確認し、方式、統合元、依存順を記録する。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            },
+            {
+              "id": "03.1.2",
+              "title": "登録・ログイン・ログアウトを統合する",
+              "acceptance": "選んだ認証方式をAPIと画面に接続し、固定IDを本番で使用しない。認証の正本を更新する。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            }
+          ]
+        },
+        {
+          "id": "03.2",
+          "title": "認可と復帰",
+          "tasks": [
+            {
+              "id": "03.2.1",
+              "title": "全APIの本人認可を確認する",
+              "acceptance": "セッションから本人を特定し、未ログイン・他人の対象ID・偽のuserIdを拒否する。Presenterの公開項目を維持する。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            },
+            {
+              "id": "03.2.2",
+              "title": "期限切れ・再ログインと別ユーザーを検証する",
+              "acceptance": "別ブラウザの2ユーザーで読み書き分離を確認。期限切れ・ログアウト後の拒否と再ログイン後の復帰を検証する。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "short": "低コスト公開準備",
+      "title": "現構成を維持して公開環境を準備する",
+      "outcome": "Next.js＋Hono＋Prisma/PostgreSQLが配置先で動作し、費用と復旧方法を説明できる。",
+      "groups": [
+        {
+          "id": "04.1",
+          "title": "配置・費用・復元",
+          "tasks": [
+            {
+              "id": "04.1.1",
+              "title": "公開先と費用上限を配置試験で決める",
+              "acceptance": "候補の商用条件・無料枠を公式情報で再確認。Next/Hono/Prisma/PostgreSQLを実配置し、制限と総費用・停止条件を記録する。SQLiteへの移行を前提にしない。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            },
+            {
+              "id": "04.1.2",
+              "title": "API URL・CORS・秘密値・ログを分離する",
+              "acceptance": "localhost固定を環境設定にし、認証Cookie/CORS/HTTPSを確認。秘密値と学習本文をログやブラウザへ漏らさない。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            },
+            {
+              "id": "04.1.3",
+              "title": "バックアップから別環境へ復元する",
+              "acceptance": "学習ログと進行状態を別DBへ復元して照合し、取得周期・保持期間・復旧担当を記録する。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            },
+            {
+              "id": "04.1.4",
+              "title": "提供範囲と公開案内の原稿を揃える",
+              "acceptance": "無料βの範囲、個人情報の扱い、連絡先、未提供機能、費用上限の確認用原稿を揃える。正式提供条件は公開前に確認する。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "short": "無料β・利用計測",
+      "title": "小さな無料βで基本体験を確かめる",
+      "outcome": "AIの完成を待たずに、基本体験を使ってもらい離脱箇所を知る。",
+      "groups": [
+        {
+          "id": "05.1",
+          "title": "公開版と計測準備",
+          "tasks": [
+            {
+              "id": "05.1.1",
+              "title": "無料βの公開版候補を作る",
+              "acceptance": "STEP 02〜04の確認を揃え、未接続の操作と架空実績を公開版で整理する。公開前ゲートは別途確認する。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            },
+            {
+              "id": "05.1.2",
+              "title": "導線イベントと実験基準を定義する",
+              "acceptance": "登録・初回受注・初回保存・7日再利用を計測。期間・母数・合格基準を事前に決め、学習本文やメールをイベントに含めない。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            }
+          ]
+        },
+        {
+          "id": "05.2",
+          "title": "公開後の観測",
+          "tasks": [
+            {
+              "id": "05.2.1",
+              "title": "少人数のβで初回体験を観測する",
+              "acceptance": "無料βゲートと公開承認後に協力者へ公開し、対象期間と人数を添えて初回保存・離脱を記録する。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            },
+            {
+              "id": "05.2.2",
+              "title": "フィードバックで最初の対象分野を絞る",
+              "acceptance": "資格・技術・自己学習の利用者から困りごとと翌週再利用を確認し、優先改善と対象分野を決める。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "short": "目標→クエスト",
+      "title": "目標から今日のクエストを生成する",
+      "outcome": "小さなAI生成を、既存の受注・タイマー・学習ログにつなぐ。",
+      "groups": [
+        {
+          "id": "06.1",
+          "title": "入力・生成・採用",
+          "tasks": [
+            {
+              "id": "06.1.1",
+              "title": "目標・期限・使える時間と出力契約を定義する",
+              "acceptance": "選んだ対象分野で入力・生成クエスト・保存先・本人所有権を定義。必要なOpenAPIとPrisma変更を別Issueで設計する。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            },
+            {
+              "id": "06.1.2",
+              "title": "少数のクエストを生成・編集・採用できる",
+              "acceptance": "目標に対応する具体的な行動と所要時間を生成し、利用者が直して採用する。既存受注→学習保存まで通る。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            }
+          ]
+        },
+        {
+          "id": "06.2",
+          "title": "実接続と利用制限",
+          "tasks": [
+            {
+              "id": "06.2.1",
+              "title": "AI事業者・入力の扱い・原価を決める",
+              "acceptance": "現行の料金・データ利用条件を確認し、送る情報、同意、削除、無料試験の上限と原価を決める。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            },
+            {
+              "id": "06.2.2",
+              "title": "生成回数・時間・出力を制限する",
+              "acceptance": "本人単位の回数・予算・タイムアウトを制御し、重複生成、不正な出力、長い入力、失敗を安全に扱う。無制限を約束しない。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            },
+            {
+              "id": "06.2.3",
+              "title": "AI失敗時も基本学習を続けられる",
+              "acceptance": "入力を保持し、再試行または基本クエストへ戻れる。未接続・生成中・失敗を架空の成功と表示しない。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "short": "AI価値の検証",
+      "title": "生成が学習と再利用につながるかを見る",
+      "outcome": "生成回数だけでなく、採用・学習完了・継続と原価で判断する。",
+      "groups": [
+        {
+          "id": "07.1",
+          "title": "測定と次の判断",
+          "tasks": [
+            {
+              "id": "07.1.1",
+              "title": "AI実験の期間・母数・基準を決める",
+              "acceptance": "生成→採用→学習完了→7日再利用の定義と、継続・修正・停止の基準を観測前に記録する。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            },
+            {
+              "id": "07.1.2",
+              "title": "利用とAI費用を同じ期間で集計する",
+              "acceptance": "人数・採用率・学習完了・再利用と利用者あたり費用を記録し、仮の数値を実績にしない。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            },
+            {
+              "id": "07.1.3",
+              "title": "聞き取りと数値から次を判断する",
+              "acceptance": "少人数の限界を明示し、既存の学習計画方法との比較、継続理由、不採用理由を確認。Plus検証へ進むか決める。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "short": "Plus需要の検証",
+      "title": "決済前に有料候補の加入意向を確かめる",
+      "outcome": "7日間クエストの提案に対する反応を、支払実績と分けて記録する。",
+      "groups": [
+        {
+          "id": "08.1",
+          "title": "価格仮説と意向",
+          "tasks": [
+            {
+              "id": "08.1.1",
+              "title": "7日間クエストと価格仮説を提示する",
+              "acceptance": "月480〜680円を仮説として価格・提供候補を示す。準備中で決済しないことを加入操作前にも明示する。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            },
+            {
+              "id": "08.1.2",
+              "title": "閲覧と加入意向を計測する",
+              "acceptance": "価格別の提案閲覧人数・加入意向人数を記録。決済なしで計測し、売上・会員数とは表示しない。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            },
+            {
+              "id": "08.1.3",
+              "title": "作る有料機能を最小範囲に決める",
+              "acceptance": "反応と聞き取りから価格、提供回数、7日計画/再計画の優先順を決める。反応が弱ければ修正または停止する。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "short": "AI計画・再計画",
+      "title": "需要があるAI計画を最小限で実装する",
+      "outcome": "7日計画と未達時の提案を、本人が確認して更新できる。",
+      "groups": [
+        {
+          "id": "09.1",
+          "title": "計画と提案",
+          "tasks": [
+            {
+              "id": "09.1.1",
+              "title": "7日計画を保存し今日のクエストへ接続する",
+              "acceptance": "使える時間に収まる計画を保存し、日別の受注・学習記録につなぐ。本人の分離、履歴、再読込を確認する。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            },
+            {
+              "id": "09.1.2",
+              "title": "未達の予定を再編成する提案を作る",
+              "acceptance": "未達と残り時間から変更案を示し、利用者の確認後に更新する。達成済みログやXPを書き換えず、拒否・競合を扱う。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            },
+            {
+              "id": "09.1.3",
+              "title": "提供回数・失敗復帰と計画品質を検証する",
+              "acceptance": "原価上限、再計画の回数、日付境界、採用/取消、API失敗と復帰をPC・スマホ・実DBで確認する。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "short": "決済・継続運用",
+      "title": "決済と提供権限を一致させる",
+      "outcome": "課金後の提供、更新・解約・復旧、費用と継続を確認して運用する。",
+      "groups": [
+        {
+          "id": "10.1",
+          "title": "テストモードでの決済",
+          "tasks": [
+            {
+              "id": "10.1.1",
+              "title": "販売価格と提供条件を確定する",
+              "acceptance": "価格、税の表示、AI回数、開始/停止時点、解約・返金、問い合わせと必要な表示を確認する。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            },
+            {
+              "id": "10.1.2",
+              "title": "StripeテストとWebhookを実装する",
+              "acceptance": "署名検証、重複・順不同・失敗・再処理を確認。ブラウザの成功遷移だけでPlus権限を付けない。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            },
+            {
+              "id": "10.1.3",
+              "title": "加入・更新・失敗・解約と本人権限を確認する",
+              "acceptance": "購読状態と利用権限が一致し、他人の契約を変更できない。支払失敗、解約、履歴、再ログインをテストする。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            }
+          ]
+        },
+        {
+          "id": "10.2",
+          "title": "公開後の継続",
+          "tasks": [
+            {
+              "id": "10.2.1",
+              "title": "有料提供の公開前レビューを揃える",
+              "acceptance": "テスト結果、提供条件、費用上限、監視・復旧を確認し、有料公開ゲートに残件を記録する。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            },
+            {
+              "id": "10.2.2",
+              "title": "売上・費用・解約と次の改善を判断する",
+              "acceptance": "有料公開ゲートと承認後の実績を集計。売上から決済/AI/運用費を分け、問い合わせ・解約理由から継続改善を決める。",
+              "status": "todo",
+              "evidence": [],
+              "issue": null
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "id": "E01",
+      "title": "API・DB・仕様の静的照合",
+      "date": "2026-10-04",
+      "revision": "8600867",
+      "method": "登録ルート、各route/service、Presenter、OpenAPI、Prismaを読み取り",
+      "result": "クエスト・受注・マイクエスト・学習記録・週間・活動・プロフィール・掲示板APIの実装が存在。達成/XP/受注ポイントの処理も存在。",
+      "limit": "実装の存在確認。今回の実DB再実行・認証・画面連携・本番動作の合格ではない。",
+      "sources": [
+        "apps/api/src/app.ts",
+        "apps/api/src/services/quest-completion.ts",
+        "apps/api/src/presenters/api-presenters.ts",
+        "docs/api/openapi.yaml",
+        "prisma/schema.prisma"
+      ]
+    },
+    {
+      "id": "E02",
+      "title": "画面・接続と仮表示の棚卸し",
+      "date": "2026-10-04",
+      "revision": "8600867",
+      "method": "ページ、カード、fetch・alert・固定配列のコードを読み取り",
+      "result": "ホームのprofile/study-logs/my-questsとクエスト一覧の取得を確認。週間・おすすめ・目標・バッジの固定値、学習ボタンalert、掲示板の固定配列が残る。 ホームはGET /api/study-logsを呼ぶが、基準版のAPIルートとOpenAPIはPOSTのみ。",
+      "limit": "画面コードの照合。PC/スマホの実表示や一連操作は今回の基準版で未検証。",
+      "sources": [
+        "apps/web/src/app/page.tsx",
+        "apps/web/src/components/quests/QuestList.tsx",
+        "apps/web/src/components/quests/QuestBoard.tsx"
+      ]
+    },
+    {
+      "id": "E03",
+      "title": "GitHub Issue・基準版・別ブランチ確認",
+      "date": "2026-10-04",
+      "revision": "8600867",
+      "method": "gh issue list --state all、gh api commits/develop、git branch -a",
+      "result": "developの最新SHAと基準版が一致。#11〜#18・#47・#48はClosed、#49・#52・#54はOpen。codex/auth-*ブランチが存在し、基準版の認証は固定ID。",
+      "limit": "Closedは再検証成功を意味しない。別認証ブランチの実装内容と統合の可否は後続で確認する。",
+      "sources": [
+        "https://github.com/IP-GACHI-UT/StudyQuest/issues/49",
+        "https://github.com/IP-GACHI-UT/StudyQuest/issues/52",
+        "https://github.com/IP-GACHI-UT/StudyQuest/issues/54",
+        "apps/api/src/lib/auth.ts"
+      ]
+    },
+    {
+      "id": "E04",
+      "title": "検証コマンド・CI・テスト定義の照合",
+      "date": "2026-10-04",
+      "revision": "8600867",
+      "method": "package.json、CI workflow、APIテストの配置を読み取り",
+      "result": "Webのlint/typecheck/build、APIの型/build/unit/実DBテスト、Biome、PrismaのコマンドとCI定義が存在する。",
+      "limit": "定義の存在確認。現在のコードに対する実行結果やCI成功を主張するものではない。",
+      "sources": [
+        "package.json",
+        ".github/workflows/quality.yml",
+        ".github/workflows/web.yml",
+        ".github/workflows/api.yml",
+        "apps/api/tests/app.test.ts",
+        "apps/api/tests/study-logs.db.test.ts"
+      ]
+    }
+  ],
+  "phases": [
+    {
+      "title": "無料βを早く公開",
+      "steps": [1, 2, 3, 4, 5],
+      "note": "基本体験・認証・公開準備を先に揃える。"
+    },
+    {
+      "title": "AIの価値を確かめる",
+      "steps": [6, 7],
+      "note": "目標→クエスト→学習完了を小さく試す。"
+    },
+    {
+      "title": "加入意向を確かめる",
+      "steps": [8],
+      "note": "作り込む前に価格と提案の反応を見る。"
+    },
+    {
+      "title": "需要があれば有料へ",
+      "steps": [9, 10],
+      "note": "計画・再計画と決済を一段ずつ進める。"
+    }
+  ],
+  "flows": [
+    {
+      "title": "クエストを受注する",
+      "description": "実在するクエストを選び、本人のマイクエストへ追加する。",
+      "exception": "重複受注や取得失敗を扱う。おすすめの固定IDを残さない。",
+      "steps": [2]
+    },
+    {
+      "title": "学習して記録する",
+      "description": "タイマーで取り組み、学習時間を同じクエストへ保存する。",
+      "exception": "保存失敗後も入力を保持し、再試行から復帰する。",
+      "steps": [2, 3]
+    },
+    {
+      "title": "達成と週間状況を見る",
+      "description": "学習ログの条件達成でXPが入り、週間の学習状況へ反映する。",
+      "exception": "二重加算・週境界・他人のデータを実DBで確認する。",
+      "steps": [2, 3]
+    },
+    {
+      "title": "目標から今日のクエストを作る",
+      "description": "目標・期限・使える時間を入力し、AIの提案を直して採用する。",
+      "exception": "AIは後続検証。費用上限と入力の扱いを決めてから接続する。",
+      "steps": [6, 7]
+    },
+    {
+      "title": "計画を続け、必要なときだけ見直す",
+      "description": "Plusの需要があれば7日計画と再計画を提供する。",
+      "exception": "準備中の意向クリックは課金しない。実決済・提供条件は別ゲート。",
+      "steps": [8, 9, 10]
+    }
+  ],
+  "routes": [
+    {
+      "id": "R01",
+      "screen": "ホーム / マイクエスト",
+      "route": "/ → GET /api/my-quests",
+      "status": "取得実装あり、学習ボタンはalert",
+      "next": "専用画面 #52・タイマーへ接続",
+      "step": 2
+    },
+    {
+      "id": "R02",
+      "screen": "クエスト一覧 / 受注",
+      "route": "/quests → GET /api/quests、POST /api/quests/{questId}/accept",
+      "status": "一覧取得・受注の実装あり",
+      "next": "実DBと本人認可を通して確認",
+      "step": 2
+    },
+    {
+      "id": "R03",
+      "screen": "学習タイマー / 保存",
+      "route": "画面未接続 → POST /api/study-logs",
+      "status": "保存・達成判定APIあり、タイマー導線が残件",
+      "next": "終了→保存→達成表示、失敗復帰",
+      "step": 2
+    },
+    {
+      "id": "R04",
+      "screen": "ホーム / 週間状況",
+      "route": "/ → GET /api/study-summary/weekly",
+      "status": "APIあり、ホームは固定値",
+      "next": "実データへ接続し週境界を確認",
+      "step": 2
+    },
+    {
+      "id": "R05",
+      "screen": "ホーム / 学習ログ",
+      "route": "/ → GET /api/study-logs",
+      "status": "画面fetchあり、基準版のAPIはPOSTのみ",
+      "next": "GETの契約・実装を整合させ取得を確認",
+      "step": 2
+    },
+    {
+      "id": "R06",
+      "screen": "ホーム / プロフィール",
+      "route": "/ → GET /api/profile",
+      "status": "取得実装あり、詳細操作はalert",
+      "next": "公開版は必要な表示のみ",
+      "step": 2
+    },
+    {
+      "id": "R07",
+      "screen": "掲示板",
+      "route": "/board → GET /api/board/quests、GET /api/activities",
+      "status": "APIあり、画面は固定配列、#54 Open",
+      "next": "後回し。公開時は未接続を整理",
+      "step": 5
+    },
+    {
+      "id": "R08",
+      "screen": "目標 / バッジ",
+      "route": "/ の固定カード、GET /api/profile のbadges",
+      "status": "目標とバッジカードは固定値",
+      "next": "無料βは非表示または未提供を明示",
+      "step": 5
+    },
+    {
+      "id": "R09",
+      "screen": "登録 / ログイン",
+      "route": "認証契約は既存ブランチ確認後に決定",
+      "status": "基準版は開発用固定ID",
+      "next": "本人認証・全API認可・期限切れ復帰",
+      "step": 3
+    },
+    {
+      "id": "R10",
+      "screen": "AI目標 / Plus / 決済",
+      "route": "後続IssueでOpenAPIとPrismaを定義",
+      "status": "計画のみ。今回はアプリを変更しない",
+      "next": "価値→需要→有料提供を順に検証",
+      "step": 6
+    }
+  ],
+  "gates": [
+    {
+      "title": "無料βの公開前",
+      "items": [
+        {
+          "title": "本認証と他人の読書き拒否",
+          "status": "未確認",
+          "note": "STEP 03を配置環境でも確認。開発用固定IDのまま複数人に公開しない。"
+        },
+        {
+          "title": "実DBの基本体験とPC・スマホ",
+          "status": "未確認",
+          "note": "受注→タイマー→保存→達成・XP→週間表示と失敗復帰を確認する。"
+        },
+        {
+          "title": "配置・費用・バックアップ復元",
+          "status": "未決定",
+          "note": "商用条件・無料枠・費用上限を再確認。API URL/CORS/HTTPS/秘密値と復元を確認する。"
+        },
+        {
+          "title": "提供範囲・案内と公開版の確認",
+          "status": "未確認",
+          "note": "個人情報の扱い、連絡先、未提供機能を確認し、具体的な配置先と公開版を承認して公開する。"
+        }
+      ]
+    },
+    {
+      "title": "AIを実接続する前",
+      "items": [
+        {
+          "title": "事業者・送信データ・提供回数",
+          "status": "未決定",
+          "note": "料金、入力の利用・保存条件、必要な同意、削除、回数/原価上限を確認する。"
+        },
+        {
+          "title": "生成から学習までの試験と判断基準",
+          "status": "未確認",
+          "note": "構造検証・タイムアウト・失敗復帰・本人分離と観測基準を揃える。"
+        }
+      ]
+    },
+    {
+      "title": "有料提供の前",
+      "items": [
+        {
+          "title": "価格・提供条件・表示とサポート",
+          "status": "未決定",
+          "note": "480〜680円は仮説。販売価格、税、解約・返金、必要な表示、問い合わせを確定する。"
+        },
+        {
+          "title": "決済・Webhook・権限・停止の整合",
+          "status": "未確認",
+          "note": "テストモードで重複/順不同/失敗/解約を確認し、実決済の公開版を承認する。"
+        }
+      ]
+    }
+  ]
+}

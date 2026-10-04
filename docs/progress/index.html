@@ -1,0 +1,1745 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex,nofollow">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-9Vy9krY6mT/osLsJQSQcrQT7e96w99UCQTwxHdoPg8A='; style-src 'sha256-415h8Bmy2i0aT69IO/dzBC80dGNQx+eUYfTjQEBPPNg='; img-src data:; connect-src 'none'; font-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+    <title>StudyQuest｜実装の全体像と進捗</title>
+    <link rel="icon" href="data:,">
+    <style>:root {
+  color-scheme: light;
+  --ink: #183c3a;
+  --muted: #526964;
+  --teal: #126c61;
+  --line: #d8e4df;
+  --paper: #fff;
+  --surface: #f4f7f4;
+  --done: #207251;
+  --verify: #895a0d;
+  --active: #1265a0;
+}
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 155px;
+}
+body {
+  margin: 0;
+  background: var(--surface);
+  color: var(--ink);
+  font:
+    14px / 1.65 'Yu Gothic UI',
+    'Yu Gothic',
+    Meiryo,
+    system-ui,
+    sans-serif;
+}
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+button {
+  cursor: pointer;
+}
+button,
+a,
+input,
+summary {
+  touch-action: manipulation;
+}
+a {
+  color: inherit;
+  text-underline-offset: 3px;
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid #2474c2;
+  outline-offset: 3px;
+}
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+progress {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 5px;
+  border: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #dfe9e3;
+}
+progress::-webkit-progress-bar {
+  background: #dfe9e3;
+}
+progress::-webkit-progress-value {
+  background: var(--teal);
+  border-radius: 10px;
+}
+progress::-moz-progress-bar {
+  background: var(--teal);
+  border-radius: 10px;
+}
+.skip {
+  position: fixed;
+  top: -100px;
+  left: 12px;
+  z-index: 20;
+  padding: 12px;
+  background: var(--paper);
+}
+.skip:focus {
+  top: 8px;
+}
+.status-header {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #fffffff7;
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(12px);
+}
+.status-top {
+  max-width: 1560px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  gap: 42px;
+  padding: 17px 32px 12px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  font-weight: 750;
+  letter-spacing: -0.7px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--ink);
+  color: white;
+  font:
+    26px Georgia,
+    serif;
+}
+.brand-light {
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  color: var(--muted);
+  font-weight: 500;
+}
+.overall {
+  flex: 1;
+  max-width: 550px;
+}
+.overall-label {
+  display: flex;
+  gap: 13px;
+  align-items: baseline;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+.overall-label > span:first-child {
+  font-size: 12px;
+  font-weight: 700;
+}
+.overall-label strong {
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+}
+.overall-label > span:last-child {
+  font-size: 11px;
+  color: var(--muted);
+}
+.local-label {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  color: var(--muted);
+  font-size: 11px;
+}
+.local-label > span:last-child {
+  border-left: 1px solid var(--line);
+  padding-left: 10px;
+}
+.local-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--teal);
+}
+.step-strip {
+  max-width: 1560px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 8px;
+  padding: 0 32px 12px;
+}
+.strip-item {
+  background: none;
+  border: 0;
+  border-radius: 4px;
+  padding: 4px 0;
+  text-align: left;
+}
+.strip-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.strip-item.is-current {
+  outline: 1px solid #a9c5d8;
+  outline-offset: 3px;
+}
+.strip-item.is-current .strip-label {
+  color: var(--active);
+  font-weight: 750;
+}
+.strip-item.is-current progress::-webkit-progress-value {
+  background: var(--active);
+}
+.layout {
+  display: grid;
+  grid-template-columns: 236px minmax(0, 1fr);
+  gap: 40px;
+  max-width: 1560px;
+  margin: auto;
+  padding: 36px 32px;
+}
+.sidebar {
+  position: sticky;
+  top: 156px;
+  align-self: start;
+  max-height: calc(100vh - 180px);
+  overflow: auto;
+  padding-right: 10px;
+  scrollbar-width: thin;
+}
+.eyebrow {
+  margin-bottom: 8px;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 1.7px;
+  color: var(--muted);
+}
+.sidebar h2 {
+  font-size: 20px;
+  margin-bottom: 24px;
+}
+.side-step {
+  display: grid;
+  grid-template-columns: 25px minmax(0, 1fr) 30px;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 9px 8px;
+  margin-bottom: 3px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  text-align: left;
+  font-size: 12px;
+  color: var(--muted);
+}
+.side-step:hover {
+  background: #e7eeea;
+}
+.side-step.active {
+  background: #dfece7;
+  color: var(--ink);
+  font-weight: 700;
+}
+.side-number {
+  display: grid;
+  place-items: center;
+  width: 23px;
+  height: 23px;
+  border: 1px solid #b9c9c1;
+  border-radius: 50%;
+  font-size: 10px;
+}
+.side-step.done .side-number {
+  background: var(--teal);
+  color: white;
+  border-color: var(--teal);
+}
+.side-percent {
+  text-align: right;
+  font-size: 10px;
+}
+.sidebar-note {
+  margin: 24px 8px 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+  color: var(--muted);
+}
+.sidebar-note p {
+  margin: 6px 0;
+}
+main {
+  min-width: 0;
+}
+.page-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 20px;
+}
+.page-heading h1 {
+  font-size: clamp(25px, 2.5vw, 36px);
+  line-height: 1.35;
+  letter-spacing: -0.9px;
+  font-weight: 750;
+  margin: 10px 0 15px;
+}
+.intro {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.9;
+  margin-bottom: 20px;
+}
+.quiet-button {
+  background: white;
+  border: 1px solid #c7d5cd;
+  border-radius: 6px;
+  padding: 8px 12px;
+  min-height: 40px;
+  font-size: 12px;
+}
+.quiet-button:hover {
+  background: #e9f1ec;
+}
+.page-heading > button {
+  white-space: nowrap;
+}
+.snapshot-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 16px;
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+.beta-line {
+  display: grid;
+  grid-template-columns: auto minmax(80px, 200px) minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+  font-size: 11px;
+}
+.beta-line span {
+  margin-left: 10px;
+  color: var(--muted);
+}
+.beta-line p {
+  margin: 0;
+  color: var(--muted);
+}
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  margin-bottom: 22px;
+  overflow: hidden;
+}
+.metric {
+  min-width: 0;
+  padding: 16px 18px;
+  text-align: left;
+  border: 0;
+  border-right: 1px solid var(--line);
+  background: none;
+}
+.metric:last-child {
+  border-right: 0;
+}
+.metric:hover {
+  background: #f0f6f2;
+}
+.metric-label {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+}
+.metric-number {
+  font-size: 30px;
+  line-height: 1.4;
+  font-weight: 650;
+  letter-spacing: -1px;
+  font-variant-numeric: tabular-nums;
+}
+.metric-unit {
+  margin-left: 5px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.metric-note {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+}
+.focus-panel {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #173e3c;
+  color: white;
+  margin-bottom: 30px;
+}
+.focus-main {
+  padding: 24px 26px;
+}
+.light {
+  color: #a3c6ba;
+}
+.focus-main h2 {
+  font-size: 20px;
+  line-height: 1.55;
+  font-weight: 650;
+  margin-bottom: 10px;
+}
+.focus-main p:not(.eyebrow) {
+  font-size: 12px;
+  line-height: 1.9;
+  color: #d1e1da;
+  margin-bottom: 16px;
+}
+.focus-link {
+  color: white;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid #86a89c;
+  padding: 4px 0;
+  min-height: 35px;
+  font-size: 12px;
+}
+.next-panel {
+  background: #204945;
+  border-left: 1px solid #486964;
+  padding: 24px;
+}
+.small-label {
+  font-size: 11px;
+  color: #b1cdc2;
+}
+.next-panel ol {
+  padding-left: 19px;
+  margin: 10px 0 15px;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.next-panel li {
+  padding-left: 4px;
+  margin-bottom: 9px;
+}
+.next-panel p {
+  font-size: 10px;
+  line-height: 1.7;
+  color: #bed3ca;
+  margin: 0;
+}
+.view-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 22px;
+}
+.view-tabs button {
+  padding: 10px 0 12px;
+  min-height: 44px;
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 650;
+}
+.view-tabs button[aria-pressed='true'] {
+  color: var(--ink);
+  border-bottom-color: var(--teal);
+}
+.view[hidden] {
+  display: none;
+}
+.toolbar {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+}
+.search-box {
+  display: block;
+  flex: 1;
+  max-width: 420px;
+}
+.search-box > span {
+  display: block;
+  font-size: 11px;
+  font-weight: 650;
+  margin-bottom: 6px;
+}
+.search-box input {
+  width: 100%;
+  min-height: 43px;
+  padding: 10px 13px;
+  border: 1px solid #c9d7ce;
+  border-radius: 6px;
+  background: white;
+  font-size: 12px;
+}
+.search-box input::placeholder {
+  color: #65766d;
+}
+.expand-buttons {
+  display: flex;
+  gap: 7px;
+}
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 15px 0;
+}
+.filter-row button {
+  background: white;
+  border: 1px solid #cedbd3;
+  border-radius: 5px;
+  min-height: 34px;
+  padding: 6px 11px;
+  font-size: 11px;
+}
+.filter-row button[aria-pressed='true'] {
+  background: var(--ink);
+  color: white;
+  border-color: var(--ink);
+}
+.filter-row button span {
+  margin-left: 6px;
+  opacity: 0.85;
+}
+.list-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 20px 0 10px;
+  font-size: 10px;
+  color: var(--muted);
+}
+.list-heading p {
+  margin: 0;
+}
+.step-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+  margin-bottom: 12px;
+  scroll-margin-top: 155px;
+}
+.step-card.current {
+  border-color: #92b7ad;
+}
+.step-summary {
+  display: grid;
+  grid-template-columns: 37px minmax(0, 1fr) 116px 15px;
+  gap: 14px;
+  align-items: center;
+  padding: 19px 21px;
+  cursor: pointer;
+  list-style: none;
+}
+.step-summary::-webkit-details-marker,
+.task > summary::-webkit-details-marker {
+  display: none;
+}
+.step-index {
+  display: grid;
+  place-items: center;
+  width: 35px;
+  height: 35px;
+  border: 1px solid #c7d8ce;
+  border-radius: 7px;
+  background: #f4f8f5;
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--muted);
+}
+.complete .step-index {
+  background: #e3f1e9;
+  color: var(--done);
+  border-color: #b2d4bf;
+}
+.step-title {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 700;
+}
+.step-subtitle {
+  font-size: 10px;
+  color: var(--muted);
+}
+.step-progress {
+  text-align: right;
+  font-size: 10px;
+}
+.step-progress > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 7px;
+}
+.step-progress strong {
+  font-size: 13px;
+}
+.chevron {
+  justify-self: end;
+  font-size: 14px;
+  color: var(--muted);
+  transition: transform 0.15s;
+}
+.step-card[open] > .step-summary .chevron {
+  transform: rotate(90deg);
+}
+.step-body {
+  border-top: 1px solid var(--line);
+  padding: 0 21px 20px;
+}
+.step-outcome {
+  padding: 16px 0 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.step-outcome b {
+  color: var(--ink);
+  font-size: 10px;
+  margin-right: 10px;
+}
+.task-group {
+  border-left: 2px solid #dce8e1;
+  padding-left: 16px;
+  margin: 9px 0 22px;
+}
+.task-group:last-child {
+  margin-bottom: 0;
+}
+.group-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.group-heading h3 {
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 0;
+}
+.group-heading h3 span {
+  font-size: 10px;
+  color: var(--muted);
+  margin-right: 9px;
+}
+.group-count {
+  white-space: nowrap;
+  font-size: 10px;
+  color: var(--muted);
+}
+.task {
+  border-bottom: 1px solid #e7eee9;
+}
+.task:last-child {
+  border-bottom: 0;
+}
+.task > summary {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 9px;
+  list-style: none;
+  cursor: pointer;
+  padding: 11px 3px;
+  min-height: 43px;
+  font-size: 12px;
+}
+.task-symbol {
+  color: #657570;
+  line-height: 1.8;
+}
+.task[data-status='done'] .task-symbol {
+  color: var(--done);
+}
+.task[data-status='verify'] .task-symbol {
+  color: var(--verify);
+}
+.task[data-status='doing'] .task-symbol {
+  color: var(--active);
+}
+.task-id {
+  color: var(--muted);
+  font-size: 9px;
+  margin-right: 8px;
+}
+.badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  line-height: 1.7;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badge.done {
+  color: #205f43;
+  background: #e5f2e9;
+}
+.badge.todo {
+  color: #54695e;
+  background: #edf1ee;
+}
+.badge.doing {
+  color: #165d91;
+  background: #e5f1fc;
+}
+.badge.verify {
+  color: #82500b;
+  background: #fff0d5;
+}
+.badge.blocked {
+  color: #973c34;
+  background: #fcebe7;
+}
+.task-detail {
+  padding: 0 12px 14px 28px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.85;
+  overflow-wrap: anywhere;
+}
+.task-detail p {
+  margin-bottom: 9px;
+}
+.task-detail strong {
+  color: var(--ink);
+}
+.evidence-chip {
+  display: inline-block;
+  background: white;
+  border: 1px solid #cbdad1;
+  border-radius: 4px;
+  font-size: 10px;
+  min-height: 30px;
+  padding: 4px 7px;
+  margin: 2px 4px 2px 0;
+}
+.empty {
+  padding: 45px 20px;
+  background: white;
+  color: var(--muted);
+  text-align: center;
+  border: 1px dashed #bacdc1;
+  border-radius: 8px;
+}
+.section-heading {
+  margin-bottom: 8px;
+  font-size: 22px;
+  letter-spacing: -0.5px;
+}
+.section-description {
+  margin-bottom: 24px;
+  font-size: 12px;
+  line-height: 1.9;
+  color: var(--muted);
+}
+.phase-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 34px;
+}
+.phase {
+  border-top: 3px solid #b4cdbf;
+  padding: 13px 0;
+}
+.phase h3 {
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+.phase p {
+  color: var(--muted);
+  font-size: 11px;
+}
+.phase button {
+  background: none;
+  border: 0;
+  padding: 5px;
+  min-height: 32px;
+  font-size: 11px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.journey {
+  counter-reset: journey;
+}
+.journey-card {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  gap: 16px;
+  position: relative;
+  padding-bottom: 22px;
+}
+.journey-card::before {
+  counter-increment: journey;
+  content: counter(journey, decimal-leading-zero);
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #dfeee4;
+  font-size: 12px;
+  font-weight: 700;
+  z-index: 1;
+}
+.journey-card:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 36px;
+  bottom: 0;
+  left: 18px;
+  border-left: 1px solid #bbd3c2;
+}
+.journey-content {
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+}
+.journey-content h3 {
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+.journey-content p {
+  font-size: 12px;
+  margin: 5px 0 12px;
+}
+.journey-content .exception {
+  font-size: 11px;
+  color: var(--muted);
+  border-top: 1px solid #e7eee9;
+  padding-top: 10px;
+}
+.journey-links {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.journey-links button {
+  border: 1px solid #c8d9cf;
+  border-radius: 4px;
+  background: #f6f9f6;
+  min-height: 32px;
+  padding: 5px 8px;
+  font-size: 10px;
+}
+.table-wrap {
+  overflow-x: auto;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin-top: 18px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 11px;
+}
+th {
+  padding: 11px 13px;
+  background: #e9f0eb;
+  color: var(--muted);
+  font-size: 10px;
+}
+td {
+  padding: 12px 13px;
+  border-top: 1px solid var(--line);
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+td:first-child {
+  white-space: nowrap;
+}
+td:nth-child(3) {
+  min-width: 180px;
+}
+code {
+  font-size: 0.95em;
+  overflow-wrap: anywhere;
+}
+.route-meta {
+  color: var(--muted);
+  font-size: 10px;
+}
+.gate-group {
+  margin: 24px 0;
+}
+.gate-group h3 {
+  font-size: 15px;
+}
+.gate-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 15px;
+  border-top: 1px solid var(--line);
+  padding: 15px 0;
+}
+.gate-row strong {
+  font-size: 12px;
+}
+.gate-row span {
+  font-size: 10px;
+  color: var(--verify);
+}
+.gate-row p {
+  grid-column: 1 / -1;
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0;
+}
+.evidence-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: white;
+  padding: 20px;
+  margin-bottom: 12px;
+  scroll-margin-top: 155px;
+}
+.evidence-card h3 {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+.evidence-card h3 span {
+  color: var(--teal);
+  font-size: 11px;
+  margin-right: 8px;
+}
+.evidence-card p {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 8px 0;
+}
+.evidence-card .limit {
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+  font-size: 11px;
+}
+.evidence-card ul {
+  padding-left: 20px;
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+.update-guide,
+.inline-note {
+  background: #e7efe8;
+  padding: 22px;
+  border-radius: 8px;
+  margin: 25px 0;
+  font-size: 12px;
+  line-height: 1.9;
+}
+.update-guide h3 {
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+.update-guide ol {
+  padding-left: 20px;
+}
+.source-doc {
+  border-bottom: 1px solid var(--line);
+  padding: 12px 0;
+}
+.source-doc summary {
+  font-size: 12px;
+  cursor: pointer;
+}
+.source-doc pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font:
+    12px / 1.85 'Yu Gothic UI',
+    'Yu Gothic',
+    Meiryo,
+    sans-serif;
+  padding: 18px;
+  background: white;
+}
+.page-footer {
+  margin-top: 32px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  font-size: 10px;
+  color: var(--muted);
+}
+@media (max-width: 1100px) {
+  .status-top {
+    gap: 20px;
+  }
+  .local-label {
+    display: none;
+  }
+  .layout {
+    grid-template-columns: 210px minmax(0, 1fr);
+    gap: 24px;
+  }
+  .beta-line {
+    grid-template-columns: auto minmax(80px, 1fr);
+  }
+  .beta-line p {
+    grid-column: 1 / -1;
+  }
+  .metric {
+    padding: 14px 12px;
+  }
+}
+@media (max-width: 800px) {
+  html {
+    scroll-padding-top: 155px;
+  }
+  .status-top {
+    flex-wrap: wrap;
+    padding: 12px 20px;
+    gap: 10px 24px;
+  }
+  .brand {
+    font-size: 19px;
+  }
+  .overall {
+    min-width: 240px;
+  }
+  .step-strip {
+    padding: 0 20px 12px;
+    gap: 8px;
+  }
+  .layout {
+    display: block;
+    padding: 22px 20px;
+  }
+  .sidebar {
+    position: static;
+    max-height: none;
+    padding: 0;
+    margin-bottom: 24px;
+    overflow: visible;
+  }
+  .sidebar > .eyebrow,
+  .sidebar > h2,
+  .sidebar-note {
+    display: none;
+  }
+  #sidebar-steps {
+    display: flex;
+    overflow-x: auto;
+    gap: 6px;
+    padding: 4px;
+  }
+  .side-step {
+    width: auto;
+    flex: 0 0 auto;
+    grid-template-columns: 23px auto 28px;
+    font-size: 11px;
+    border: 1px solid var(--line);
+    background: white;
+  }
+  .phase-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 540px) {
+  .status-top {
+    display: block;
+    padding: 10px 16px;
+  }
+  .brand {
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+  .brand-mark {
+    width: 27px;
+    height: 27px;
+    font-size: 23px;
+  }
+  .brand-light {
+    font-size: 11px;
+  }
+  .overall-label {
+    gap: 10px;
+    margin-bottom: 5px;
+  }
+  .overall-label strong {
+    font-size: 19px;
+  }
+  .overall-label > span:last-child {
+    margin-left: auto;
+    font-size: 10px;
+  }
+  .step-strip {
+    padding: 0 16px 10px;
+    gap: 7px;
+  }
+  .strip-label {
+    font-size: 9px;
+  }
+  .strip-label > span:last-child {
+    display: none;
+  }
+  .layout {
+    padding: 18px 16px;
+  }
+  .page-heading {
+    display: block;
+  }
+  .page-heading h1 {
+    font-size: 26px;
+  }
+  .page-heading > button {
+    min-height: 35px;
+    font-size: 11px;
+    margin-bottom: 14px;
+  }
+  .intro {
+    font-size: 12px;
+    margin-bottom: 14px;
+  }
+  .snapshot-line {
+    font-size: 9px;
+    gap: 3px 9px;
+    margin-bottom: 14px;
+  }
+  .beta-line {
+    gap: 8px 12px;
+    font-size: 10px;
+  }
+  .summary-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-bottom: 18px;
+  }
+  .metric {
+    padding: 11px 13px;
+    border-bottom: 1px solid var(--line);
+  }
+  .metric:nth-child(3) {
+    border-right: 0;
+  }
+  .metric:nth-child(4),
+  .metric:nth-child(5) {
+    border-bottom: 0;
+  }
+  .metric-number {
+    font-size: 26px;
+  }
+  .metric-label {
+    font-size: 10px;
+  }
+  .metric-note {
+    font-size: 9px;
+  }
+  .focus-panel {
+    display: block;
+    margin-bottom: 23px;
+  }
+  .focus-main {
+    padding: 20px;
+  }
+  .focus-main h2 {
+    font-size: 18px;
+  }
+  .next-panel {
+    padding: 18px 20px;
+    border-left: 0;
+    border-top: 1px solid #486964;
+  }
+  .next-panel ol {
+    font-size: 11px;
+  }
+  .view-tabs {
+    gap: 0 20px;
+    margin-bottom: 17px;
+  }
+  .view-tabs button {
+    font-size: 11px;
+    min-height: 42px;
+    padding: 7px 0;
+  }
+  .toolbar {
+    display: block;
+  }
+  .search-box {
+    max-width: none;
+  }
+  .expand-buttons {
+    margin-top: 10px;
+    justify-content: flex-end;
+  }
+  .expand-buttons button {
+    min-height: 33px;
+    font-size: 10px;
+    padding: 5px 10px;
+  }
+  .filter-row {
+    gap: 6px;
+    margin: 12px 0;
+  }
+  .filter-row button {
+    font-size: 10px;
+    padding: 5px 9px;
+  }
+  .list-heading {
+    display: block;
+  }
+  .list-heading p + p {
+    margin-top: 3px;
+  }
+  .step-summary {
+    grid-template-columns: 28px minmax(0, 1fr) 13px;
+    gap: 10px;
+    padding: 16px 13px;
+  }
+  .step-index {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+  .step-title {
+    font-size: 12px;
+  }
+  .step-progress {
+    grid-column: 2;
+    grid-row: 2;
+    text-align: left;
+  }
+  .chevron {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  .step-body {
+    padding: 0 13px 16px;
+  }
+  .step-outcome {
+    font-size: 11px;
+  }
+  .step-outcome b {
+    display: block;
+    margin-bottom: 4px;
+  }
+  .task-group {
+    padding-left: 10px;
+  }
+  .group-heading {
+    display: block;
+  }
+  .group-count {
+    display: block;
+    margin-top: 3px;
+  }
+  .task > summary {
+    grid-template-columns: 14px minmax(0, 1fr);
+    font-size: 11px;
+    gap: 4px 7px;
+  }
+  .task > summary > .badge {
+    grid-column: 2;
+    justify-self: start;
+  }
+  .task-detail {
+    padding: 0 0 12px 21px;
+  }
+  .section-heading {
+    font-size: 20px;
+  }
+  .journey-card {
+    grid-template-columns: 30px minmax(0, 1fr);
+    gap: 10px;
+  }
+  .journey-card::before {
+    width: 28px;
+    height: 28px;
+  }
+  .journey-card:not(:last-child)::after {
+    left: 14px;
+    top: 28px;
+  }
+  .journey-content {
+    padding: 15px;
+  }
+  .evidence-card {
+    padding: 16px;
+  }
+  .table-wrap {
+    border: 0;
+    background: none;
+  }
+  table,
+  tbody,
+  tr,
+  td {
+    display: block;
+    width: 100%;
+  }
+  thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  tr {
+    margin-bottom: 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 8px 12px;
+    background: white;
+  }
+  td {
+    border: 0;
+    padding: 5px 0;
+  }
+  td:first-child {
+    white-space: normal;
+  }
+  td:nth-child(3) {
+    min-width: 0;
+  }
+  td::before {
+    content: attr(data-label);
+    display: block;
+    color: var(--muted);
+    font-size: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .chevron {
+    transition: none;
+  }
+}
+</style>
+  </head>
+  <body>
+    <a class="skip" href="#main">本文へ移動する</a>
+    <header class="status-header">
+      <div class="status-top">
+        <a class="brand" href="#main"><span class="brand-mark" aria-hidden="true">S</span><span>StudyQuest <span class="brand-light">開発進捗</span></span></a>
+        <div class="overall">
+          <div class="overall-label"><span>全計画の進捗</span><strong id="overall-value">—</strong><span id="overall-count"></span></div>
+          <progress id="overall-bar" max="100" value="0" aria-label="全計画の完了率"></progress>
+        </div>
+        <div class="local-label"><span class="local-dot" aria-hidden="true"></span><span>ローカルの作業記録</span><span id="header-step-count"></span></div>
+      </div>
+      <nav id="step-strip" class="step-strip" aria-label="工程ごとの進捗"></nav>
+    </header>
+    <div class="layout">
+      <aside class="sidebar" aria-label="工程ナビゲーション">
+        <p class="eyebrow">開発ロードマップ</p><h2>実装の全体像</h2>
+        <nav id="sidebar-steps" aria-label="工程へ移動"></nav>
+        <div class="sidebar-note"><p>まず無料βを公開し、AIの価値と加入意向を確かめてから有料提供へ進みます。</p><p>完了率は小項目の件数です。工数や公開までの日数を表しません。</p><p>アプリ画面は今回変更していません。</p></div>
+      </aside>
+      <main id="main" tabindex="-1">
+        <div class="page-heading"><div><p class="eyebrow">StudyQuestの現在地</p><h1>実装の全体像と進捗</h1><p class="intro">今ある学習体験を、まず使ってもらう。<br>無料βの公開から、AIクエストと課金需要の検証までを追います。</p></div><button type="button" class="quiet-button" id="reload">最新の記録を読み直す</button></div>
+        <div class="snapshot-line"><span id="updated"></span><span id="revision"></span><span id="snapshot"></span></div>
+        <section class="beta-line" aria-label="無料βまでの進捗"><div><strong>無料βまで</strong><span id="beta-count"></span></div><progress id="beta-bar" max="100" value="0" aria-label="無料βまでの完了率"></progress><p>STEP 01〜05。公開前の確認は別タブに記録しています。</p></section>
+        <div class="summary-grid" id="summary" aria-label="状態別の件数"></div>
+        <section class="focus-panel" aria-labelledby="focus-title"><div class="focus-main"><p class="eyebrow light">次に進める工程</p><h2 id="focus-title"></h2><p id="activity"></p><button type="button" class="focus-link" id="go-current">この工程の小項目を見る</button></div><div class="next-panel"><span class="small-label">次に進める作業</span><ol id="next-tasks"></ol><p id="runtime"></p></div></section>
+        <nav class="view-tabs" aria-label="表示の切り替え"><button type="button" data-view="tasks" aria-pressed="true" aria-controls="tasks-view">タスク進捗</button><button type="button" data-view="flows" aria-pressed="false" aria-controls="flows-view">実装順と体験</button><button type="button" data-view="routes" aria-pressed="false" aria-controls="routes-view">画面・API対応</button><button type="button" data-view="gates" aria-pressed="false" aria-controls="gates-view">公開前の確認</button><button type="button" data-view="evidence" aria-pressed="false" aria-controls="evidence-view">根拠と更新方法</button></nav>
+        <section id="tasks-view" class="view" aria-label="タスク進捗"><div class="toolbar"><label class="search-box"><span>タスクを検索</span><input id="task-search" type="search" placeholder="例：タイマー、認証、02.1、XP" autocomplete="off"></label><div class="expand-buttons"><button type="button" class="quiet-button" id="expand-all">すべて展開</button><button type="button" class="quiet-button" id="collapse-all">すべて折りたたむ</button></div></div><div class="filter-row" id="filters" aria-label="タスクの状態で絞り込む"></div><div class="list-heading"><p id="result-count" role="status" aria-live="polite"></p><p>大項目 → 中項目 → 小項目</p></div><div id="task-list"></div></section>
+        <section id="flows-view" class="view" aria-label="実装順と体験" hidden></section>
+        <section id="routes-view" class="view" aria-label="画面とAPIの対応" hidden></section>
+        <section id="gates-view" class="view" aria-label="公開前の確認" hidden></section>
+        <section id="evidence-view" class="view" aria-label="根拠と更新方法" hidden></section>
+        <footer class="page-footer">記録された対象版と確認範囲の進捗です。実装の存在、実DB検証、外部接続、公開を分けて確認します。</footer>
+        <noscript><p class="empty">表示にはJavaScriptを有効にしてください。計画の本文はdocs/roadmap.md、状態はdocs/progress/tasks.jsonで確認できます。</p></noscript>
+      </main>
+    </div>
+    <script id="progress-data" type="application/json">{"schemaVersion":1,"updatedAt":"2026-10-04T13:35:11.154Z","snapshotLabel":"2026-10-04 / コード・Issueの棚卸し","baseRevision":"8600867","currentStep":2,"currentTaskId":"02.1.1","activity":"次に進めるのは、受注したクエストを学習して記録する導線。主要APIは存在し、タイマー・週間表示の実データ接続が残っています。","runtime":"コードとIssueを照合。今回の棚卸しではアプリ・実DBの主要導線は再実行していません。","steps":[{"id":1,"short":"現在地・作業基準","title":"現在地と作業基準を揃える","outcome":"実装の存在、未接続の画面、未検証の動作を区別する。","groups":[{"id":"01.1","title":"基準版の棚卸し","tasks":[{"id":"01.1.1","title":"主要API・DB・仕様の存在を照合する","acceptance":"Honoの登録ルート、OpenAPI、Prismaと役割を照合し、実動作を確認した範囲と区別する。","status":"done","evidence":["E01"],"issue":null},{"id":"01.1.2","title":"画面とAPIの接続・仮表示を棚卸しする","acceptance":"ホーム・クエスト・掲示板について、取得API、固定値、仮の操作を記録する。","status":"done","evidence":["E02"],"issue":null},{"id":"01.1.3","title":"Issueと既存認証ブランチを確認する","acceptance":"旧Issueの状態、未完了Issue、認証の別ブランチの存在を記録する。統合済みとは扱わない。","status":"done","evidence":["E03"],"issue":null},{"id":"01.1.4","title":"既存の検証コマンドとCI定義を照合する","acceptance":"package.jsonとCI定義、APIテストの配置を確認する。テスト成功の証拠とは区別する。","status":"done","evidence":["E04"],"issue":null}]}]},{"id":2,"short":"学習の主要導線","title":"受注から学習・達成までをつなぐ","outcome":"受注→学習→保存→達成・XP→週間表示を実DBで通す。","groups":[{"id":"02.1","title":"学習する画面と保存","tasks":[{"id":"02.1.1","title":"マイクエストから学習へ進める","acceptance":"専用画面に本人の受注一覧・状態を表示し、学習対象へ移動できる。空・取得失敗を扱う。","status":"todo","evidence":[],"issue":52},{"id":"02.1.2","title":"タイマーと学習ログ保存をつなぐ","acceptance":"開始・一時停止・終了から正しいクエストと時間を保存する。二重送信を防ぎ、保存失敗後も内容を保持して再試行できる。","status":"todo","evidence":[],"issue":null},{"id":"02.1.3","title":"週間表示とおすすめを実データへ接続する","acceptance":"週間APIの値とDBのログが一致する。おすすめは実在するクエストIDを使い、目標・バッジ等の未提供表示を整理する。","status":"todo","evidence":[],"issue":null},{"id":"02.1.4","title":"学習ログ取得の契約とAPIを整合させる","acceptance":"ホームが呼ぶGET /api/study-logsの本人限定の取得契約・OpenAPI・Presenter・実装を揃える。空・エラーと保存後の再取得を検証する。","status":"todo","evidence":[],"issue":null}]},{"id":"02.2","title":"APIと実操作の確認","tasks":[{"id":"02.2.1","title":"達成・XP・受注ポイントの実DB検証","acceptance":"閾値の前後、受注重複、達成時の二重加算防止を現版で実DB検証し、コマンドと対象版を記録する。","status":"verify","evidence":["E01"],"issue":18},{"id":"02.2.2","title":"週間APIの集計境界を確認する","acceptance":"日付・週境界・空の週・本人の分離を実DBで確認し、画面との対応を記録する。","status":"verify","evidence":["E01"],"issue":15},{"id":"02.2.3","title":"PC・スマホで基本体験を完走する","acceptance":"一覧→受注→学習→保存→達成→週間表示を確認。正常・空・待機・失敗・再試行と既定のWeb/APIチェックを記録する。","status":"todo","evidence":[],"issue":null}]}]},{"id":3,"short":"本認証・本人分離","title":"複数人向けの本認証を統合する","outcome":"固定の開発用ユーザーを公開環境で使わず、本人のデータだけを操作できる。","groups":[{"id":"03.1","title":"方式と既存作業","tasks":[{"id":"03.1.1","title":"認証ブランチを評価して統合順を決める","acceptance":"codex/auth-*の実装・仕様・検証結果を確認し、方式、統合元、依存順を記録する。","status":"todo","evidence":[],"issue":null},{"id":"03.1.2","title":"登録・ログイン・ログアウトを統合する","acceptance":"選んだ認証方式をAPIと画面に接続し、固定IDを本番で使用しない。認証の正本を更新する。","status":"todo","evidence":[],"issue":null}]},{"id":"03.2","title":"認可と復帰","tasks":[{"id":"03.2.1","title":"全APIの本人認可を確認する","acceptance":"セッションから本人を特定し、未ログイン・他人の対象ID・偽のuserIdを拒否する。Presenterの公開項目を維持する。","status":"todo","evidence":[],"issue":null},{"id":"03.2.2","title":"期限切れ・再ログインと別ユーザーを検証する","acceptance":"別ブラウザの2ユーザーで読み書き分離を確認。期限切れ・ログアウト後の拒否と再ログイン後の復帰を検証する。","status":"todo","evidence":[],"issue":null}]}]},{"id":4,"short":"低コスト公開準備","title":"現構成を維持して公開環境を準備する","outcome":"Next.js＋Hono＋Prisma/PostgreSQLが配置先で動作し、費用と復旧方法を説明できる。","groups":[{"id":"04.1","title":"配置・費用・復元","tasks":[{"id":"04.1.1","title":"公開先と費用上限を配置試験で決める","acceptance":"候補の商用条件・無料枠を公式情報で再確認。Next/Hono/Prisma/PostgreSQLを実配置し、制限と総費用・停止条件を記録する。SQLiteへの移行を前提にしない。","status":"todo","evidence":[],"issue":null},{"id":"04.1.2","title":"API URL・CORS・秘密値・ログを分離する","acceptance":"localhost固定を環境設定にし、認証Cookie/CORS/HTTPSを確認。秘密値と学習本文をログやブラウザへ漏らさない。","status":"todo","evidence":[],"issue":null},{"id":"04.1.3","title":"バックアップから別環境へ復元する","acceptance":"学習ログと進行状態を別DBへ復元して照合し、取得周期・保持期間・復旧担当を記録する。","status":"todo","evidence":[],"issue":null},{"id":"04.1.4","title":"提供範囲と公開案内の原稿を揃える","acceptance":"無料βの範囲、個人情報の扱い、連絡先、未提供機能、費用上限の確認用原稿を揃える。正式提供条件は公開前に確認する。","status":"todo","evidence":[],"issue":null}]}]},{"id":5,"short":"無料β・利用計測","title":"小さな無料βで基本体験を確かめる","outcome":"AIの完成を待たずに、基本体験を使ってもらい離脱箇所を知る。","groups":[{"id":"05.1","title":"公開版と計測準備","tasks":[{"id":"05.1.1","title":"無料βの公開版候補を作る","acceptance":"STEP 02〜04の確認を揃え、未接続の操作と架空実績を公開版で整理する。公開前ゲートは別途確認する。","status":"todo","evidence":[],"issue":null},{"id":"05.1.2","title":"導線イベントと実験基準を定義する","acceptance":"登録・初回受注・初回保存・7日再利用を計測。期間・母数・合格基準を事前に決め、学習本文やメールをイベントに含めない。","status":"todo","evidence":[],"issue":null}]},{"id":"05.2","title":"公開後の観測","tasks":[{"id":"05.2.1","title":"少人数のβで初回体験を観測する","acceptance":"無料βゲートと公開承認後に協力者へ公開し、対象期間と人数を添えて初回保存・離脱を記録する。","status":"todo","evidence":[],"issue":null},{"id":"05.2.2","title":"フィードバックで最初の対象分野を絞る","acceptance":"資格・技術・自己学習の利用者から困りごとと翌週再利用を確認し、優先改善と対象分野を決める。","status":"todo","evidence":[],"issue":null}]}]},{"id":6,"short":"目標→クエスト","title":"目標から今日のクエストを生成する","outcome":"小さなAI生成を、既存の受注・タイマー・学習ログにつなぐ。","groups":[{"id":"06.1","title":"入力・生成・採用","tasks":[{"id":"06.1.1","title":"目標・期限・使える時間と出力契約を定義する","acceptance":"選んだ対象分野で入力・生成クエスト・保存先・本人所有権を定義。必要なOpenAPIとPrisma変更を別Issueで設計する。","status":"todo","evidence":[],"issue":null},{"id":"06.1.2","title":"少数のクエストを生成・編集・採用できる","acceptance":"目標に対応する具体的な行動と所要時間を生成し、利用者が直して採用する。既存受注→学習保存まで通る。","status":"todo","evidence":[],"issue":null}]},{"id":"06.2","title":"実接続と利用制限","tasks":[{"id":"06.2.1","title":"AI事業者・入力の扱い・原価を決める","acceptance":"現行の料金・データ利用条件を確認し、送る情報、同意、削除、無料試験の上限と原価を決める。","status":"todo","evidence":[],"issue":null},{"id":"06.2.2","title":"生成回数・時間・出力を制限する","acceptance":"本人単位の回数・予算・タイムアウトを制御し、重複生成、不正な出力、長い入力、失敗を安全に扱う。無制限を約束しない。","status":"todo","evidence":[],"issue":null},{"id":"06.2.3","title":"AI失敗時も基本学習を続けられる","acceptance":"入力を保持し、再試行または基本クエストへ戻れる。未接続・生成中・失敗を架空の成功と表示しない。","status":"todo","evidence":[],"issue":null}]}]},{"id":7,"short":"AI価値の検証","title":"生成が学習と再利用につながるかを見る","outcome":"生成回数だけでなく、採用・学習完了・継続と原価で判断する。","groups":[{"id":"07.1","title":"測定と次の判断","tasks":[{"id":"07.1.1","title":"AI実験の期間・母数・基準を決める","acceptance":"生成→採用→学習完了→7日再利用の定義と、継続・修正・停止の基準を観測前に記録する。","status":"todo","evidence":[],"issue":null},{"id":"07.1.2","title":"利用とAI費用を同じ期間で集計する","acceptance":"人数・採用率・学習完了・再利用と利用者あたり費用を記録し、仮の数値を実績にしない。","status":"todo","evidence":[],"issue":null},{"id":"07.1.3","title":"聞き取りと数値から次を判断する","acceptance":"少人数の限界を明示し、既存の学習計画方法との比較、継続理由、不採用理由を確認。Plus検証へ進むか決める。","status":"todo","evidence":[],"issue":null}]}]},{"id":8,"short":"Plus需要の検証","title":"決済前に有料候補の加入意向を確かめる","outcome":"7日間クエストの提案に対する反応を、支払実績と分けて記録する。","groups":[{"id":"08.1","title":"価格仮説と意向","tasks":[{"id":"08.1.1","title":"7日間クエストと価格仮説を提示する","acceptance":"月480〜680円を仮説として価格・提供候補を示す。準備中で決済しないことを加入操作前にも明示する。","status":"todo","evidence":[],"issue":null},{"id":"08.1.2","title":"閲覧と加入意向を計測する","acceptance":"価格別の提案閲覧人数・加入意向人数を記録。決済なしで計測し、売上・会員数とは表示しない。","status":"todo","evidence":[],"issue":null},{"id":"08.1.3","title":"作る有料機能を最小範囲に決める","acceptance":"反応と聞き取りから価格、提供回数、7日計画/再計画の優先順を決める。反応が弱ければ修正または停止する。","status":"todo","evidence":[],"issue":null}]}]},{"id":9,"short":"AI計画・再計画","title":"需要があるAI計画を最小限で実装する","outcome":"7日計画と未達時の提案を、本人が確認して更新できる。","groups":[{"id":"09.1","title":"計画と提案","tasks":[{"id":"09.1.1","title":"7日計画を保存し今日のクエストへ接続する","acceptance":"使える時間に収まる計画を保存し、日別の受注・学習記録につなぐ。本人の分離、履歴、再読込を確認する。","status":"todo","evidence":[],"issue":null},{"id":"09.1.2","title":"未達の予定を再編成する提案を作る","acceptance":"未達と残り時間から変更案を示し、利用者の確認後に更新する。達成済みログやXPを書き換えず、拒否・競合を扱う。","status":"todo","evidence":[],"issue":null},{"id":"09.1.3","title":"提供回数・失敗復帰と計画品質を検証する","acceptance":"原価上限、再計画の回数、日付境界、採用/取消、API失敗と復帰をPC・スマホ・実DBで確認する。","status":"todo","evidence":[],"issue":null}]}]},{"id":10,"short":"決済・継続運用","title":"決済と提供権限を一致させる","outcome":"課金後の提供、更新・解約・復旧、費用と継続を確認して運用する。","groups":[{"id":"10.1","title":"テストモードでの決済","tasks":[{"id":"10.1.1","title":"販売価格と提供条件を確定する","acceptance":"価格、税の表示、AI回数、開始/停止時点、解約・返金、問い合わせと必要な表示を確認する。","status":"todo","evidence":[],"issue":null},{"id":"10.1.2","title":"StripeテストとWebhookを実装する","acceptance":"署名検証、重複・順不同・失敗・再処理を確認。ブラウザの成功遷移だけでPlus権限を付けない。","status":"todo","evidence":[],"issue":null},{"id":"10.1.3","title":"加入・更新・失敗・解約と本人権限を確認する","acceptance":"購読状態と利用権限が一致し、他人の契約を変更できない。支払失敗、解約、履歴、再ログインをテストする。","status":"todo","evidence":[],"issue":null}]},{"id":"10.2","title":"公開後の継続","tasks":[{"id":"10.2.1","title":"有料提供の公開前レビューを揃える","acceptance":"テスト結果、提供条件、費用上限、監視・復旧を確認し、有料公開ゲートに残件を記録する。","status":"todo","evidence":[],"issue":null},{"id":"10.2.2","title":"売上・費用・解約と次の改善を判断する","acceptance":"有料公開ゲートと承認後の実績を集計。売上から決済/AI/運用費を分け、問い合わせ・解約理由から継続改善を決める。","status":"todo","evidence":[],"issue":null}]}]}],"evidence":[{"id":"E01","title":"API・DB・仕様の静的照合","date":"2026-10-04","revision":"8600867","method":"登録ルート、各route/service、Presenter、OpenAPI、Prismaを読み取り","result":"クエスト・受注・マイクエスト・学習記録・週間・活動・プロフィール・掲示板APIの実装が存在。達成/XP/受注ポイントの処理も存在。","limit":"実装の存在確認。今回の実DB再実行・認証・画面連携・本番動作の合格ではない。","sources":["apps/api/src/app.ts","apps/api/src/services/quest-completion.ts","apps/api/src/presenters/api-presenters.ts","docs/api/openapi.yaml","prisma/schema.prisma"]},{"id":"E02","title":"画面・接続と仮表示の棚卸し","date":"2026-10-04","revision":"8600867","method":"ページ、カード、fetch・alert・固定配列のコードを読み取り","result":"ホームのprofile/study-logs/my-questsとクエスト一覧の取得を確認。週間・おすすめ・目標・バッジの固定値、学習ボタンalert、掲示板の固定配列が残る。 ホームはGET /api/study-logsを呼ぶが、基準版のAPIルートとOpenAPIはPOSTのみ。","limit":"画面コードの照合。PC/スマホの実表示や一連操作は今回の基準版で未検証。","sources":["apps/web/src/app/page.tsx","apps/web/src/components/quests/QuestList.tsx","apps/web/src/components/quests/QuestBoard.tsx"]},{"id":"E03","title":"GitHub Issue・基準版・別ブランチ確認","date":"2026-10-04","revision":"8600867","method":"gh issue list --state all、gh api commits/develop、git branch -a","result":"developの最新SHAと基準版が一致。#11〜#18・#47・#48はClosed、#49・#52・#54はOpen。codex/auth-*ブランチが存在し、基準版の認証は固定ID。","limit":"Closedは再検証成功を意味しない。別認証ブランチの実装内容と統合の可否は後続で確認する。","sources":["https://github.com/IP-GACHI-UT/StudyQuest/issues/49","https://github.com/IP-GACHI-UT/StudyQuest/issues/52","https://github.com/IP-GACHI-UT/StudyQuest/issues/54","apps/api/src/lib/auth.ts"]},{"id":"E04","title":"検証コマンド・CI・テスト定義の照合","date":"2026-10-04","revision":"8600867","method":"package.json、CI workflow、APIテストの配置を読み取り","result":"Webのlint/typecheck/build、APIの型/build/unit/実DBテスト、Biome、PrismaのコマンドとCI定義が存在する。","limit":"定義の存在確認。現在のコードに対する実行結果やCI成功を主張するものではない。","sources":["package.json",".github/workflows/quality.yml",".github/workflows/web.yml",".github/workflows/api.yml","apps/api/tests/app.test.ts","apps/api/tests/study-logs.db.test.ts"]}],"phases":[{"title":"無料βを早く公開","steps":[1,2,3,4,5],"note":"基本体験・認証・公開準備を先に揃える。"},{"title":"AIの価値を確かめる","steps":[6,7],"note":"目標→クエスト→学習完了を小さく試す。"},{"title":"加入意向を確かめる","steps":[8],"note":"作り込む前に価格と提案の反応を見る。"},{"title":"需要があれば有料へ","steps":[9,10],"note":"計画・再計画と決済を一段ずつ進める。"}],"flows":[{"title":"クエストを受注する","description":"実在するクエストを選び、本人のマイクエストへ追加する。","exception":"重複受注や取得失敗を扱う。おすすめの固定IDを残さない。","steps":[2]},{"title":"学習して記録する","description":"タイマーで取り組み、学習時間を同じクエストへ保存する。","exception":"保存失敗後も入力を保持し、再試行から復帰する。","steps":[2,3]},{"title":"達成と週間状況を見る","description":"学習ログの条件達成でXPが入り、週間の学習状況へ反映する。","exception":"二重加算・週境界・他人のデータを実DBで確認する。","steps":[2,3]},{"title":"目標から今日のクエストを作る","description":"目標・期限・使える時間を入力し、AIの提案を直して採用する。","exception":"AIは後続検証。費用上限と入力の扱いを決めてから接続する。","steps":[6,7]},{"title":"計画を続け、必要なときだけ見直す","description":"Plusの需要があれば7日計画と再計画を提供する。","exception":"準備中の意向クリックは課金しない。実決済・提供条件は別ゲート。","steps":[8,9,10]}],"routes":[{"id":"R01","screen":"ホーム / マイクエスト","route":"/ → GET /api/my-quests","status":"取得実装あり、学習ボタンはalert","next":"専用画面 #52・タイマーへ接続","step":2},{"id":"R02","screen":"クエスト一覧 / 受注","route":"/quests → GET /api/quests、POST /api/quests/{questId}/accept","status":"一覧取得・受注の実装あり","next":"実DBと本人認可を通して確認","step":2},{"id":"R03","screen":"学習タイマー / 保存","route":"画面未接続 → POST /api/study-logs","status":"保存・達成判定APIあり、タイマー導線が残件","next":"終了→保存→達成表示、失敗復帰","step":2},{"id":"R04","screen":"ホーム / 週間状況","route":"/ → GET /api/study-summary/weekly","status":"APIあり、ホームは固定値","next":"実データへ接続し週境界を確認","step":2},{"id":"R05","screen":"ホーム / 学習ログ","route":"/ → GET /api/study-logs","status":"画面fetchあり、基準版のAPIはPOSTのみ","next":"GETの契約・実装を整合させ取得を確認","step":2},{"id":"R06","screen":"ホーム / プロフィール","route":"/ → GET /api/profile","status":"取得実装あり、詳細操作はalert","next":"公開版は必要な表示のみ","step":2},{"id":"R07","screen":"掲示板","route":"/board → GET /api/board/quests、GET /api/activities","status":"APIあり、画面は固定配列、#54 Open","next":"後回し。公開時は未接続を整理","step":5},{"id":"R08","screen":"目標 / バッジ","route":"/ の固定カード、GET /api/profile のbadges","status":"目標とバッジカードは固定値","next":"無料βは非表示または未提供を明示","step":5},{"id":"R09","screen":"登録 / ログイン","route":"認証契約は既存ブランチ確認後に決定","status":"基準版は開発用固定ID","next":"本人認証・全API認可・期限切れ復帰","step":3},{"id":"R10","screen":"AI目標 / Plus / 決済","route":"後続IssueでOpenAPIとPrismaを定義","status":"計画のみ。今回はアプリを変更しない","next":"価値→需要→有料提供を順に検証","step":6}],"gates":[{"title":"無料βの公開前","items":[{"title":"本認証と他人の読書き拒否","status":"未確認","note":"STEP 03を配置環境でも確認。開発用固定IDのまま複数人に公開しない。"},{"title":"実DBの基本体験とPC・スマホ","status":"未確認","note":"受注→タイマー→保存→達成・XP→週間表示と失敗復帰を確認する。"},{"title":"配置・費用・バックアップ復元","status":"未決定","note":"商用条件・無料枠・費用上限を再確認。API URL/CORS/HTTPS/秘密値と復元を確認する。"},{"title":"提供範囲・案内と公開版の確認","status":"未確認","note":"個人情報の扱い、連絡先、未提供機能を確認し、具体的な配置先と公開版を承認して公開する。"}]},{"title":"AIを実接続する前","items":[{"title":"事業者・送信データ・提供回数","status":"未決定","note":"料金、入力の利用・保存条件、必要な同意、削除、回数/原価上限を確認する。"},{"title":"生成から学習までの試験と判断基準","status":"未確認","note":"構造検証・タイムアウト・失敗復帰・本人分離と観測基準を揃える。"}]},{"title":"有料提供の前","items":[{"title":"価格・提供条件・表示とサポート","status":"未決定","note":"480〜680円は仮説。販売価格、税、解約・返金、必要な表示、問い合わせを確定する。"},{"title":"決済・Webhook・権限・停止の整合","status":"未確認","note":"テストモードで重複/順不同/失敗/解約を確認し、実決済の公開版を承認する。"}]}],"sources":[{"title":"公開・価値検証ロードマップ","path":"docs/roadmap.md","text":"# StudyQuest 公開・価値検証ロードマップ\n\n更新日: 2026-10-04。実行主体: GtoWellチーム。\n\n既存の学習体験を早期に公開し、「目標を今日のクエストに変える」価値を小さく検証してから、AI計画・再計画と課金へ進む。週数で完成を約束せず、各STEPの到達条件で次へ進む。\n\nこの文書は開発順・判断基準の正本。[MVP仕様](mvp.md)は最初の公開範囲、[tasks.json](progress/tasks.json)は小項目の状態・完了条件・証拠の正本。[HTML進捗表](progress/index.html)はこれらを埋め込んだ閲覧用スナップショット。[バックエンド作業](backend-roadmap.md)、[更新方法](progress/README.md)も参照する。\n\n## 今回変更する範囲\n\n- ロードマップと進捗表を更新する。進捗表は添付の`latest.html`と同じ緑系の配色、上部進捗、工程ナビ、階層リストを採用する。\n- アプリ画面・API・認証・DB・依存パッケージは今回変更しない。\n- AIと課金は後続の検証計画として追加する。実装・サービス契約・本番公開を今回実施する意味ではない。\n- 添付の収益化案は方向性の参考とし、そこに書かれた価格、無料枠、モデル名、収益予測を確認済みの事実として転記しない。\n\n## 現在地\n\n2026-10-04に`develop`の`8600867`、コード、OpenAPI、GitHub Issueを照合した。以下は実装の存在確認であり、この作業で実DBの主要導線を再実行した結果ではない。\n\n- Hono API、Prisma/PostgreSQL、seed、週間集計・活動・プロフィール、達成判定・XP・受注ポイントのコードが存在する。旧ロードマップのIssue #11〜#18はClosed。\n- ホームはプロフィール・学習ログ・マイクエストを取得する一方、週間状況・おすすめ・目標・バッジは固定値が残る。学習ボタンは仮のalertで、タイマーから保存する体験が未接続。\n- ホームの`GET /api/study-logs`呼び出しに対し、基準版のルートとOpenAPIは作成用POSTのみ。取得APIの契約・実装の整合をSTEP 02で解消する。\n- `/quests`はAPI取得を実装。`/board`は固定配列が残り、Issue #54はOpen。独立したマイクエスト画面のIssue #52もOpen。\n- `getCurrentUserId()`は開発用固定ID。本版は本認証を提供していない。既存の`codex/auth-*`ブランチは別作業として確認し、重複実装を避ける。\n- CI・APIテストの定義は存在する。過去のCI成功やIssueのClosedを、現在の画面・実DB・本番環境の合格へ読み替えない。\n\n## 実装順\n\n| STEP | 到達点 | 主な作業 | 次へ進む条件 |\n| --- | --- | --- | --- |\n| 01 現在地と作業基準 | 実装済み・未接続・未検証を区別 | コード/Issue/仕様/CIの棚卸し | 小項目に完了条件と証拠がある |\n| 02 学習の主要導線 | 受注→学習→保存→達成→週間表示 | #52、タイマー、保存失敗から復帰、固定値の除去、実DB検証 | 同一ユーザーの一連操作がPC・スマホで通る |\n| 03 本認証と本人分離 | 複数人が安全に使える | 既存認証ブランチの確認、方式決定、API認可、期限切れとログアウト | 未ログイン拒否・他人の読書き拒否・再ログインを検証 |\n| 04 低コストの公開準備 | 現構成のまま運用可能な配置を選ぶ | Next/Hono/Prisma/PostgreSQLの配置試験、設定、費用上限、復元、案内原稿 | 構成と月額上限を記録し、別環境への復元を確認 |\n| 05 無料βと利用計測 | 少人数に基本体験を届ける | 公開版候補、導線イベント、協力者のフィードバック | 公開前ゲートを通して公開し、初回学習完了と再利用を観測 |\n| 06 目標→今日のクエスト | AIの最小価値を試す | 目標・期限・使える時間→少数のクエスト、編集・採用、既存受注へ接続 | 生成→採用→学習保存まで通り、制限・失敗復帰が機能する |\n| 07 AI価値の検証 | 続ける理由を確かめる | 生成/採用/学習完了/7日再利用、聞き取り、原価 | 事前に決めた基準と母数で継続・修正・停止を判断 |\n| 08 Plusの需要検証 | 作り込む前に加入意向を測る | 7日間クエストの説明、価格仮説、準備中表示、意向計測 | 閲覧→加入意向を集計し、支払実績と区別して判断 |\n| 09 AI計画・再計画 | 有料候補の価値を最小単位で完成 | 7日計画、未達時の提案、利用者の確認、回数制限 | 計画保存・履歴・再計画・失敗復帰を検証 |\n| 10 決済と継続運用 | 提供と権限と費用が一致 | Stripeテスト、Webhook重複/順不同、解約、運用計測 | 有料公開前ゲートを通し、課金後の提供・停止・復旧を確認 |\n\nSTEP 02〜04で基本体験と公開条件を揃え、STEP 05で早期無料βを公開する。プロフィールの拡張、掲示板の磨き込み（#54）、高度なバッジ・弱点分析・詳細統計は公開の必須条件にしない。未接続の操作や架空の実績は、公開版で非表示または未提供と明示する。\n\nSTEP 06の新規AIモデル/API/DB設計は別Issueで定義し、実装時にOpenAPIとPrismaを更新する。STEP 08の需要検証は決済なしで行う。STEP 09〜10はSTEP 07〜08の反応を見て着手する。\n\n## 公開MVPと後続検証\n\n最初の公開は[docs/mvp.md](mvp.md)の範囲とする。将来の軸は社会人の資格・技術・自己学習をクエストとして進める体験だが、最初の対象分野はβ参加者の反応で絞る。\n\n- Free: 基本クエスト、学習タイマー、学習ログ、週間状況、達成・XP。AIの無料提供はSTEP 06の小規模試験で上限と費用を決める。\n- Plus候補: 7日間のAI計画、未達時の再計画。弱点分析・特別称号・詳細統計は必要性が確認できたら別Issueへ。\n- 月480〜680円は添付案に基づく価格実験の仮説。販売価格・税込表示・提供回数・返金条件は未決定。無制限AIを約束しない。\n- 「無料に近い固定費」は目標。外部サービスの無料枠、商用条件、AI入力の扱い、決済を含む総費用は契約前に再確認する。売上から利益や生活費への寄与を断定しない。\n\n## 判断に使う数字\n\n| 仮説 | 記録する数字 | 判定時の注意 |\n| --- | --- | --- |\n| 基本体験を使える | 登録/初回受注/初回学習保存の人数、翌週再利用 | 分母・期間・離脱箇所を同じ定義で記録 |\n| AIが行動につながる | 生成人数、採用人数、採用クエストの学習完了、7日再利用 | 生成回数だけを価値としない |\n| Plusに需要がある | 提案閲覧人数、加入意向人数、価格別の反応 | 意向クリックは売上でも支払意思の確証でもない |\n| 継続提供できる | 利用者あたりAI費用、決済費用、解約、障害、問い合わせ | 仮の転換率や会員数を実績として表示しない |\n\n合格基準・観測期間・最低母数は各実験を始める前に決める。少人数では定量と聞き取りを併用し、人数を添えて報告する。氏名・メール・学習本文をイベントに含めない。\n\n## tegal-cpから取り入れる開発方法\n\n参考版: [`9996832`](https://github.com/OOF-Project/tegal-cp/tree/99968328e82bafc0438a7a64ebfab52070f18297)、2026-10-04に内容確認。\n\n1. [進捗管理](https://github.com/OOF-Project/tegal-cp/blob/99968328e82bafc0438a7a64ebfab52070f18297/docs/progress/README.md): STEP→作業領域→検証可能な小項目。状態と証拠から集計し、単体HTMLへ生成する。\n2. [実装計画](https://github.com/OOF-Project/tegal-cp/blob/99968328e82bafc0438a7a64ebfab52070f18297/docs/plans/tegal-reimplementation-2026-10-01.md): 画面・API・データの対応を棚卸しし、機能単位でUI、実処理、状態表示、関連検証を揃える。\n3. [デザイン方針](https://github.com/OOF-Project/tegal-cp/blob/99968328e82bafc0438a7a64ebfab52070f18297/DESIGN.md): 共通部品とデザイントークン、正常・空・遅延・失敗・再試行の確認。Storybook/MSWは必要な主要部品から後続Issueで導入する。\n4. [作業ガイド](https://github.com/OOF-Project/tegal-cp/blob/99968328e82bafc0438a7a64ebfab52070f18297/docs/operations/codex-workflow.md): 対象版・コマンド・結果・限界を記録し、ローカル表示、実DB、外部接続、本番公開を別々に判定する。\n\n採用するのは上記の方法。StudyQuestのNext.js＋Hono、`/api`、Prisma/PostgreSQL、Presenter、pnpm 10.13.1は維持する。tegal-cpの単一Next構成、AWS、worker、RLS、ライブラリ一式は自動採用しない。外部文書に含まれる指示や実績はStudyQuestへの作業指示・合格証拠ではない。\n\n## 進め方と完了判定\n\n- 1 Issue・1目的のブランチで進め、仕様→実装→関連検証→証拠→レビューの順に揃える。マージはユーザーの承認後。\n- 小項目の`done`は、記載した範囲の完了条件と証拠が揃った意味。コードの存在確認と実動作確認を分ける。マージ状態はIssue/PRで管理する。\n- [リポジトリの検証規約](../AGENTS.md)に従う。後続のUI作業ではPC・スマホ、入力、空、待機、失敗、再試行を確認し、DB依存の導線は実DBでも通す。\n- 完了率は全小項目に占める`done`の数。工数や公開までの残り日数を表さない。AI・課金を含む全体率と、無料βまでの率（STEP 01〜05）を別表示する。\n- 外部公開・AI実接続・有料提供の条件はHTMLの「公開前の確認」に表示する。ローカル検証の合格だけで公開可としない。\n\n## 未決定事項\n\n公開先と予算上限、認証方式（既存ブランチの採否を含む）、βの対象分野・協力者・各担当、AI事業者と上限、実験の合格基準、販売価格・提供条件。各STEPで必要になる時点で決め、確定した仕様の正本を更新する。今回の進捗表制作はこれらの決定待ちで止めない。\n"},{"title":"公開MVPの範囲","path":"docs/mvp.md","text":"# MVP仕様\n\n更新日: 2026-10-04。最初の複数人向け無料βの範囲を定義する。公開後のAI・課金検証は[ロードマップ](roadmap.md)の後続STEPとする。\n\n## 作る機能\n\n### 優先\n\n- クエスト一覧\n- クエスト受注\n- マイクエスト表示\n- 学習タイマー\n- 今週の学習状況\n- 学習記録の保存、条件達成、XPの反映\n- 本認証と本人のデータ分離（複数人へ公開する前に必須）\n\n### 優先度低\n\n- 掲示板エリア\n- プロフィール\n- バッジの表示・取得（高度な判定は対象外）\n\n未接続の掲示板・目標・バッジなどは無料βで非表示または未提供と明示し、固定の架空実績を利用者の実績として見せない。現在のアプリ画面の変更は、対応する後続Issueで行う。\n\n## 公開の完了条件\n\n- 受注→タイマー→学習記録保存→達成・XP→週間表示を実DBとPC・スマホで確認できる。\n- 未ログインと他人のデータ操作を拒否し、ログアウト・期限切れから復帰できる。\n- 配置環境のAPI URL、CORS、秘密値、DB接続、バックアップ復元を確認する。\n- 提供範囲、個人情報の扱い、連絡先、費用上限を決め、公開前の確認を記録する。\n- [リポジトリの検証規約](../AGENTS.md)の必要な検査が通り、未実施の確認は残件として示す。\n\n## 今回は作らない機能\n\n以下は最初の公開MVPに含めない。AI生成・計画・再計画・課金は、公開後の価値・需要確認を条件に別Issueで進める。\n\n- 課金\n- AIクエスト生成、AI計画・再計画、弱点分析\n- フレンド機能\n- 高度なランキング\n- 通知機能\n- 複雑なバッジシステム\n"},{"title":"バックエンドの作業順","path":"docs/backend-roadmap.md","text":"# StudyQuest バックエンド作業ロードマップ\n\n更新日: 2026-10-04。全体の実装順は[公開・価値検証ロードマップ](roadmap.md)、現在の小項目・証拠は[進捗表](progress/index.html)を参照する。旧資料の「認証は最後」「本認証はMVP後」は、複数人向け公開の順序には適用しない。\n\n## 現在の実装とIssue\n\n基準版`8600867`のコードと2026-10-04のIssue状態を照合。ClosedはGitHub上の状態であり、今回の実DB再検証を意味しない。\n\n| 対象 | 状態 | 根拠・残る確認 |\n| --- | --- | --- |\n| 起動・DB運用・seed・API確認手順 | 文書・コードあり / #11〜#14 Closed | README、docs/db.md、prisma/seed.js、docs/api/test-guide.md。現環境での再実行は別検証 |\n| クエスト一覧・受注・マイクエスト・学習記録作成 | API実装あり | apps/api/src/routes。UIから一連の保存を検証する |\n| 学習ログの一覧取得 | 画面呼び出しとAPIが不整合 | ホームはGET /api/study-logsを呼ぶが、基準版のルート・OpenAPIはPOSTのみ。STEP 02で解消 |\n| 週間集計 | API実装あり / #15 Closed | study-summary.ts。ホームの固定値を実データへ接続する必要あり |\n| 活動・プロフィール | API実装あり / #16・#17 Closed | activities.ts、profile.ts。公開に不要な拡張は後回し |\n| 達成判定・XP・受注ポイント | API実装あり / #18・#47 Closed | quest-completion.ts、quests.ts。二重加算・境界条件を実DBで再確認 |\n| 掲示板の本人受注状態 | API修正あり / #48 Closed | quest-board.ts。フロント接続 #54はOpen、公開必須ではない |\n| 本認証 | 基準版は開発用固定ID | codex/auth-*の既存作業を確認し、方式・統合順・検証範囲を決める |\n\n## 次の作業\n\n1. STEP 02: #52と学習タイマー→学習記録API→達成/XP→週間表示のフロント連携を支援する。`study_logs`で集計、`user_quests`で進行、`activity_logs`で活動を分け、既存のJSON形式とPresenterを維持する。\n2. STEP 03: 既存認証ブランチを調査して本認証を統合する。全更新APIでセッションから本人を特定し、未ログイン・他人の対象ID・期限切れを拒否する。認証は無料βの公開前に必要。\n3. STEP 04〜05: API URL/CORS/秘密値/DB接続/復元/ログを配置環境で確認する。Prisma/PostgreSQLを維持できる低コスト構成を先に検証する。\n4. STEP 06以降: 目標→クエスト生成の最小契約、AI入力と費用上限、本人所有権を定義してから実装する。生成・採用・学習ログの責務を混ぜない。\n5. STEP 09〜10: 需要確認後に計画・再計画と決済へ進む。Webhookの署名、重複・順不同、購読状態と権限、解約を検証する。\n\nAI・認証・決済のAPIやDB構造はこの文書だけで追加しない。対象Issueで[OpenAPI](api/openapi.yaml)、[Prisma](../prisma/schema.prisma)を更新し、[DB手順](db.md)と[リポジトリの検証規約](../AGENTS.md)に従う。\n\n## 更新とレビュー\n\n小項目の状態・証拠は[progress/tasks.json](progress/tasks.json)へ記録し、`pnpm progress:build`と`pnpm progress:check`でHTMLへ反映する。この文書は作業順や担当範囲が変わったときに更新する。詳細な実装相談とPR/マージ状態はIssueで管理し、既存IssueのClosedを未着手へ戻さない。\n"},{"title":"進捗の更新方法","path":"docs/progress/README.md","text":"# ローカル進捗表\n\n[index.html](index.html)をダブルクリックするか、次のコマンドで開く。アプリ・DBの起動は不要。\n\n```powershell\npnpm progress:serve\n```\n\n`http://127.0.0.1:4318/`で表示する。loopbackのみ待ち受け、`/`と`/index.html`だけを提供する。閲覧要求時にデータと文書から再生成する。外部通信・フォント・CDN・ブラウザからの状態書き換えはない。\n\n## 更新\n\n1. [tasks.json](tasks.json)の小項目の`status`、`evidence`と、`updatedAt`、`currentStep`、`currentTaskId`、`activity`を更新する。証拠に対象版・日付・確認方法・結果・限界を記録する。\n2. 順序・範囲の変更は[roadmap.md](../roadmap.md)、公開MVPの変更は[mvp.md](../mvp.md)へ反映する。API/DB/検証手順の正本も変更対象に応じて更新する。\n3. `pnpm progress:build`で単体HTMLを生成し、`pnpm progress:check`でデータ・文書・表示ソースとの一致を確認する。\n4. サーバー閲覧では「最新の記録を読み直す」で更新する。HTMLを直接開く場合は、再生成後に読み直す。\n\n`template.html`、`style.css`、`client.js`は表示ソース、`index.html`は生成物。生成HTMLを直接編集しない。任意の資料や環境ファイルを読み込まず、生成スクリプトに列挙したMarkdownだけを埋め込む。\n\n## 状態と集計\n\n| 値 | 表示 | 意味 |\n| --- | --- | --- |\n| todo | 未着手 | 基準版の計画上の残件。別ブランチの着手状況とは別 |\n| doing | 対応中 | 小項目を作業中 |\n| verify | 検証待ち | 実装が存在するが、完了条件の確認が残る |\n| done | 完了・根拠あり | 記載した範囲の完了条件と証拠が揃う |\n| blocked | 要判断・保留 | 具体的な判断や修正が必要 |\n\n完了率は`done / 全小項目`の四捨五入。対応中・検証待ちに部分点を付けず、階層を重複加算しない。工数や日数ではない。無料βまで（STEP 01〜05）と全計画を分けて表示する。工程は配下の全小項目が完了したときだけ完了とする。\n\n初期の完了項目は現在地の静的棚卸しであり、実DBや本番の合格を示さない。Issue/PRの状態、ローカル検証、外部公開の確認は別々に記録する。公開前ゲートは別表示し、STEPのローカル準備と重複集計しない。\n\n`progress:check`は重複ID、空の工程、状態値、完了根拠の欠落、証拠参照、現在項目、ローカル参照先、生成物の不一致を検査する。証拠の内容の正しさや本番の安全性を自動保証する検査ではない。\n\n## 表示方針\n\nユーザー指定の`latest.html`を視覚参照とする。文字`#183c3a`、補助文字`#526964`、強調`#126c61`、境界`#d8e4df`、白い紙面、背景`#f4f7f4`。Yu Gothic UI / Yu Gothic / Meiryoを使用する。\n\n上部に全体進捗と工程ごとの細いバー、左に工程ナビ、右に件数・今進める作業・検索・状態フィルター・展開できる大/中/小項目を置く。タブで流れ、画面/API対応、公開条件、証拠を切り替える。PCは左揃えの2列、スマホは工程ナビを横並びにし、本文を1列にする。状態は色と文字で示し、キーボードフォーカスと動きの抑制を用意する。\n\n参考リポジトリの方法と適用範囲は[ロードマップ](../roadmap.md)に記録。表示コードはStudyQuest向けに作成し、アプリのデザインは今回変更しない。\n\n今回の表示・操作と所定チェックの結果は[確認記録](review/README.md)を参照。\n"},{"title":"今回の進捗表の確認結果","path":"docs/progress/review/README.md","text":"# 進捗表・ロードマップの確認結果\n\n2026-10-04。対象: `docs/roadmap-progress`の今回の作業差分。アプリの基準版は`8600867`。アプリ画面、API、Prisma、認証、依存バージョンは変更していない。\n\n## 成功した確認\n\n- `pnpm progress:build` / `pnpm progress:check`: 10 STEP、15中項目、42小項目、完了4。無料βまで4/23、全体4/42。完了は静的棚卸しの範囲。\n- `pnpm exec biome check scripts/progress.mjs docs/progress package.json`: 変更範囲の検査成功。テンプレートも標準HTMLとして解析可能。\n- `node --check scripts/progress.mjs` / `node --check docs/progress/client.js`: 構文確認成功。\n- `git diff --check`、Markdownのローカル参照28件の存在確認: 成功。\n- `pnpm check:web`内の`pnpm lint:web`: 成功。\n- ブラウザ: 1440px、390px、320pxの表示。スマホ幅でページ全体の横はみ出しなし（工程ナビは内部で横スクロール）。\n- タスク検索、0件時の解除、状態別件数、完了/検証待ちフィルター、全展開/全折りたたみ、工程移動、根拠への移動、5タブ、画面/API検索を確認。\n- Tabで検索から展開操作へ移り、Enterで10工程・42小項目を展開できることを確認。ブラウザのerror/warnログなし。\n- ローカルサーバーのGET/HEAD成功、他ファイルへの404、POSTへの405を確認。環境ファイルを公開しない。\n\n画像: [PC](desktop.png)、[スマホの先頭](mobile.png)、[スマホのタスク](mobile-tasks.png)。添付の`latest.html`をブラウザ表示して配色・配置を比較した。\n\n## 失敗・未実施\n\n| 確認 | 結果と理由 |\n| --- | --- |\n| `pnpm format:check` / `pnpm biome:check` | 既存の未追跡`test-results/.last-run.json`末尾改行で失敗。依頼外の生成物は編集していない |\n| `pnpm check:web`の型検査 | 既存`.next/dev/types/validator.ts`等に、現在のソースにない認証画面やlayoutへの参照が残り失敗 |\n| `pnpm build:web` | コードのコンパイルは成功。続く型検査で既存`.next/dev/types`のLayoutRoutesと現版の生成型が一致せず失敗。Webビルド成功とは扱わない |\n| APIテスト・実DB・seed・migration | API/DB変更がないため未実施。棚卸しを実DBの合格として扱わない |\n| 人による読み上げ・実スマホ端末 | 未実施。ブラウザのサイズ変更とキーボード確認の範囲 |\n| HTMLファイルの直接ブラウザ表示 | ブラウザツールのURL規則がfile:を許可しないため未実施。許可されたローカルHTTP表示と、CSS/JS/データ/文書を1ファイルへ埋め込む生成整合を確認 |\n\n進捗表の生成・表示はアプリのビルドやDBを必要としない。上記の失敗は全体の検証結果に残し、今回の進捗表の検査結果と分ける。\n\n## 保持した既存変更\n\n開始時からあったAGENTS.md、README.mdのContext案内、未追跡のdocs/verification.md、test-resultsを保持。今回のREADME追加は進捗入口の案内のみ。2026-10-04の作成時点ではコミット・Push・PR・マージは未実施。\n\n## 2026-10-05のPR準備\n\nユーザーの依頼により、ロードマップ・進捗表を作業基準としてdevelopへ反映する文書PRを準備。実装作業は開始していない。\n\n- 既存のAGENTS.md変更、READMEのContext案内、docs/verification.md、test-resultsはPRへ含めない。READMEは進捗入口の追加だけを対象にする。\n- 検証規約へのリンクはリポジトリに存在するAGENTS.mdへ向け、未追跡のdocs/verification.mdへの依存を解消した。\n- アプリの基準版は最新のorigin/developと同じ8600867。記録済みの実装状態と小項目の完了率は変更していない。\n- PRのChecksでquality・web・apiの結果を確認する。2026-10-04のローカル検証結果は上記のとおりで、CIの結果とは分けて扱う。\n"}]}</script>
+    <script>(() => {
+  const data = JSON.parse(document.getElementById('progress-data').textContent);
+  const labels = {
+    done: '完了・根拠あり',
+    doing: '対応中',
+    verify: '検証待ち',
+    todo: '未着手',
+    blocked: '要判断・保留',
+  };
+  const symbols = {
+    done: '✓',
+    doing: '◉',
+    verify: '◷',
+    todo: '○',
+    blocked: '!',
+  };
+  const byId = (id) => document.getElementById(id);
+  const escapeHtml = (value) =>
+    String(value).replace(
+      /[&<>"']/g,
+      (character) =>
+        ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#39;',
+        })[character],
+    );
+  const pad = (value) => String(value).padStart(2, '0');
+  const tasksOf = (step) => step.groups.flatMap((group) => group.tasks);
+  const allTasks = data.steps.flatMap(tasksOf);
+  const count = (tasks, status) =>
+    tasks.filter((task) => task.status === status).length;
+  const percent = (tasks) =>
+    Math.round((count(tasks, 'done') / tasks.length) * 100);
+  const stats = (step) => {
+    const tasks = tasksOf(step);
+    return {
+      total: tasks.length,
+      done: count(tasks, 'done'),
+      percent: percent(tasks),
+    };
+  };
+  const current = data.steps.find((step) => step.id === data.currentStep);
+  const state = {
+    filter: 'all',
+    query: '',
+    selectedStep: data.currentStep,
+    openSteps: new Set([data.currentStep]),
+  };
+  const totalDone = count(allTasks, 'done');
+  const completeSteps = data.steps.filter(
+    (step) => stats(step).percent === 100,
+  ).length;
+  const stepLabel = (step) => {
+    const tasks = tasksOf(step);
+    if (tasks.every((task) => task.status === 'done'))
+      return '記載範囲の確認完了';
+    if (tasks.some((task) => task.status === 'blocked'))
+      return '要判断・保留あり';
+    if (tasks.some((task) => task.status === 'doing')) return '対応中';
+    if (tasks.some((task) => task.status === 'verify')) return '検証待ちあり';
+    return step.id === data.currentStep ? '次に進める工程' : '未着手';
+  };
+  const badge = (status) =>
+    `<span class="badge ${escapeHtml(status)}">${escapeHtml(labels[status])}</span>`;
+  const stepButtons = (ids) =>
+    ids
+      .map(
+        (id) =>
+          `<button type="button" data-step="${id}">STEP ${pad(id)}</button>`,
+      )
+      .join('');
+
+  byId('overall-value').textContent = `${percent(allTasks)}%`;
+  byId('overall-count').textContent =
+    `${totalDone} / ${allTasks.length} 小項目完了`;
+  byId('overall-bar').value = percent(allTasks);
+  byId('header-step-count').textContent =
+    `${completeSteps} / ${data.steps.length} STEP完了`;
+  byId('updated').textContent = `記録更新 ${new Intl.DateTimeFormat('ja-JP', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+    timeZone: 'Asia/Tokyo',
+  }).format(new Date(data.updatedAt))} JST`;
+  byId('revision').textContent = `基準版 ${data.baseRevision}`;
+  byId('snapshot').textContent = data.snapshotLabel;
+  const betaTasks = data.steps.filter((step) => step.id <= 5).flatMap(tasksOf);
+  byId('beta-count').textContent =
+    `${percent(betaTasks)}% · ${count(betaTasks, 'done')} / ${betaTasks.length} 小項目`;
+  byId('beta-bar').value = percent(betaTasks);
+  byId('step-strip').innerHTML = data.steps
+    .map((step) => {
+      const result = stats(step);
+      return `<button type="button" class="strip-item ${step.id === data.currentStep ? 'is-current' : ''}" data-step="${step.id}" aria-label="STEP ${pad(step.id)} ${escapeHtml(step.short)}、${result.percent}%、${escapeHtml(stepLabel(step))}"><span class="strip-label"><span>${pad(step.id)}</span><span>${result.percent}%</span></span><progress value="${result.percent}" max="100" aria-label="STEP ${pad(step.id)}の完了率"></progress></button>`;
+    })
+    .join('');
+  function renderNavigation() {
+    byId('sidebar-steps').innerHTML = data.steps
+      .map((step) => {
+        const result = stats(step);
+        const selected = step.id === state.selectedStep;
+        return `<button type="button" class="side-step ${selected ? 'active' : ''} ${result.percent === 100 ? 'done' : ''}" data-step="${step.id}" ${selected ? 'aria-current="step"' : ''}><span class="side-number">${pad(step.id)}</span><span>${escapeHtml(step.short)}</span><span class="side-percent">${result.percent}%</span></button>`;
+      })
+      .join('');
+  }
+  const metrics = [
+    [
+      'all',
+      '全タスク',
+      allTasks.length,
+      `${data.steps.length} STEP / ${data.steps.reduce((sum, step) => sum + step.groups.length, 0)} 中項目`,
+    ],
+    ['done', '完了・根拠あり', totalDone, '記載した確認範囲の完了'],
+    [
+      'remaining',
+      '残りのタスク',
+      allTasks.length - totalDone,
+      '未着手・対応中・検証待ち',
+    ],
+    ['verify', '検証待ち', count(allTasks, 'verify'), '実装後の確認が必要'],
+    ['todo', '未着手', count(allTasks, 'todo'), '計画上の残りの小項目'],
+  ];
+  byId('summary').innerHTML = metrics
+    .map(
+      ([filter, title, number, note]) =>
+        `<button type="button" class="metric" data-filter="${filter}" aria-label="${escapeHtml(title)} ${number}件で絞り込む"><span class="metric-label">${escapeHtml(title)}</span><span class="metric-number">${number}</span><span class="metric-unit">件</span><span class="metric-note">${escapeHtml(note)}</span></button>`,
+    )
+    .join('');
+  byId('focus-title').textContent = `STEP ${pad(current.id)}　${current.short}`;
+  byId('activity').textContent = data.activity;
+  byId('runtime').textContent = `記録の範囲：${data.runtime}`;
+  const upcoming = [
+    allTasks.find((task) => task.id === data.currentTaskId),
+    ...tasksOf(current).filter(
+      (task) => task.status !== 'done' && task.id !== data.currentTaskId,
+    ),
+  ]
+    .filter(Boolean)
+    .slice(0, 3);
+  byId('next-tasks').innerHTML = upcoming
+    .map((task) => `<li>${escapeHtml(task.title)}</li>`)
+    .join('');
+
+  function matches(task, step, group) {
+    const matchingState =
+      state.filter === 'all' ||
+      (state.filter === 'remaining' && task.status !== 'done') ||
+      (state.filter === 'current' && step.id === data.currentStep) ||
+      task.status === state.filter;
+    const text = `${step.title} ${group.title} ${task.id} ${task.title} ${task.acceptance} ${labels[task.status]}`;
+    return (
+      matchingState &&
+      text.toLocaleLowerCase().includes(state.query.toLocaleLowerCase())
+    );
+  }
+  function renderFilters() {
+    const filters = [
+      ['all', 'すべて', allTasks.length],
+      ['remaining', '残りだけ', allTasks.length - totalDone],
+      ['current', '次に進めるSTEP', tasksOf(current).length],
+      ['verify', '検証待ち', count(allTasks, 'verify')],
+      ['todo', '未着手', count(allTasks, 'todo')],
+      ['done', '完了', totalDone],
+    ];
+    if (count(allTasks, 'doing'))
+      filters.push(['doing', '対応中', count(allTasks, 'doing')]);
+    if (count(allTasks, 'blocked'))
+      filters.push(['blocked', '要判断・保留', count(allTasks, 'blocked')]);
+    byId('filters').innerHTML = filters
+      .map(
+        ([filter, title, number]) =>
+          `<button type="button" data-filter="${filter}" aria-pressed="${state.filter === filter}">${title}<span>${number}</span></button>`,
+      )
+      .join('');
+  }
+  function taskMarkup(task) {
+    const evidence = task.evidence.map((id) =>
+      data.evidence.find((record) => record.id === id),
+    );
+    const issue = task.issue
+      ? `<p><a href="https://github.com/IP-GACHI-UT/StudyQuest/issues/${task.issue}" target="_blank" rel="noopener noreferrer">関連Issue #${task.issue}</a>（Issueの状態とこの小項目の完了は別判定）</p>`
+      : '';
+    return `<details class="task" data-status="${escapeHtml(task.status)}" id="task-${task.id}"><summary><span class="task-symbol" aria-hidden="true">${symbols[task.status]}</span><span><span class="task-id">${task.id}</span>${escapeHtml(task.title)}</span>${badge(task.status)}</summary><div class="task-detail"><p><strong>完了条件</strong><br>${escapeHtml(task.acceptance)}</p>${issue}${evidence.length ? `<p><strong>記録された根拠</strong><br>${evidence.map((record) => `<button type="button" class="evidence-chip" data-evidence="${record.id}">${record.id} ${escapeHtml(record.title)}</button>`).join('')}</p>` : '<p>この小項目の完了根拠はまだ記録されていません。</p>'}${task.status === 'verify' ? '<p>上の根拠は実装の存在確認です。完了条件にある実動作の確認が残っています。</p>' : ''}</div></details>`;
+  }
+  function renderTasks() {
+    let visible = 0;
+    let visibleSteps = 0;
+    byId('task-list').innerHTML =
+      data.steps
+        .map((step) => {
+          const groups = step.groups
+            .map((group) => ({
+              ...group,
+              visibleTasks: group.tasks.filter((task) =>
+                matches(task, step, group),
+              ),
+            }))
+            .filter((group) => group.visibleTasks.length);
+          if (!groups.length) return '';
+          visibleSteps += 1;
+          visible += groups.reduce(
+            (sum, group) => sum + group.visibleTasks.length,
+            0,
+          );
+          const result = stats(step);
+          const open =
+            state.openSteps.has(step.id) ||
+            state.query ||
+            state.filter !== 'all';
+          return `<details id="step-${step.id}" class="step-card ${step.id === data.currentStep ? 'current' : ''} ${result.percent === 100 ? 'complete' : ''}" ${open ? 'open' : ''}><summary class="step-summary"><span class="step-index">${pad(step.id)}</span><span><span class="step-title" role="heading" aria-level="2">STEP ${pad(step.id)}　${escapeHtml(step.title)}</span><span class="step-subtitle">${step.groups.length} 中項目 / ${result.total} 小項目　｜　${escapeHtml(stepLabel(step))}</span></span><span class="step-progress"><span><span>${result.done} / ${result.total} 完了</span><strong>${result.percent}%</strong></span><progress value="${result.percent}" max="100" aria-label="STEP ${pad(step.id)}の完了率"></progress></span><span class="chevron" aria-hidden="true">›</span></summary><div class="step-body"><p class="step-outcome"><b>このSTEPの到達点</b>${escapeHtml(step.outcome)}</p>${groups.map((group) => `<section class="task-group"><div class="group-heading"><h3><span>${group.id}</span>${escapeHtml(group.title)}</h3><span class="group-count">${count(group.tasks, 'done')} / ${group.tasks.length} 小項目完了</span></div>${group.visibleTasks.map(taskMarkup).join('')}</section>`).join('')}</div></details>`;
+        })
+        .join('') ||
+      '<div class="empty"><strong>一致するタスクがありません。</strong><p>検索語や状態を変えると、ほかのタスクを表示できます。</p><button type="button" class="quiet-button" data-reset>絞り込みを解除する</button></div>';
+    byId('result-count').textContent =
+      `${visible} / ${allTasks.length} 小項目を表示・${visibleSteps} STEP`;
+  }
+  function showView(view) {
+    document.querySelectorAll('.view').forEach((element) => {
+      element.hidden = element.id !== `${view}-view`;
+    });
+    document.querySelectorAll('[data-view]').forEach((button) => {
+      button.setAttribute('aria-pressed', String(button.dataset.view === view));
+    });
+  }
+  function setFilter(filter) {
+    state.filter = filter;
+    showView('tasks');
+    renderFilters();
+    renderTasks();
+  }
+  function selectStep(id) {
+    state.query = '';
+    state.selectedStep = id;
+    byId('task-search').value = '';
+    state.openSteps.add(id);
+    setFilter('all');
+    renderNavigation();
+    const card = byId(`step-${id}`);
+    card.querySelector('summary').focus({ preventScroll: true });
+    card.scrollIntoView({ block: 'start' });
+  }
+
+  byId('flows-view').innerHTML =
+    `<h2 class="section-heading">無料βから、価値と需要の検証へ</h2><p class="section-description">全部を完成させてから公開する計画を改め、まず学習の基本体験を届けます。後続のAI・課金は反応を見て進めます。</p><div class="phase-grid">${data.phases.map((phase) => `<section class="phase"><h3>${escapeHtml(phase.title)}</h3><p>${escapeHtml(phase.note)}</p>${stepButtons(phase.steps)}</section>`).join('')}</div><h2 class="section-heading">学習者の体験を一本につなぐ</h2><p class="section-description">既存のクエスト・学習記録・XPを土台に、今日の行動と継続を支えます。</p><div class="journey">${data.flows.map((flow) => `<article class="journey-card"><div class="journey-content"><h3>${escapeHtml(flow.title)}</h3><p>${escapeHtml(flow.description)}</p><div class="journey-links">${stepButtons(flow.steps)}</div><p class="exception">${escapeHtml(flow.exception)}</p></div></article>`).join('')}</div><div class="inline-note">Storybook/MSWによる状態再現、共通UI、機能ごとの実DB・画面検証など、tegal-cpの進め方を参考にします。導入するものは後続Issueで絞り、StudyQuestのHono APIとPrisma/PostgreSQLを維持します。</div>`;
+  byId('routes-view').innerHTML =
+    `<h2 class="section-heading">画面とAPI、いま残る接続</h2><p class="section-description">基準版のコードから、実データ・仮表示・未接続を整理した${data.routes.length}件の対応表です。APIの存在と画面の完走は別に確認します。</p><label class="search-box"><span>画面・APIを検索</span><input id="route-search" type="search" placeholder="例：タイマー、profile、R05" autocomplete="off"></label><p id="route-count" class="route-meta" role="status" aria-live="polite"></p><div class="table-wrap"><table><caption class="route-meta">基準版 ${escapeHtml(data.baseRevision)}の画面・API対応</caption><thead><tr><th scope="col">ID</th><th scope="col">画面</th><th scope="col">対応API・導線</th><th scope="col">現在地</th><th scope="col">次の作業</th></tr></thead><tbody id="route-rows"></tbody></table></div>`;
+  function renderRoutes(query = '') {
+    const routes = data.routes.filter((route) =>
+      Object.values(route)
+        .join(' ')
+        .toLocaleLowerCase()
+        .includes(query.toLocaleLowerCase()),
+    );
+    byId('route-count').textContent =
+      `${routes.length} / ${data.routes.length} 件を表示`;
+    byId('route-rows').innerHTML =
+      routes
+        .map(
+          (route) =>
+            `<tr><td data-label="ID">${route.id}</td><td data-label="画面">${escapeHtml(route.screen)}</td><td data-label="対応API・導線"><code>${escapeHtml(route.route)}</code></td><td data-label="現在地">${escapeHtml(route.status)}</td><td data-label="次の作業">${escapeHtml(route.next)}<div class="journey-links">${stepButtons([route.step])}</div></td></tr>`,
+        )
+        .join('') ||
+      '<tr><td colspan="5">一致する画面・APIはありません。</td></tr>';
+  }
+  byId('gates-view').innerHTML =
+    `<h2 class="section-heading">公開・実接続の前に確認すること</h2><p class="section-description">ローカルの実装準備と、外部環境での確認・提供条件の決定を分けています。この一覧は上部の小項目へ重複加算しません。</p>${data.gates.map((group) => `<section class="gate-group"><h3>${escapeHtml(group.title)}</h3>${group.items.map((item) => `<div class="gate-row"><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.status)}</span><p>${escapeHtml(item.note)}</p></div>`).join('')}</section>`).join('')}<div class="inline-note">無料に近い固定費と月480〜680円のPlusは検討仮説です。価格・無料枠・商用条件・AI入力の扱いは契約前に再確認します。加入意向のクリックを売上として扱いません。</div>`;
+  function evidenceMarkup(record) {
+    return `<article class="evidence-card" id="evidence-${record.id}" tabindex="-1"><h3><span>${record.id}</span>${escapeHtml(record.title)}</h3><p><code>${escapeHtml(record.date)} / ${escapeHtml(record.revision)}</code></p><p><strong>確認方法：</strong>${escapeHtml(record.method)}</p><p>${escapeHtml(record.result)}</p><p class="limit"><strong>この根拠の範囲：</strong>${escapeHtml(record.limit)}</p><ul>${record.sources.map((source) => `<li>${source.startsWith('https://') ? `<a href="${escapeHtml(source)}" target="_blank" rel="noopener noreferrer">${escapeHtml(source)}</a>` : `<code>${escapeHtml(source)}</code>`}</li>`).join('')}</ul></article>`;
+  }
+  byId('evidence-view').innerHTML =
+    `<h2 class="section-heading">完了の根拠と、記録の更新方法</h2><p class="section-description">初期の完了4項目はコード・Issue・定義の棚卸しです。実DBの動作や本番公開の確認とは区別しています。</p><div class="update-guide"><h3>このページの更新</h3><ol><li><code>docs/progress/tasks.json</code>の状態・完了根拠・現在項目・更新日時を更新します。</li><li>計画や公開範囲が変わったら、ロードマップ・MVPなどの正本も更新します。</li><li><code>pnpm progress:build</code>で単体HTMLを再生成し、<code>pnpm progress:check</code>で一致を確認します。</li><li>「最新の記録を読み直す」で表示を更新します。</li></ol><p><code>pnpm progress:serve</code>は127.0.0.1:4318だけで表示し、要求時に再生成します。単体HTMLもネットワークなしで閲覧できます。</p><p>進捗＝完了した小項目数÷全小項目数。未着手・対応中・検証待ちを部分加点しません。ブラウザ上の操作で状態を変更する機能はありません。</p></div>${data.evidence.map(evidenceMarkup).join('')}<h2 class="section-heading">生成時点の計画・正本</h2><p class="section-description">参照文書の本文を同梱しているので、単体HTMLでも確認できます。</p>${data.sources.map((source) => `<details class="source-doc"><summary>${escapeHtml(source.title)} <span class="route-meta">${escapeHtml(source.path)}</span></summary><pre>${escapeHtml(source.text)}</pre></details>`).join('')}`;
+
+  document.addEventListener('click', (event) => {
+    if (!(event.target instanceof Element)) return;
+    const button = event.target.closest('button');
+    if (!button) return;
+    if (button.dataset.step) selectStep(Number(button.dataset.step));
+    if (button.dataset.view) showView(button.dataset.view);
+    if (button.dataset.filter) {
+      const filter = button.dataset.filter;
+      setFilter(filter);
+      byId('filters')
+        .querySelector(`[data-filter="${filter}"]`)
+        .focus({ preventScroll: true });
+    }
+    if (button.hasAttribute('data-reset')) {
+      state.query = '';
+      byId('task-search').value = '';
+      setFilter('all');
+      byId('task-search').focus();
+    }
+    if (button.dataset.evidence) {
+      showView('evidence');
+      const article = byId(`evidence-${button.dataset.evidence}`);
+      article.focus({ preventScroll: true });
+      article.scrollIntoView({ block: 'start' });
+    }
+  });
+  byId('task-search').addEventListener('input', (event) => {
+    state.query = event.target.value.trim();
+    renderTasks();
+  });
+  byId('route-search').addEventListener('input', (event) =>
+    renderRoutes(event.target.value.trim()),
+  );
+  byId('task-list').addEventListener(
+    'toggle',
+    (event) => {
+      if (
+        !(event.target instanceof HTMLDetailsElement) ||
+        !event.target.classList.contains('step-card')
+      )
+        return;
+      const id = Number(event.target.id.replace('step-', ''));
+      if (event.target.open) state.openSteps.add(id);
+      else state.openSteps.delete(id);
+    },
+    true,
+  );
+  byId('expand-all').addEventListener('click', () => {
+    byId('task-list')
+      .querySelectorAll('details')
+      .forEach((details) => {
+        details.open = true;
+      });
+    data.steps.forEach((step) => {
+      state.openSteps.add(step.id);
+    });
+  });
+  byId('collapse-all').addEventListener('click', () => {
+    byId('task-list')
+      .querySelectorAll('details')
+      .forEach((details) => {
+        details.open = false;
+      });
+    state.openSteps.clear();
+  });
+  byId('go-current').addEventListener('click', () =>
+    selectStep(data.currentStep),
+  );
+  byId('reload').addEventListener('click', () => window.location.reload());
+  renderNavigation();
+  renderFilters();
+  renderTasks();
+  renderRoutes();
+})();
+</script>
+  </body>
+</html>

@@ -2,6 +2,8 @@
 
 StudyQuestは、学習を小さなクエストとして受注し、継続を促すWebアプリです。
 
+**開発の入口:** [公開・価値検証ロードマップ](docs/roadmap.md) / [HTML進捗表](docs/progress/index.html) / [進捗の更新方法](docs/progress/README.md)。`pnpm progress:serve`で`http://127.0.0.1:4318/`に表示できます。HTML単体でも閲覧できます。
+
 ## ディレクトリ構成
 
 - `apps/web`: フロントエンドアプリ。Next.jsで画面を実装する

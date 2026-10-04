@@ -1,0 +1,19 @@
+{
+  "scope": "local synthetic review data only",
+  "date": "2026-10-05",
+  "revision": "3d574ab29c28972300f9487a1564a6627e6b5d07",
+  "action": "API停止で失敗→再試行で復帰→未受注クエストをダブルクリック",
+  "before": {
+    "questRows": 0,
+    "acceptActivities": 0,
+    "points": 18
+  },
+  "after": {
+    "questRows": 1,
+    "acceptActivities": 1,
+    "points": 33
+  },
+  "acceptReward": 15,
+  "result": "受注・活動は1件、受注報酬は1回",
+  "limits": ["PCブラウザと390px幅", "実参加者・本番環境ではない"]
+}

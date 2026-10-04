@@ -127,9 +127,16 @@ function buildCountByQuest(counts: QuestCount[]) {
 }
 
 function getCurrentDayRange(date: Date) {
-  const start = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  const end = new Date(start);
-  end.setDate(end.getDate() + 1);
+  const japanOffsetMs = 9 * 60 * 60 * 1000;
+  const japanDate = new Date(date.getTime() + japanOffsetMs);
+  const start = new Date(
+    Date.UTC(
+      japanDate.getUTCFullYear(),
+      japanDate.getUTCMonth(),
+      japanDate.getUTCDate(),
+    ) - japanOffsetMs,
+  );
+  const end = new Date(start.getTime() + 24 * 60 * 60 * 1000);
 
   return { start, end };
 }

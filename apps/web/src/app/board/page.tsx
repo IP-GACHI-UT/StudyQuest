@@ -7,7 +7,7 @@ export default function BoardPage() {
       <SectionHeader
         enTitle="QUEST BOARD"
         jaTitle="クエスト掲示板"
-        description="多くの学習者が取り組んでいるクエスト"
+        description="クエストごとの今日の受注・達成と、累計の達成率"
       />
       <QuestBoard />
     </div>

@@ -9,6 +9,7 @@ StudyQuestのバックエンドAPI
 - Presenter
 - ビジネスロジック
 - 学習記録・クエスト管理
+- Better Authによる認証・session・メール送信
 
 ## 実装方針
 
@@ -16,8 +17,7 @@ StudyQuestのバックエンドAPI
 - APIパスは `/api/quests` のように `/api/...` を維持します。
 - 今後のAPI追加は `apps/api/src/routes` に行います。
 - Prisma Clientは `packages/db/src/prisma.ts` を使用します。
-- 認証方式は、明示指示があるまで導入しません。
-- 既存の仮ユーザーID取得処理を使う場合は、`apps/api` 側に置きます。
+- Better Authは `/api/auth/*` にマウントし、ユーザー別APIでは検証済みsessionのUser IDを使用します。
 - レスポンス形式は `docs/api/openapi.yaml` と既存APIレスポンスに合わせます。
 
 ## 環境変数
@@ -25,8 +25,13 @@ StudyQuestのバックエンドAPI
 ```env
 DATABASE_URL=
 API_PORT=3001
-CORS_ORIGIN=http://localhost:3000
+APP_ORIGIN=http://localhost:3000
+BETTER_AUTH_SECRET=
+SMTP_HOST=localhost
+SMTP_PORT=1025
 ```
+
+全項目とGoogle OAuth、Resendの設定は `docs/authentication.md` を参照してください。
 
 ## APIテスト
 
@@ -64,6 +69,9 @@ pnpm test:api:db
 - 重複受注防止
 - 学習時間のバリデーション
 - クエスト達成報酬の二重加算防止
+- メール確認前のログイン拒否
+- パスワード再設定時のsession失効
+- ユーザー間のデータ分離
 
 に関するDB結合テストを実行します。開発用seedは使用しません。
 

@@ -15,8 +15,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'StudyQuest',
-  description: '小さなクエストで学習を記録し、進捗を確かめる。',
+  title: {
+    default: 'StudyQuest',
+    template: '%s | StudyQuest',
+  },
+  description: '学習を小さなクエストに変えて、毎日の一歩を続けるWebアプリ',
 };
 
 export default function RootLayout({
@@ -29,9 +32,11 @@ export default function RootLayout({
       lang="ja"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-screen bg-background">
+      <body className="flex min-h-screen flex-col bg-background">
         <Header />
-        <main className="mx-auto max-w-7xl px-4 py-6">{children}</main>
+        <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6">
+          {children}
+        </main>
         <Footer />
       </body>
     </html>

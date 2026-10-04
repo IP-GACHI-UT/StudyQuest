@@ -1,15 +1,23 @@
 import { CATEGORIES, type Category } from '@/constants/quest/category';
 
-export const API_BASE_URL = (
-  process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001'
-).replace(/\/$/, '');
+export class AuthenticationRequiredError extends Error {
+  constructor() {
+    super('ログインの有効期限が切れました。再度ログインしてください。');
+    this.name = 'AuthenticationRequiredError';
+  }
+}
+
+export function currentLoginHref() {
+  return `/login?next=${encodeURIComponent(window.location.pathname + window.location.search)}`;
+}
+
 export async function apiRequest<T>(
   path: string,
   init?: RequestInit,
 ): Promise<T> {
   let response: Response;
   try {
-    response = await fetch(`${API_BASE_URL}/api${path}`, {
+    response = await fetch(`/api${path}`, {
       credentials: 'include',
       cache: 'no-store',
       ...init,
@@ -21,6 +29,7 @@ export async function apiRequest<T>(
     );
   }
   if (!response.ok) {
+    if (response.status === 401) throw new AuthenticationRequiredError();
     const body = await response.json().catch(() => null);
     throw new Error(
       body?.error?.message ?? '通信に失敗しました。もう一度お試しください。',

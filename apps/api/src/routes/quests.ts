@@ -1,13 +1,13 @@
 import { Prisma, prisma } from '@studyquest/db';
 import { Hono } from 'hono';
 import { errorResponse, jsonResponse } from '../lib/api-response.js';
-import { getCurrentUserId } from '../lib/auth.js';
+import { type AuthEnv, requireAuth } from '../lib/auth.js';
 import {
   presentQuest,
   presentUserQuest,
 } from '../presenters/api-presenters.js';
 
-export const questsRoute = new Hono()
+export const questsRoute = new Hono<AuthEnv>()
   .get('/', async () => {
     try {
       const quests = await prisma.quest.findMany({
@@ -23,9 +23,9 @@ export const questsRoute = new Hono()
       );
     }
   })
-  .post('/:questId/accept', async (c) => {
+  .post('/:questId/accept', requireAuth, async (c) => {
     const questId = c.req.param('questId');
-    const userId = await getCurrentUserId();
+    const userId = c.var.user.id;
 
     try {
       const quest = await prisma.quest.findFirst({
@@ -66,16 +66,6 @@ export const questsRoute = new Hono()
       }
 
       const userQuest = await prisma.$transaction(async (tx) => {
-        await tx.user.upsert({
-          where: { id: userId },
-          update: {},
-          create: {
-            id: userId,
-            displayName: '開発用ユーザー',
-            email: 'dev@example.com',
-          },
-        });
-
         const createdUserQuest = await tx.userQuest.create({
           data: {
             userId,

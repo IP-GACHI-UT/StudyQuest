@@ -6,7 +6,11 @@ import { RecommendedQuestCard } from '@/components/cards/RecommendedQuestCard';
 import { FilterButton } from '@/components/common/FilterButton';
 import { CATEGORIES, type Category } from '@/constants/quest/category';
 import { DIFFICULTIES, type Difficulty } from '@/constants/quest/difficulty';
-import { apiRequest } from '@/lib/api';
+import {
+  AuthenticationRequiredError,
+  apiRequest,
+  currentLoginHref,
+} from '@/lib/api';
 import type { Quest } from '@/types/quest';
 import { acceptQuest } from '@/utils/acceptQuest';
 
@@ -132,6 +136,10 @@ export const QuestList = () => {
       await loadQuests();
       setAcceptMessage('クエストを受注しました。');
     } catch (acceptError) {
+      if (acceptError instanceof AuthenticationRequiredError) {
+        window.location.assign(currentLoginHref());
+        return;
+      }
       setAcceptMessage(
         acceptError instanceof Error
           ? acceptError.message

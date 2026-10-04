@@ -1,7 +1,7 @@
 import type { Category } from '@/constants/quest/category';
 import type { Difficulty } from '@/constants/quest/difficulty';
 
-export type Quest<Id extends string | number = number> = {
+export type Quest<Id extends string | number = string> = {
   id: Id;
   title: string;
   difficulty: Difficulty;
@@ -13,4 +13,5 @@ export type Quest<Id extends string | number = number> = {
   acceptedToday?: number;
   completedToday?: number;
   completionRate?: number;
+  isAccepted?: boolean;
 };

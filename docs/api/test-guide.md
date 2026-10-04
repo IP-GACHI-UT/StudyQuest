@@ -15,7 +15,7 @@
 - `.env` の `DATABASE_URL` は、ローカルPostgreSQLを向いている必要があります。
 - APIは `apps/api` のHonoアプリとして起動します。
 - APIのBase URLは `http://localhost:3001` です。
-- API確認では、Web側の `http://localhost:3000` ではなく `http://localhost:3001` を使います。
+- ブラウザからは `http://localhost:3000/api/*` を使用し、Next.jsがHonoへ転送します。Thunder ClientやcurlでAPIを直接確認するときだけ `http://localhost:3001` を使います。
 
 ## 3. API確認前の準備
 
@@ -24,10 +24,12 @@
 ```bash
 pnpm install
 cp .env.example .env
+docker compose up -d db mailpit
 pnpm prisma:generate
 pnpm prisma migrate dev
 pnpm db:seed
 pnpm dev:api
+pnpm dev:web
 ```
 
 Windows PowerShellで `.env` を作る場合は、次のコマンドも使えます。
@@ -44,8 +46,12 @@ Thunder Clientでは、次の設定で確認します。
 
 - Base URL: `http://localhost:3001`
 - Header: `Content-Type: application/json`
+- 書き込みと認証操作は `Origin: http://localhost:3000` も指定します（CSRF対策）。
 - Bodyが必要なAPIでは、Bodyの種類をJSONにします。
-- 認証はまだ本実装ではありません。開発用ユーザー `dev-user-001` が使われる前提です。
+- `GET /api/health`と`GET /api/quests`以外の業務APIは認証が必要です。
+- 通常はWebの登録・ログイン画面とMailpit（`http://localhost:8025`）を使用してsession Cookieを取得します。
+- Thunder Clientで保護APIを確認する場合は、`POST /api/auth/sign-in/email`でログインし、返された`studyquest.session_token` Cookieを同じCookie jarで送信します。
+- curlの保護API例を実行する場合も、有効なsession Cookieを`--cookie`で追加してください。
 
 Thunder ClientのURL欄には、Base URLを含めた完全なURLを入力しても問題ありません。例: `http://localhost:3001/api/quests`
 
@@ -107,7 +113,7 @@ curl http://localhost:3001/api/quests
 
 - Method: `POST`
 - URL例: `http://localhost:3001/api/quests/dev-quest-html-001/accept`
-- 目的: 指定したクエストを開発用ユーザーのマイクエストに追加します。
+- 目的: 指定したクエストをログインユーザーのマイクエストに追加します。
 
 Thunder Clientでの確認手順:
 
@@ -148,7 +154,7 @@ curl -X POST http://localhost:3001/api/quests/not-found-quest/accept \
 
 - Method: `GET`
 - URL: `http://localhost:3001/api/my-quests`
-- 目的: 開発用ユーザーが受注しているクエスト一覧を取得します。
+- 目的: ログインユーザーが受注しているクエスト一覧を取得します。
 
 Thunder Clientでの確認手順:
 
@@ -264,7 +270,7 @@ curl -X POST http://localhost:3001/api/study-logs \
 
 - Method: `GET`
 - URL: `http://localhost:3001/api/board/quests`
-- 目的: 掲示板に表示するクエストごとの全体集計と、開発用ユーザーの受注状態を取得します。
+- 目的: 掲示板に表示するクエストごとの全体集計と、ログインユーザーの受注状態を取得します。
 
 Thunder Clientでの確認手順:
 
@@ -278,8 +284,8 @@ Thunder Clientでの確認手順:
 - `quests` 配列が返ります。
 - 各要素の `quest` にクエスト情報が含まれます。
 - `statistics` に `acceptedToday`、`completedToday`、`completionRate` が含まれます。
-- `currentUser.isAccepted` は、開発用ユーザーが受注済みの場合だけ `true` になります。
-- 他ユーザーの受注数を表す `acceptedToday` が1以上でも、開発用ユーザーが未受注なら `currentUser.isAccepted` は `false` です。
+- `currentUser.isAccepted` は、ログインユーザーが受注済みの場合だけ `true` になります。
+- 他ユーザーの受注数を表す `acceptedToday` が1以上でも、ログインユーザーが未受注なら `currentUser.isAccepted` は `false` です。
 
 主要項目だけを抜粋したレスポンス例:
 

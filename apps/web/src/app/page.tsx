@@ -1,194 +1,137 @@
-'use client';
+import { ArrowRight, CheckCircle2, Compass, Flame, Trophy } from 'lucide-react';
 import Link from 'next/link';
-import { useRef, useState } from 'react';
-import { BadgeCard } from '@/components/cards/BadgeCard';
-import { MyQuestCard } from '@/components/cards/MyQuestCard';
-import { ProfileCard } from '@/components/cards/ProfileCard';
-import { RecommendedQuestCard } from '@/components/cards/RecommendedQuestCard';
-import { StudyLogCard } from '@/components/cards/StudyLogCard';
-import { WeeklyStudyCard } from '@/components/cards/WeeklyStudyCard';
-import { ResourceNotice } from '@/components/common/ResourceNotice';
-import SectionHeader from '@/components/common/SectionHeader';
-import { useApiResource } from '@/hooks/useApiResource';
-import {
-  type ApiQuest,
-  categoryLabel,
-  difficultyLabel,
-  formatStudyMinutes,
-  type Profile,
-  type StudyLog,
-  statusLabel,
-  type UserQuest,
-  type WeeklySummary,
-} from '@/lib/api';
-import { acceptQuest } from '@/utils/acceptQuest';
 
-export default function Home() {
-  const myQuests = useApiResource<{ userQuests: UserQuest[] }>('/my-quests');
-  const quests = useApiResource<{ quests: ApiQuest[] }>('/quests');
-  const logs = useApiResource<{ studyLogs: StudyLog[] }>('/study-logs');
-  const weekly = useApiResource<{ summary: WeeklySummary }>(
-    '/study-summary/weekly',
-  );
-  const profile = useApiResource<{ profile: Profile }>('/profile');
-  const accepting = useRef(false);
-  const [busy, setBusy] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
-  const active =
-    myQuests.data?.userQuests.filter((item) => item.status === 'in_progress') ??
-    [];
-  const acceptedIds = new Set(
-    myQuests.data?.userQuests.map((item) => item.quest.id),
-  );
-  const recommended =
-    quests.data?.quests
-      .filter((item) => !acceptedIds.has(item.id))
-      .slice(0, 2) ?? [];
-  async function accept(id: string) {
-    if (accepting.current) return;
-    accepting.current = true;
-    setBusy(true);
-    setMessage(null);
-    try {
-      await acceptQuest(id);
-      myQuests.reload();
-      profile.reload();
-      setMessage(
-        'クエストを受注しました。マイクエストから学習を始められます。',
-      );
-    } catch (cause) {
-      setMessage(
-        cause instanceof Error ? cause.message : '受注に失敗しました。',
-      );
-    } finally {
-      accepting.current = false;
-      setBusy(false);
-    }
-  }
-  const summary = weekly.data?.summary;
-  const person = profile.data?.profile;
+const features = [
+  {
+    icon: Compass,
+    title: '小さく始められる',
+    description:
+      'いまの時間と気分に合う学習クエストを選んで、すぐに一歩を踏み出せます。',
+  },
+  {
+    icon: Flame,
+    title: '続けた実感が見える',
+    description:
+      '学習時間や連続記録を可視化し、積み重ねを次の行動につなげます。',
+  },
+  {
+    icon: Trophy,
+    title: '達成が成果になる',
+    description:
+      'クエスト達成でポイントやXPを獲得。小さな成功を着実に残せます。',
+  },
+];
+
+export default function LandingPage() {
   return (
-    <div className="space-y-6">
-      <SectionHeader
-        enTitle="MY QUEST"
-        jaTitle="いま達成を目指しているクエスト"
-        description={`進行中: ${active.length}件`}
-      />
-      <ResourceNotice {...myQuests} />
-      {!myQuests.loading &&
-        !myQuests.error &&
-        (active[0] ? (
-          <MyQuestCard
-            status={statusLabel[active[0].status]}
-            title={active[0].quest.title}
-            category={active[0].quest.category}
-            difficulty={difficultyLabel[active[0].quest.difficulty]}
-            buttonLabel="学習する"
-            href={`/study/${encodeURIComponent(active[0].quest.id)}`}
-          />
-        ) : (
-          <p>受注中のクエストはありません。</p>
-        ))}
-      <Link href="/my-quest" className="inline-block text-blue-600 underline">
-        マイクエストをすべて見る
-      </Link>
-      <SectionHeader
-        enTitle="RECOMMENDED"
-        jaTitle="おすすめクエスト"
-        description="未受注のクエストから選べます"
-      />
-      <ResourceNotice {...quests} />
-      {message && (
-        <p role="status">
-          {message}{' '}
-          <Link href="/my-quest" className="text-blue-600 underline">
-            マイクエストへ
-          </Link>
-        </p>
-      )}
-      {!quests.loading &&
-        !quests.error &&
-        !myQuests.loading &&
-        !myQuests.error &&
-        (recommended.length ? (
-          <div className="grid gap-6 md:grid-cols-2">
-            {recommended.map((quest) => (
-              <RecommendedQuestCard
-                key={quest.id}
-                title={quest.title}
-                difficulty={difficultyLabel[quest.difficulty]}
-                description={quest.description}
-                category={categoryLabel(quest.category)}
-                duration={`${quest.estimatedMinutes}分`}
-                acceptPoint={quest.acceptPoint}
-                clearPoint={quest.clearPoint}
-                isAccepting={busy}
-                onAccept={() => void accept(quest.id)}
-              />
-            ))}
+    <div className="space-y-20 pb-12 pt-8 sm:pt-16">
+      <section className="relative overflow-hidden rounded-3xl bg-slate-950 px-6 py-16 text-white sm:px-12 lg:px-16 lg:py-24">
+        <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-blue-500/25 blur-3xl" />
+        <div className="absolute -bottom-32 left-1/3 h-72 w-72 rounded-full bg-cyan-400/15 blur-3xl" />
+        <div className="relative max-w-3xl">
+          <p className="mb-5 text-sm font-bold tracking-[0.2em] text-blue-300">
+            SMALL QUESTS. QUIET PROGRESS.
+          </p>
+          <h1 className="text-4xl font-black leading-tight tracking-tight sm:text-6xl">
+            今日の学びを、
+            <br />
+            ひとつのクエストに。
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
+            StudyQuestは、勉強を小さな挑戦に変える学習継続アプリです。
+            迷う時間を減らして、静かでも確かな前進を積み重ねましょう。
+          </p>
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <Link
+              href="/signup"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-500 px-6 py-3 font-bold text-white transition hover:bg-blue-400"
+            >
+              無料で始める
+              <ArrowRight aria-hidden="true" size={18} />
+            </Link>
+            <Link
+              href="/quests"
+              className="inline-flex items-center justify-center rounded-xl border border-slate-600 px-6 py-3 font-bold text-white transition hover:border-slate-400 hover:bg-white/5"
+            >
+              クエストを見る
+            </Link>
           </div>
-        ) : (
-          <p>新しく受注できるクエストはありません。</p>
-        ))}
-      <ResourceNotice {...weekly} />
-      {!weekly.loading && !weekly.error && summary && (
-        <WeeklyStudyCard
-          studyMinutes={summary.studyMinutes}
-          completedQuests={summary.completedQuestCount}
-          earnedXp={summary.earnedXp}
-          streakDays={summary.streakDays}
-          chartData={summary.dailyStudyMinutes.map((day, index) => ({
-            day: ['月', '火', '水', '木', '金', '土', '日'][index],
-            hours: day.minutes / 60,
-          }))}
-        />
-      )}
-      <ResourceNotice {...profile} />
-      {!profile.loading && !profile.error && person && (
-        <>
-          <ProfileCard
-            userName={person.displayName}
-            level={person.level}
-            totalPoints={person.totalPoints}
-            totalXp={person.totalXp}
-            totalStudyTime={formatStudyMinutes(person.totalStudyMinutes)}
-            icon={<div className="h-full w-full bg-gray-300" />}
-          />
-          {person.badges.length ? (
-            <BadgeCard
-              title="最近のバッジ"
-              badges={person.badges.map((badge) => ({
-                id: badge.id,
-                icon: badge.icon ?? '🏅',
-                description: `${badge.name}: ${badge.description}`,
-              }))}
-            />
-          ) : (
-            <p className="text-sm text-gray-500">
-              獲得したバッジはまだありません。
-            </p>
-          )}
-        </>
-      )}
-      <StudyLogCard
-        logs={
-          logs.data?.studyLogs.map((log) => ({
-            created_at: new Date(log.studiedAt),
-            text: `${log.minutes}分${log.note ? `・${log.note}` : ''}`,
-          })) ?? []
-        }
-        isLoading={logs.loading}
-        error={logs.error}
-      />
-      {logs.error && (
-        <button
-          type="button"
-          onClick={logs.reload}
-          className="rounded border px-4 py-2"
-        >
-          学習ログを再試行
-        </button>
-      )}
+        </div>
+      </section>
+
+      <section aria-labelledby="features-heading">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-sm font-bold tracking-widest text-blue-600">
+            WHY STUDYQUEST
+          </p>
+          <h2
+            id="features-heading"
+            className="mt-3 text-3xl font-black text-slate-900"
+          >
+            続けるための仕組みを、シンプルに
+          </h2>
+        </div>
+        <div className="mt-10 grid gap-5 md:grid-cols-3">
+          {features.map(({ icon: Icon, title, description }) => (
+            <article
+              key={title}
+              className="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm"
+            >
+              <span className="inline-flex rounded-xl bg-blue-50 p-3 text-blue-600">
+                <Icon aria-hidden="true" size={24} />
+              </span>
+              <h3 className="mt-5 text-xl font-bold text-slate-900">{title}</h3>
+              <p className="mt-3 leading-7 text-slate-600">{description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="grid items-center gap-10 rounded-3xl bg-blue-50 px-6 py-12 sm:px-10 lg:grid-cols-2">
+        <div>
+          <p className="text-sm font-bold tracking-widest text-blue-700">
+            HOW IT WORKS
+          </p>
+          <h2 className="mt-3 text-3xl font-black text-slate-900">
+            3ステップで学習を記録
+          </h2>
+          <ol className="mt-7 space-y-5">
+            {[
+              '興味や目標に合うクエストを探す',
+              'クエストを受注して学習に取り組む',
+              '学習時間を記録して達成を積み重ねる',
+            ].map((step) => (
+              <li
+                key={step}
+                className="flex items-center gap-3 font-semibold text-slate-700"
+              >
+                <CheckCircle2
+                  aria-hidden="true"
+                  className="shrink-0 text-blue-600"
+                  size={21}
+                />
+                {step}
+              </li>
+            ))}
+          </ol>
+        </div>
+        <div className="rounded-2xl bg-white p-8 shadow-sm">
+          <p className="text-sm font-semibold text-slate-500">クエストの例</p>
+          <h3 className="mt-3 text-2xl font-black text-slate-900">
+            公式ドキュメントを10分読む
+          </h3>
+          <p className="mt-3 leading-7 text-slate-600">
+            まとまった時間がなくても大丈夫。まずは10分のクエストから始められます。
+          </p>
+          <Link
+            href="/quests"
+            className="mt-6 inline-flex items-center gap-2 font-bold text-blue-700 hover:text-blue-800"
+          >
+            公開クエストを探す
+            <ArrowRight aria-hidden="true" size={17} />
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }

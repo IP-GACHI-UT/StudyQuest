@@ -26,6 +26,7 @@ StudyQuestは、学習を小さなクエストとして受注し、継続を促�
 - DBモデル定義: `prisma/schema.prisma`
 - DB・Prisma運用手順: `docs/db.md`
 - アーキテクチャ方針: `docs/architecture.md`
+- 認証設計・外部サービス設定: `docs/authentication.md`
 
 ## ローカル想定
 
@@ -36,12 +37,12 @@ StudyQuestは、学習を小さなクエストとして受注し、継続を促�
 ## セットアップ
 
 事前に Docker Desktop などをインストールし、`docker compose` が使える状態にしてください。
-DBだけを Docker Compose で起動し、Next.js / Hono API は従来どおり pnpm で起動します。
+DBと開発用メールサーバーMailpitをDocker Composeで起動し、Next.js / Hono APIは従来どおりpnpmで起動します。
 
 ```bash
 pnpm install
 cp .env.example .env
-docker compose up -d db
+docker compose up -d db mailpit
 pnpm prisma:generate
 pnpm prisma migrate dev
 pnpm db:seed
@@ -51,9 +52,9 @@ pnpm dev:web
 
 `pnpm dev:api` と `pnpm dev:web` は、それぞれ別のターミナルで実行してください。
 
-STEP 02の基本体験は `/quests` → `/my-quest` → `/study/{questId}` → `/` で確認します。タイマー終了後は端数を1分へ切り上げ、時間とメモを確認して保存します。保存失敗時はその画面を保ったまま「保存を再試行」で同じ内容を送れます。画面を離れると未保存のタイマー・入力は失われます。
+基本体験は `/signup` → Mailpitでメール確認 → `/quests` → `/my-quest` → `/study/{questId}` → `/dashboard` で確認します。タイマー終了後は端数を1分へ切り上げ、時間とメモを確認して保存します。保存失敗時はその画面を保ったまま「保存を再試行」で同じ内容を送れます。セッション期限切れの場合は「別タブで再ログイン」から同じアカウントへログインして戻ります。画面を離れると未保存のタイマー・入力は失われます。
 
-APIの待受は `API_HOST`（既定 `127.0.0.1`）と `API_PORT`、許可するWebのoriginは `CORS_ORIGIN` で指定します。Webの接続先を変える場合は `apps/web/.env.local` に `NEXT_PUBLIC_API_URL=http://localhost:3001` を設定するか、Web起動・ビルド時の環境変数として渡してください。Next.jsはリポジトリルートの `.env` をWebの設定として読みません。`NEXT_PUBLIC_` の値はブラウザーに公開されるので秘密値を入れません。現在は開発用固定ユーザーで、複数人への公開前にSTEP 03の認証が必要です。
+APIの待受は `API_HOST`（既定 `127.0.0.1`）と `API_PORT`、Webのoriginは `APP_ORIGIN` で指定します。ブラウザーは同じoriginの `/api/*` を使い、Next.jsがHonoへrewriteします。接続先を変える場合は `apps/web/.env.local` に `API_INTERNAL_URL=http://localhost:3001` を設定するか、Web起動・ビルド時の環境変数として渡してください。Next.jsはリポジトリルートの `.env` をWebの設定として読みません。`NEXT_PUBLIC_API_URL` と `CORS_ORIGIN` は使用しません。本人のデータはセッションのUser IDから取得します。
 
 Windows PowerShell で `.env` をコピーする場合:
 
@@ -67,6 +68,9 @@ Copy-Item .env.example .env
 補足:
 
 - `docker compose up -d db` はPostgreSQLを起動するだけです。
+- Mailpitのメール確認画面は `http://localhost:8025` です。
 - テーブル作成は `pnpm prisma migrate dev` で行います。
 - 開発用データ投入は `pnpm db:seed` で行います。
 - アプリ本体はDockerではなく、`pnpm dev:api` / `pnpm dev:web` で起動します。
+
+メール登録、Google OAuth、パスワード再設定に必要な環境変数と外部サービス設定は `docs/authentication.md` を参照してください。

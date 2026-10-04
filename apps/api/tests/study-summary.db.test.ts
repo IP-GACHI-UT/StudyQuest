@@ -9,23 +9,37 @@ import {
   vi,
 } from 'vitest';
 import { app } from '../src/app.js';
-import { DEVELOPMENT_USER_ID } from '../src/lib/auth.js';
+import {
+  authenticatedHeaders,
+  createAuthenticatedTestUser,
+} from './auth-test-helper.js';
+
+let DEVELOPMENT_USER_ID = '';
+let authCookie = '';
+const OWN_EMAIL = 'study-summary-own@example.com';
 
 const OTHER_USER = 'test-summary-other';
 const QUEST_ID = 'test-summary-quest';
 async function cleanup() {
   await prisma.user.deleteMany({
-    where: { id: { in: [DEVELOPMENT_USER_ID, OTHER_USER] } },
+    where: { OR: [{ email: OWN_EMAIL }, { id: OTHER_USER }] },
   });
   await prisma.quest.deleteMany({ where: { id: QUEST_ID } });
 }
 beforeEach(async () => {
   await cleanup();
-  await prisma.user.createMany({
-    data: [
-      { id: DEVELOPMENT_USER_ID, displayName: '本人' },
-      { id: OTHER_USER, displayName: '別ユーザー' },
-    ],
+  const own = await createAuthenticatedTestUser({
+    email: OWN_EMAIL,
+    name: '本人',
+  });
+  DEVELOPMENT_USER_ID = own.userId;
+  authCookie = own.cookie;
+  await prisma.user.create({
+    data: {
+      id: OTHER_USER,
+      email: 'study-summary-other@example.com',
+      displayName: '別ユーザー',
+    },
   });
   await prisma.quest.create({
     data: {
@@ -67,7 +81,11 @@ async function createLog(
 describe('GET /api/study-logs', () => {
   it('returns an empty array for a user with no logs', async () => {
     await expect(
-      (await app.request('/api/study-logs')).json(),
+      (
+        await app.request('/api/study-logs', {
+          headers: authenticatedHeaders(authCookie),
+        })
+      ).json(),
     ).resolves.toEqual({ studyLogs: [] });
   });
   it('returns only own logs in studiedAt/id descending order and ignores client userId', async () => {
@@ -75,7 +93,9 @@ describe('GET /api/study-logs', () => {
     await createLog('log-b', '2026-01-12T01:00:00Z', 2);
     await createLog('log-c', '2026-01-13T01:00:00Z', 3);
     await createLog('other', '2026-01-14T01:00:00Z', 999, OTHER_USER);
-    const response = await app.request(`/api/study-logs?userId=${OTHER_USER}`);
+    const response = await app.request(`/api/study-logs?userId=${OTHER_USER}`, {
+      headers: authenticatedHeaders(authCookie),
+    });
     expect(response.status).toBe(200);
     const body = await response.json();
     expect(body.studyLogs.map((log: { id: string }) => log.id)).toEqual([
@@ -90,7 +110,11 @@ describe('GET /api/study-logs', () => {
 });
 describe('GET /api/study-summary/weekly', () => {
   it('returns all seven zero days for an empty week', async () => {
-    const body = await (await app.request('/api/study-summary/weekly')).json();
+    const body = await (
+      await app.request('/api/study-summary/weekly', {
+        headers: authenticatedHeaders(authCookie),
+      })
+    ).json();
     expect(body.summary).toEqual({
       studyMinutes: 0,
       completedQuestCount: 0,
@@ -126,7 +150,9 @@ describe('GET /api/study-summary/weekly', () => {
         },
       ],
     });
-    const response = await app.request('/api/study-summary/weekly');
+    const response = await app.request('/api/study-summary/weekly', {
+      headers: authenticatedHeaders(authCookie),
+    });
     expect(response.status).toBe(200);
     const body = await response.json();
     expect(body.summary.studyMinutes).toBe(19);
@@ -139,7 +165,11 @@ describe('GET /api/study-summary/weekly', () => {
     expect(body.summary.earnedXp).toBe(11);
     expect(body.summary.streakDays).toBe(2);
     vi.setSystemTime(new Date('2026-01-18T15:00:00Z'));
-    const next = await (await app.request('/api/study-summary/weekly')).json();
+    const next = await (
+      await app.request('/api/study-summary/weekly', {
+        headers: authenticatedHeaders(authCookie),
+      })
+    ).json();
     expect(next.summary.studyMinutes).toBe(200);
     expect(next.summary.dailyStudyMinutes[0]).toEqual({
       date: '2026-01-19',

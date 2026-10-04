@@ -81,7 +81,7 @@ function StudyQuest({ questId }: { questId: string }) {
             <p className="mt-3">学習記録はまだありません。</p>
           ))}
       </section>
-      <Link href="/" className="inline-block text-blue-600 underline">
+      <Link href="/dashboard" className="inline-block text-blue-600 underline">
         ホームで今週の学習状況を見る
       </Link>
     </div>

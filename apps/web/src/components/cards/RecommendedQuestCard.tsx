@@ -14,6 +14,7 @@ type RecommendedQuestCardProps = {
   acceptPoint: number;
   clearPoint: number;
   isAccepting?: boolean;
+  buttonLabel?: string;
   onAccept: () => void;
 };
 
@@ -26,6 +27,7 @@ export const RecommendedQuestCard = ({
   acceptPoint,
   clearPoint,
   isAccepting = false,
+  buttonLabel = 'クエスト受注',
   onAccept,
 }: RecommendedQuestCardProps) => {
   return (
@@ -56,7 +58,7 @@ export const RecommendedQuestCard = ({
         onClick={onAccept}
         disabled={isAccepting}
       >
-        {isAccepting ? '受注中...' : 'クエスト受注'}
+        {isAccepting ? '受注中...' : buttonLabel}
       </button>
     </Card>
   );

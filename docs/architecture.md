@@ -15,7 +15,7 @@
 - DB処理、Presenter、ビジネスロジックは `apps/api` 側に置きます。
 - Prisma Clientは `packages/db/src/prisma.ts` から使用します。
 
-## 移行時の制約
+## API移行時の制約（初期基準版）
 
 - 認証方式は今回導入しません。
 - 既存の仮ユーザーID取得処理がある場合は `apps/api` に移します。
@@ -29,6 +29,8 @@
 - `apps/web`: `http://localhost:3000`
 - `apps/api`: `http://localhost:3001`
 
-APIは `API_HOST` の既定値 `127.0.0.1` でローカルだけを待ち受ける。Webの接続先は `NEXT_PUBLIC_API_URL`、APIの許可originは `CORS_ORIGIN` とする。配置時の待受・HTTPS・秘密値はSTEP 04で別途確認する。
+APIは `API_HOST` の既定値 `127.0.0.1` でローカルだけを待ち受ける。STEP 03ではブラウザーの `/api/*` をNext.jsからHonoへrewriteし、サーバー側の接続先は `API_INTERNAL_URL`、許可originは `APP_ORIGIN` とする。配置時の待受・HTTPS・秘密値はSTEP 04で別途確認する。
+
+STEP 03は上記のAPI移行とは別の認証タスクとして、既存認証PRのDB migration・画面・Better Authを統合する。`/dashboard`、`/board`、`/my-quest`、`/study/{questId}` は保護レイアウトでセッションを照合し、すべてのユーザー別APIもHonoの `requireAuth` で照合する。固定ユーザーIDやクライアント指定のIDは本人判定に使わない。認証の正本は [authentication.md](authentication.md)。
 
 STEP 02の学習記録は、任意のUUID v4 `requestId` を `study-` 付きの既存主キーに保存する。同じキー・内容の再送は確定した記録を返す。クエストごとに `user_quests` 行をトランザクション内でロックして、同時保存による達成閾値の見落としを防ぐ。DB構造は追加しない。週間集計は日本時間の月曜00:00から翌月曜00:00未満。

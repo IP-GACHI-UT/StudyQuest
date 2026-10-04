@@ -1,6 +1,10 @@
 'use client';
 import { useCallback, useEffect, useState } from 'react';
-import { apiRequest } from '@/lib/api';
+import {
+  AuthenticationRequiredError,
+  apiRequest,
+  currentLoginHref,
+} from '@/lib/api';
 
 export function useApiResource<T>(path: string) {
   const [data, setData] = useState<T | null>(null);
@@ -19,6 +23,13 @@ export function useApiResource<T>(path: string) {
         const result = await apiRequest<T>(path, { signal: controller.signal });
         if (!controller.signal.aborted) setData(result);
       } catch (cause) {
+        if (
+          !controller.signal.aborted &&
+          cause instanceof AuthenticationRequiredError
+        ) {
+          window.location.assign(currentLoginHref());
+          return;
+        }
         if (!controller.signal.aborted)
           setError(
             cause instanceof Error ? cause.message : '取得に失敗しました。',

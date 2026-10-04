@@ -1,7 +1,7 @@
 import { prisma } from '@studyquest/db';
 import { Hono } from 'hono';
 import { errorResponse, jsonResponse } from '../lib/api-response.js';
-import { getCurrentUserId } from '../lib/auth.js';
+import { type AuthEnv, requireAuth } from '../lib/auth.js';
 import { presentStudyLog } from '../presenters/api-presenters.js';
 import { completeUserQuestIfInProgress } from '../services/quest-completion.js';
 
@@ -13,9 +13,10 @@ type StudyLogRequestBody = {
   studiedAt?: unknown;
 };
 
-export const studyLogsRoute = new Hono()
-  .get('/', async () => {
-    const userId = await getCurrentUserId();
+export const studyLogsRoute = new Hono<AuthEnv>()
+  .use('*', requireAuth)
+  .get('/', async (c) => {
+    const userId = c.var.user.id;
     try {
       const studyLogs = await prisma.studyLog.findMany({
         where: { userId },
@@ -51,7 +52,7 @@ export const studyLogsRoute = new Hono()
       );
     }
 
-    const userId = await getCurrentUserId();
+    const userId = c.var.user.id;
     const { questId, minutes, note, studiedAt, requestId } = validation.value;
     // 任意の再送キーを既存の主キーへ格納し、DBの一意制約で同時送信も防ぐ。
     const logId = requestId ? `study-${requestId}` : undefined;

@@ -1,6 +1,11 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { apiRequest, type StudyLogDraft } from '@/lib/api';
+import {
+  AuthenticationRequiredError,
+  apiRequest,
+  currentLoginHref,
+  type StudyLogDraft,
+} from '@/lib/api';
 
 export function StudyTimer({
   questId,
@@ -22,6 +27,7 @@ export function StudyTimer({
   const [submitted, setSubmitted] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [loginHref, setLoginHref] = useState<string | null>(null);
   useEffect(() => {
     if (!running) return;
     const timer = window.setInterval(() => {
@@ -70,6 +76,7 @@ export function StudyTimer({
     setSubmitted(true);
     setSaving(true);
     setError(null);
+    setLoginHref(null);
     try {
       await apiRequest('/study-logs', {
         method: 'POST',
@@ -79,6 +86,8 @@ export function StudyTimer({
       setSaved(true);
       afterSave();
     } catch (cause) {
+      if (cause instanceof AuthenticationRequiredError)
+        setLoginHref(currentLoginHref());
       setError(
         `${cause instanceof Error ? cause.message : '保存に失敗しました。'} 入力は保持しています。同じ内容で再試行できます。`,
       );
@@ -173,6 +182,19 @@ export function StudyTimer({
       {error && (
         <p role="alert" className="mt-4 text-red-600">
           {error}
+        </p>
+      )}
+      {loginHref && (
+        <p className="mt-3 text-sm">
+          <a
+            href={loginHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-700 underline"
+          >
+            別タブで再ログイン
+          </a>
+          後、この画面で保存を再試行してください。同じアカウントでログインしてください。
         </p>
       )}
     </section>

@@ -14,10 +14,8 @@ export default function SectionHeader({
       <div className="w-1 h-16 bg-blue-800" />
       <div>
         <p className="text-blue-400">{enTitle}</p>
-        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-          {jaTitle}
-        </h2>
-        <p className="text-gray-600 dark:text-gray-300">{description}</p>
+        <h2 className="text-xl font-semibold text-gray-900">{jaTitle}</h2>
+        <p className="text-gray-600">{description}</p>
       </div>
     </div>
   );

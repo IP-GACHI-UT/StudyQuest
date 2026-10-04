@@ -1,9 +1,13 @@
 import { prisma } from '@studyquest/db';
 import { afterAll, afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { app } from '../src/app.js';
-import { DEVELOPMENT_USER_ID } from '../src/lib/auth.js';
+import {
+  authenticatedHeaders,
+  createAuthenticatedTestUser,
+} from './auth-test-helper.js';
 
 const INITIAL_TOTAL_POINTS = 100;
+const TEST_USER_EMAIL = 'quests-db-test@example.com';
 const OTHER_USER_IDS = [
   'test-quest-board-other-user-1',
   'test-quest-board-other-user-2',
@@ -19,10 +23,14 @@ const TEST_QUEST = {
   xpReward: 3,
   isActive: true,
 };
+let currentUserId = '';
+let authCookie = '';
 
 async function deleteTestData() {
   await prisma.user.deleteMany({
-    where: { id: { in: [DEVELOPMENT_USER_ID, ...OTHER_USER_IDS] } },
+    where: {
+      OR: [{ email: TEST_USER_EMAIL }, { id: { in: [...OTHER_USER_IDS] } }],
+    },
   });
   await prisma.quest.deleteMany({
     where: { id: TEST_QUEST.id },
@@ -31,13 +39,15 @@ async function deleteTestData() {
 
 beforeEach(async () => {
   await deleteTestData();
-  await prisma.user.create({
-    data: {
-      id: DEVELOPMENT_USER_ID,
-      displayName: 'クエストDB結合テスト用ユーザー',
-      email: 'quests-db-test@example.com',
-      totalPoints: INITIAL_TOTAL_POINTS,
-    },
+  const authenticatedUser = await createAuthenticatedTestUser({
+    email: TEST_USER_EMAIL,
+    name: 'クエストDB結合テスト用ユーザー',
+  });
+  currentUserId = authenticatedUser.userId;
+  authCookie = authenticatedUser.cookie;
+  await prisma.user.update({
+    where: { id: currentUserId },
+    data: { totalPoints: INITIAL_TOTAL_POINTS },
   });
   await prisma.quest.create({ data: TEST_QUEST });
 });
@@ -74,7 +84,9 @@ describe('GET /api/quests', () => {
 
 describe('GET /api/board/quests', () => {
   it('returns zero statistics when nobody has accepted the quest', async () => {
-    const response = await app.request('/api/board/quests');
+    const response = await app.request('/api/board/quests', {
+      headers: authenticatedHeaders(authCookie),
+    });
 
     expect(response.status).toBe(200);
     await expect(response.json()).resolves.toEqual(
@@ -126,7 +138,9 @@ describe('GET /api/board/quests', () => {
       ],
     });
 
-    const response = await app.request('/api/board/quests');
+    const response = await app.request('/api/board/quests', {
+      headers: authenticatedHeaders(authCookie),
+    });
 
     expect(response.status).toBe(200);
     await expect(response.json()).resolves.toEqual(
@@ -151,13 +165,15 @@ describe('GET /api/board/quests', () => {
   it('returns the current user as accepted independently of today statistics', async () => {
     await prisma.userQuest.create({
       data: {
-        userId: DEVELOPMENT_USER_ID,
+        userId: currentUserId,
         questId: TEST_QUEST.id,
         acceptedAt: new Date('2000-01-01T00:00:00.000Z'),
       },
     });
 
-    const response = await app.request('/api/board/quests');
+    const response = await app.request('/api/board/quests', {
+      headers: authenticatedHeaders(authCookie),
+    });
 
     expect(response.status).toBe(200);
     await expect(response.json()).resolves.toEqual(
@@ -184,7 +200,10 @@ describe('POST /api/quests/:questId/accept', () => {
   it('awards accept points only once when rejecting a duplicate acceptance', async () => {
     const firstResponse = await app.request(
       `/api/quests/${TEST_QUEST.id}/accept`,
-      { method: 'POST' },
+      {
+        method: 'POST',
+        headers: authenticatedHeaders(authCookie),
+      },
     );
 
     expect(firstResponse.status).toBe(201);
@@ -198,7 +217,7 @@ describe('POST /api/quests/:questId/accept', () => {
     );
     await expect(
       prisma.user.findUniqueOrThrow({
-        where: { id: DEVELOPMENT_USER_ID },
+        where: { id: currentUserId },
         select: { totalPoints: true },
       }),
     ).resolves.toEqual({
@@ -207,7 +226,10 @@ describe('POST /api/quests/:questId/accept', () => {
 
     const secondResponse = await app.request(
       `/api/quests/${TEST_QUEST.id}/accept`,
-      { method: 'POST' },
+      {
+        method: 'POST',
+        headers: authenticatedHeaders(authCookie),
+      },
     );
 
     expect(secondResponse.status).toBe(409);
@@ -222,7 +244,7 @@ describe('POST /api/quests/:questId/accept', () => {
     await expect(
       prisma.userQuest.count({
         where: {
-          userId: DEVELOPMENT_USER_ID,
+          userId: currentUserId,
           questId: TEST_QUEST.id,
         },
       }),
@@ -230,7 +252,7 @@ describe('POST /api/quests/:questId/accept', () => {
     await expect(
       prisma.activityLog.count({
         where: {
-          userId: DEVELOPMENT_USER_ID,
+          userId: currentUserId,
           questId: TEST_QUEST.id,
           type: 'QUEST_ACCEPTED',
         },
@@ -238,7 +260,7 @@ describe('POST /api/quests/:questId/accept', () => {
     ).resolves.toBe(1);
     await expect(
       prisma.user.findUniqueOrThrow({
-        where: { id: DEVELOPMENT_USER_ID },
+        where: { id: currentUserId },
         select: { totalPoints: true },
       }),
     ).resolves.toEqual({

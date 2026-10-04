@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { Card } from '../common/Card';
 import { Tag } from '../common/Tag';
 
@@ -9,7 +10,7 @@ type MyQuestCardProps = {
   category: string;
   difficulty: string;
   buttonLabel: string;
-  onButtonClick: () => void;
+  href: string;
 };
 
 export const MyQuestCard = ({
@@ -18,25 +19,24 @@ export const MyQuestCard = ({
   category,
   difficulty,
   buttonLabel,
-  onButtonClick,
+  href,
 }: MyQuestCardProps) => {
   return (
     <Card>
       <div className="flex items-start justify-between">
         <Tag label={status} color="blue" />
 
-        <button
-          type="button"
-          onClick={onButtonClick}
+        <Link
+          href={href}
           className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
         >
           {buttonLabel}
-        </button>
+        </Link>
       </div>
 
       <p className="mt-3 font-semibold">{title}</p>
 
-      <div className="mt-2 flex gap-4 text-sm text-gray-500">
+      <div className="mt-2 flex gap-4 text-sm text-gray-300">
         <span>{category}</span>
         <span>{difficulty}</span>
       </div>

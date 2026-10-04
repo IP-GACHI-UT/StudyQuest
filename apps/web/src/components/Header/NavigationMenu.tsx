@@ -18,7 +18,7 @@ export const NavigationMenu = () => {
             <li key={item.href}>
               <Link
                 href={item.href}
-                className="font-medium text-gray-600 hover:text-gray-900"
+                className="font-medium text-gray-200 hover:text-white"
               >
                 {item.label}
               </Link>
@@ -29,7 +29,12 @@ export const NavigationMenu = () => {
 
       {/* モバイル */}
       <div className="lg:hidden">
-        <button type="button" onClick={() => setIsOpen((prev) => !prev)}>
+        <button
+          type="button"
+          aria-label={isOpen ? 'メニューを閉じる' : 'メニューを開く'}
+          aria-expanded={isOpen}
+          onClick={() => setIsOpen((prev) => !prev)}
+        >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
@@ -41,7 +46,7 @@ export const NavigationMenu = () => {
                   <Link
                     href={item.href}
                     onClick={() => setIsOpen(false)}
-                    className="block px-6 py-4 hover:bg-gray-50"
+                    className="block px-6 py-4 text-gray-200 hover:bg-gray-700"
                   >
                     {item.label}
                   </Link>

@@ -36,12 +36,12 @@ export const RecommendedQuestCard = ({
         <Tag label={difficulty} color="green" />
       </div>
 
-      <p className="mt-3 text-sm text-gray-500">{description}</p>
+      <p className="mt-3 text-sm text-gray-300">{description}</p>
 
       <div className="mt-4 flex items-center gap-2">
         <Tag label={category} color="blue" />
 
-        <span className="text-sm text-gray-500">{duration}</span>
+        <span className="text-sm text-gray-300">{duration}</span>
       </div>
 
       <div className="mt-4 flex gap-4 text-sm">

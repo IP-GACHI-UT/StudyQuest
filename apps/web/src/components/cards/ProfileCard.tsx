@@ -29,7 +29,7 @@ export const ProfileCard = ({
 
         <div>
           <h2 className="text-xl font-bold">{userName}</h2>
-          <p className="text-sm text-gray-500">Lv.{level}</p>
+          <p className="text-sm text-gray-300">Lv.{level}</p>
         </div>
       </div>
 
@@ -46,13 +46,15 @@ export const ProfileCard = ({
       </div>
 
       {/* ボタン */}
-      <button
-        type="button"
-        className="mt-6 w-full rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-        onClick={onProfileClick}
-      >
-        プロフィール
-      </button>
+      {onProfileClick ? (
+        <button
+          type="button"
+          className="mt-6 w-full rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+          onClick={onProfileClick}
+        >
+          プロフィール
+        </button>
+      ) : null}
     </Card>
   );
 };

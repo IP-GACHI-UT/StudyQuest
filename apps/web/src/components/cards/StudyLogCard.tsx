@@ -25,15 +25,15 @@ export const StudyLogCard = ({
       <h3 className="mb-3 text-lg font-bold">学習ログ</h3>
 
       {isLoading ? (
-        <p className="text-sm text-gray-600">学習ログを読み込み中です…</p>
+        <p className="text-sm text-gray-300">学習ログを読み込み中です…</p>
       ) : error ? (
         <p className="text-sm text-red-600">{error}</p>
       ) : displayLogs.length === 0 ? (
-        <p className="text-sm text-gray-500">学習ログがまだありません。</p>
+        <p className="text-sm text-gray-300">学習ログがまだありません。</p>
       ) : (
         <div className="space-y-1">
           {displayLogs.map((log, index) => (
-            <p key={index} className="text-sm text-gray-600">
+            <p key={index} className="text-sm text-gray-300">
               <span className="mr-2 font-medium">
                 {formatLogTime(log.created_at)}
               </span>

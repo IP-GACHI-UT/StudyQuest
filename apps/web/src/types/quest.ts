@@ -1,8 +1,8 @@
 import type { Category } from '@/constants/quest/category';
 import type { Difficulty } from '@/constants/quest/difficulty';
 
-export type Quest = {
-  id: number;
+export type Quest<Id extends string | number = number> = {
+  id: Id;
   title: string;
   difficulty: Difficulty;
   description: string;

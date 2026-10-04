@@ -13,6 +13,7 @@ const sourceDocuments = [
   ['配置候補・費用と公開残件', 'docs/release.md'],
   ['バックアップ・別DB復元', 'docs/backup.md'],
   ['無料βの公開案内原稿', 'docs/beta-notice.md'],
+  ['無料βの計測・実験基準', 'docs/beta-metrics.md'],
   ['バックエンドの作業順', 'docs/backend-roadmap.md'],
   ['進捗の更新方法', 'docs/progress/README.md'],
   ['今回の進捗表の確認結果', 'docs/progress/review/README.md'],

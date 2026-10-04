@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "period": {
+    "timezone": "Asia/Tokyo",
+    "from": "2025-12-31T15:00:00.000Z",
+    "toExclusive": "2026-01-14T15:00:00.000Z",
+    "observedBefore": "2026-01-28T15:00:00.000Z"
+  },
+  "requestedParticipants": 1,
+  "counts": {
+    "registered": 0,
+    "firstAccepted": 0,
+    "firstSaved": 0,
+    "acceptedAndSaved": 0,
+    "registeredWithoutAccept": 0,
+    "acceptedWithoutSave": 0,
+    "eligibleForFirstSave48h": 0,
+    "pendingFirstSave48h": 0,
+    "savedWithin48h": 0,
+    "eligibleForD7": 0,
+    "pendingD7": 0,
+    "reusedOnD7": 0
+  },
+  "rates": {
+    "firstAccept": {
+      "numerator": 0,
+      "denominator": 0,
+      "percent": null
+    },
+    "firstSave": {
+      "numerator": 0,
+      "denominator": 0,
+      "percent": null
+    },
+    "saveAfterAccept": {
+      "numerator": 0,
+      "denominator": 0,
+      "percent": null
+    },
+    "saveWithin48h": {
+      "numerator": 0,
+      "denominator": 0,
+      "percent": null
+    },
+    "reuseOnD7": {
+      "numerator": 0,
+      "denominator": 0,
+      "percent": null
+    }
+  }
+}

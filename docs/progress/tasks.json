@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-04T20:48:42.435946+00:00",
-  "snapshotLabel": "2026-10-05 / STEP 04の公開準備・ローカル復元 / 未マージ",
-  "baseRevision": "e16f03e",
+  "updatedAt": "2026-10-04T22:03:28.065190+00:00",
+  "snapshotLabel": "2026-10-05 / STEP 05の無料β候補・匿名計測 / 未マージ",
+  "baseRevision": "8b080df",
   "currentStep": 5,
   "currentTaskId": "05.1.1",
-  "activity": "STEP 02のPR #65・STEP 03のPR #67はOpen。STEP 04は公式条件・月0円案・公開原稿と別DB復元を確認。実配置・HTTPS・メール窓口は確認待ちとし、次はSTEP 05の公開版と計測準備。",
-  "runtime": "専用ローカルPostgreSQL 16で別DBへ復元し、ログ5分・進行・活動・XP/pointsと画面の一致を確認。外部登録・DNS変更・本番送信・クラウド配置・公開は未実施。",
+  "activity": "PR #65・#67・#69はOpen。STEP 05の掲示板・日本時間集計・匿名計測をローカル検証。計測準備は完了、公開版は実配置・窓口・運営者確認待ち。実βの募集と観測は保留。",
+  "runtime": "専用ローカルDB・MailpitでWeb/API/Prisma、単体13件・実DB29件・認証E2E3件とPC/スマホ幅を確認。二重受注なし・匿名JSON・D7/48時間境界を検証。外部登録・送信・公開・マージは未実施。",
   "steps": [
     {
       "id": 1,
@@ -242,17 +242,17 @@
               "id": "05.1.1",
               "title": "無料βの公開版候補を作る",
               "acceptance": "STEP 02〜04の確認を揃え、未接続の操作と架空実績を公開版で整理する。公開前ゲートは別途確認する。",
-              "status": "todo",
-              "evidence": [],
-              "issue": null
+              "status": "verify",
+              "evidence": ["E11", "E09", "E10"],
+              "issue": 70
             },
             {
               "id": "05.1.2",
               "title": "導線イベントと実験基準を定義する",
               "acceptance": "登録・初回受注・初回保存・7日再利用を計測。期間・母数・合格基準を事前に決め、学習本文やメールをイベントに含めない。",
-              "status": "todo",
-              "evidence": [],
-              "issue": null
+              "status": "done",
+              "evidence": ["E12"],
+              "issue": 70
             }
           ]
         },
@@ -264,17 +264,17 @@
               "id": "05.2.1",
               "title": "少人数のβで初回体験を観測する",
               "acceptance": "無料βゲートと公開承認後に協力者へ公開し、対象期間と人数を添えて初回保存・離脱を記録する。",
-              "status": "todo",
-              "evidence": [],
-              "issue": null
+              "status": "blocked",
+              "evidence": ["E13"],
+              "issue": 70
             },
             {
               "id": "05.2.2",
               "title": "フィードバックで最初の対象分野を絞る",
               "acceptance": "資格・技術・自己学習の利用者から困りごとと翌週再利用を確認し、優先改善と対象分野を決める。",
-              "status": "todo",
-              "evidence": [],
-              "issue": null
+              "status": "blocked",
+              "evidence": ["E13"],
+              "issue": 70
             }
           ]
         }
@@ -668,6 +668,67 @@
         "docs/progress/review/step04.md",
         "docs/progress/review/step04-restore-result.json"
       ]
+    },
+    {
+      "id": "E11",
+      "title": "STEP 05の掲示板・日本時間集計と失敗復帰",
+      "date": "2026-10-05",
+      "revision": "3d574ab29c28972300f9487a1564a6627e6b5d07",
+      "method": "固定仮表示を除去。実セッションでAPI停止→再試行→連続受注を操作し、実DBの件数・ポイントを照合。日本時間の日境界を専用DBテスト。",
+      "result": "受注・活動は各1件、ポイント18→33（15点1回）。空表示、PC828/スマホ390で横あふれなし。今日の集計はJSTの両端を確認。",
+      "limit": "ローカルのダミー検証。STEP 04の実配置・HTTPS・窓口・公開版確認が残る。実スマホ端末・公開・マージは未確認。",
+      "sources": [
+        "docs/progress/review/step05.md",
+        "docs/progress/review/step05-accept-result.json",
+        "docs/api/openapi.yaml"
+      ]
+    },
+    {
+      "id": "E12",
+      "title": "STEP 05の匿名集計・観測窓・実験基準案",
+      "date": "2026-10-05",
+      "revision": "8b080dfe99fa07adc1c7145e66d8daca96bb7be9",
+      "method": "読み取り専用snapshotで指定協力者の既存DBを集計。専用DBテスト4件とCLIの匿名JSON・不正日付拒否を検証。期間・母数・率の案を文書化。",
+      "result": "登録/初回受注/初回保存、48時間保存、JST D7再利用を定義。観測済み分母だけを使い、重複保存は1人、分母0はnull。全実DB29件と所定Web/API・認証E2E3件が成功。",
+      "limit": "実参加者の計測ではない。基準は初回βの案で、日程・担当・同意・募集は公開前に確定。削除された過去記録は現DBから復元できない。",
+      "sources": [
+        "docs/beta-metrics.md",
+        "scripts/beta-metrics.sql",
+        "apps/api/tests/beta-metrics.db.test.ts",
+        "docs/progress/review/step05-cli-empty-result.json",
+        "docs/progress/review/step05.md"
+      ]
+    },
+    {
+      "id": "E13",
+      "title": "STEP 05の実公開・協力者観測の確認待ち",
+      "date": "2026-10-05",
+      "revision": "8b080df / ローカル候補のみ",
+      "method": "無料βの公開前ゲートと未実施の外部作業を照合。",
+      "result": "公開先・HTTPS・本番SMTP・窓口受信/返信・運営者名称と公開承認、協力者/日程の確認が必要。実βの初回保存・再利用・聞き取りは未観測。",
+      "limit": "ローカルのダミー集計を実績とせず、05.2.1・05.2.2を保留。外部登録・公開・招待・メール送信は実施していない。",
+      "sources": [
+        "docs/release.md",
+        "docs/beta-notice.md",
+        "docs/beta-metrics.md",
+        "docs/progress/review/step05.md"
+      ]
+    },
+    {
+      "id": "E14",
+      "title": "STEP 04のOpen PRとGitHub CI",
+      "date": "2026-10-05",
+      "revision": "52b04bf655d74586552ba44766c1fc5f95a46837",
+      "method": "gh pr viewでPR #69の状態・head・CheckRunを確認。",
+      "result": "PR #69はOpen、PR #67に依存。quality・web・api-static・api-db・authentication-e2eの5チェックが成功。",
+      "limit": "このheadのGitHub CI。実配置・公開・マージを確認したものではない。",
+      "sources": [
+        "https://github.com/IP-GACHI-UT/StudyQuest/pull/69",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37233923459",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37233923528",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37233923463",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37233923564"
+      ]
     }
   ],
   "phases": [
@@ -776,9 +837,9 @@
     {
       "id": "R07",
       "screen": "掲示板",
-      "route": "/board → GET /api/board/quests、GET /api/activities",
-      "status": "既存認証PRのAPI接続を取り込み。公開版の仮表示と失敗復帰はSTEP 05で確認",
-      "next": "後回し。公開時は未接続を整理",
+      "route": "/board → GET /api/board/quests、POST /api/quests/{questId}/accept",
+      "status": "架空の活動表示を除去。JST今日集計・再試行・空表示・連続受注を実DB確認",
+      "next": "実配置で再確認、元PR #62は変更なし",
       "step": 5
     },
     {
@@ -828,7 +889,7 @@
         {
           "title": "提供範囲・案内と公開版の確認",
           "status": "原稿あり / 運営者確認待ち",
-          "note": "無料β範囲・個人情報・停止・未提供機能の原稿を作成。info@gtowell.devは候補で外部受信/返信は未確認。運営者名称・正式条件・公開版と公開承認を確認する。"
+          "note": "無料β範囲・個人情報・停止・未提供機能の原稿と、掲示板の仮表示除去・匿名計測を準備。info@gtowell.devの外部受信/返信、運営者名称・正式条件・実配置の公開版と公開承認を確認する。"
         }
       ]
     },

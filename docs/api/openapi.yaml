@@ -34,6 +34,7 @@ paths:
       description: |
         Issue #74の契約案。sessionから所有者を決定し、入力のuserIdは受け付けません。
         本人とrequestIdが同じ要求は再実行せず、入力が異なる場合は409です。
+        既存の同一入力の再送は保存済み結果を返し、今日からの期限検査・回数予約は初回だけ行います。
         分野・provider・上限・無料βの提供判断が未確定ならAIを呼ばず503です。
         正規化した文字列と実在する日本時間の日付を検査します。
       security:
@@ -72,7 +73,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
+                $ref: "#/components/schemas/AiQuestGenerationErrorResponse"
         "503":
           description: AI_UNAVAILABLE。未接続・制限未設定のためproviderを呼びません。
           content:
@@ -84,7 +85,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
+                $ref: "#/components/schemas/AiQuestGenerationErrorResponse"
         "500":
           $ref: "#/components/responses/InternalServerError"
   /api/quest-generations/{generationId}:
@@ -630,6 +631,16 @@ components:
           schema:
             $ref: "#/components/schemas/ErrorResponse"
   schemas:
+    AiQuestGenerationErrorResponse:
+      allOf:
+        - $ref: "#/components/schemas/ErrorResponse"
+        - type: object
+          required: [generationId]
+          properties:
+            generationId:
+              type: string
+              minLength: 1
+              description: 本人の保存済み生成ID。同じ要求の再送で初回応答を失った場合も照会先を取得できます。
     AiRequestId:
       type: string
       format: uuid

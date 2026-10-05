@@ -56,6 +56,8 @@
 | `GET /api/quest-generations/{generationId}` | 保存した入力・状態・案・採用先を再取得 | 未ログイン401。他人のIDと不存在は同じ404。providerの生レスポンスや内部料金は返さない |
 | `POST /api/quest-generations/{generationId}/adoptions` | 一つの案を編集して採用し、既存形式の`userQuest`を返す | generationの所有者をsessionと照合。requestIdで再送を識別し、同じ案は一度だけ採用。採用後の編集はこのAPIで行わない |
 
+502/504は既存の`error`に保存済み`generationId`を添える。初回応答を失ってIDが不明でも、同じrequestId/入力のPOSTから保存済みの成功・実行中・失敗/結果不明のIDを取得できる。再送の入力一致を先に照合し、今日からの期限検査・quota予約は初回だけ行う。日付が変わっただけで確定済みの要求を拒否したり、再生成したりしない。
+
 採用入力は`requestId`、`draftIndex`、編集済みの`title`・`description`・`estimatedMinutes`。生成時と同じ長さ・時間制約を使う。未採用の案から1件ずつ選び、今回の編集後時間と既に採用した案の時間の合計も元の予算以下にする。生成レコードをロックして、並行採用で合計を超えないようにする。
 
 採用のtransactionで個人用Quest・UserQuest（IN_PROGRESS）・採用記録・活動を一緒に作る。モデル案だけでは受注、ポイント、学習ログを作らない。既存の受注APIをHTTPで再呼び出しして二重作成しない。同じrequestId/内容の再送は確定済みの201、内容の変更や採用済み案の別要求は409。DB制約でも競合を防ぐ。
@@ -68,7 +70,7 @@
 
 | 対象 | 追加案 | 制約・寿命 |
 | --- | --- | --- |
-| QuestGeneration | userId、requestId、正規化した入力とハッシュ、状態、検証済みdrafts(JSON)、内部provider/モデル/設定版、時刻、使用量・原価（未確定はnull） | `(userId, requestId)` unique。JSONはAPI・DBの前に同じvalidatorを通す。モデル出力はuserIdを書き換えられない |
+| QuestGeneration | userId、requestId、正規化した入力とハッシュ、状態、検証済みdrafts(JSON)、内部provider/モデル/設定版、provider側照会ID（得られる場合）、時刻、使用量・原価（未確定はnull） | `(userId, requestId)` unique。JSONはAPI・DBの前に同じvalidatorを通す。モデル出力はuserIdを書き換えられない |
 | QuestGenerationAdoption | generationId、draftIndex、userId、requestId、入力ハッシュ、questId、createdAt | `(generationId, draftIndex)` / `(userId, requestId)` / questIdはそれぞれunique。生成の所有者とuserIdの一致をtransactionで検査 |
 | Quest | nullableのownerIdとUserへのrelation | nullは既存共通クエスト、非nullは本人用。新規AI採用では必ずsessionのIDを設定。既存データは共通のまま |
 | User | 上記の所有relation | 退会時の削除方針を決め、所有者だけnullになって個人用Questが公開へ変わる`SetNull`を禁止する |

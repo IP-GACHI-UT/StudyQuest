@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-05T01:21:46.174Z",
+  "updatedAt": "2026-10-05T01:29:18.175Z",
   "snapshotLabel": "2026-10-05 / STEP 06のAI候補とオフライン原価試算 / 未マージ",
-  "baseRevision": "888a3be",
+  "baseRevision": "153d9c7",
   "currentStep": 6,
   "currentTaskId": "06.2.1",
-  "activity": "STEP 06のAI候補・送信/保持条件・回数/費用案とオフライン試算を準備。PR #65・#67・#69・#71・#73・#75はOpen。分野・事業者・上限は未承認、完了数18/42を維持。",
+  "activity": "STEP 02〜06のPR #65・#67・#69・#71・#73・#75・#77はOpen。PR #77はCI 5項目成功、試算11件もCIで成功。AI候補・条件・上限案を用意したが、分野・事業者・上限は未承認。完了数18/42を維持。",
   "runtime": "料金試算11テストとWebの所定チェック成功。通常有料料金・仮のtoken数/為替で比較。実AI・利用量/費用・制限・生成API/DB/画面は未検証。公開・登録・課金・マージは未実施。",
   "steps": [
     {
@@ -317,7 +317,7 @@
               "title": "AI事業者・入力の扱い・原価を決める",
               "acceptance": "現行の料金・データ利用条件を確認し、送る情報、同意、削除、無料試験の上限と原価を決める。",
               "status": "blocked",
-              "evidence": ["E18", "E20"],
+              "evidence": ["E18", "E20", "E21"],
               "issue": 76
             },
             {
@@ -814,7 +814,7 @@
       "id": "E20",
       "title": "AI候補の条件と接続不要の原価試算",
       "date": "2026-10-05",
-      "revision": "888a3bef84a02c712c04271f7303dc045b498a94",
+      "revision": "153d9c7835eadc5f6a0d4721cb25bf590b30d98f",
       "method": "公式料金・データ管理・利用条件を確認。Node標準CLIの手計算/切上げ/予算境界/引数拒否/キーなし起動/エラー非出力11テスト、Webのlint/型/build/Biomeを実行。",
       "result": "通常有料の2候補と送信・保持・回数/原価案を整理。3,000入力/1,500全課金出力/300回/160円という仮定でOpenAI 54円、Google 223.20円。06.2.1は判断待ち。",
       "limit": "事業者・分野・条件・保持/同意・上限は未承認。試算は実請求・提供採算ではない。無料β実測、実AI・品質/usage・制限と新API/DB/画面は未検証。登録・課金・公開・マージは行わない。",
@@ -824,7 +824,25 @@
         "scripts/ai-cost-estimate.mjs",
         "scripts/ai-cost-estimate.test.mjs",
         "docs/progress/review/step06-provider.md",
-        "https://github.com/IP-GACHI-UT/StudyQuest/issues/76"
+        "https://github.com/IP-GACHI-UT/StudyQuest/issues/76",
+        "https://github.com/IP-GACHI-UT/StudyQuest/pull/77"
+      ]
+    },
+    {
+      "id": "E21",
+      "title": "AI候補・試算のOpen PRとGitHub CI",
+      "date": "2026-10-05",
+      "revision": "153d9c7835eadc5f6a0d4721cb25bf590b30d98f",
+      "method": "gh pr view/checksでOpen・base・head・5 CheckRunを照合。qualityログでオフライン試算11テストの実行と合格を確認。",
+      "result": "PR #77はPR #75をbaseに作成。quality/web/api-static/api-db/authentication-e2eが全てSUCCESS。試算11テストはLinux Node 22でも成功。",
+      "limit": "このheadのCI結果。既存API/認証テストは新AIの動作証拠ではない。分野/事業者/上限の承認、無料βの公開/実測、実AI・生成API/DB/UI・課金・マージは未実施。",
+      "sources": [
+        "https://github.com/IP-GACHI-UT/StudyQuest/pull/77",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37251437368",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37251437325",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37251437321",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37251437331",
+        "docs/progress/review/step06-provider.md"
       ]
     }
   ],

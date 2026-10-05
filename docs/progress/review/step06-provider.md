@@ -28,7 +28,18 @@
 
 料金snapshotの出典と確認日は[候補文書](../../ai-provider.md)とJSONに記録する。接続・支払いの確認や実AIの成功を意味しない。
 
-進捗表の06.2.1は事業者・条件・上限の判断待ちを維持。対象分野未決定の06.1.1も維持する。完了数は18/42、無料βは18/23。PR CIの結果は確認後に追記する。表示確認は進捗表の確認で、AIアプリ導線の検証ではない。
+進捗表の06.2.1は事業者・条件・上限の判断待ちを維持。対象分野未決定の06.1.1も維持する。完了数は18/42、無料βは18/23。表示確認は進捗表の確認で、AIアプリ導線の検証ではない。
+
+## Open PRとCI
+
+[PR #77](https://github.com/IP-GACHI-UT/StudyQuest/pull/77)はOpen。baseはPR #75の`docs/74-step06-quest-contract`。候補資料を含む対象版`153d9c7835eadc5f6a0d4721cb25bf590b30d98f`で全5チェック成功。
+
+- [quality](https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37251437368): 新規オフライン試算11テストもLinux Node 22で成功。ログでtests/pass 11、fail 0を確認。
+- [web](https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37251437325)
+- [api-static / api-db](https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37251437321)
+- [authentication-e2e](https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37251437331)
+
+API/認証E2Eは既存実装の検証。実AIやplannedの生成/採用を検証した意味ではない。CI記録の文書更新後のheadはPR上で再確認する。ユーザーの確認前にはマージしない。
 
 ## 未実施と残る条件
 

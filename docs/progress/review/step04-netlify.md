@@ -21,7 +21,15 @@ API仕様・Presenter・DB schema・migration・seed・画面表示は変更し�
 - CI=true pnpm install --frozen-lockfileを使用。ZIP出力はNFT/API v2/nodejs22.x、Prisma Clientの実体を含む。環境ファイルを依存一覧で拒否する。
 - 一時loopbackゲートウェイでhealth 200、Cookieなし保護ページ307→login、有効な既存セッションでSSR 200を確認。クライアント側の読込完了はこの一時ゲートウェイでは確認できず、合格に数えない。実Netlify adapter/pathの試験とは区別する。
 
-Windowsのディレクトリ出力はsymlink権限で失敗し、ZIPへ変更。Windows ZIPにはjunctionの絶対参照があるため、本番へuploadしない。Linux CIのZIP展開・生成済み入口のhealth/Prisma query/未認証拒否はPR Checksで確認する。最終headと結果をここへ追記する。
+Windowsのディレクトリ出力はsymlink権限で失敗し、ZIPへ変更。Windows ZIPにはjunctionの絶対参照があるため、本番へuploadしない。
+
+## GitHub CIと進捗表示
+
+[PR #73](https://github.com/IP-GACHI-UT/StudyQuest/pull/73)はOpen、baseはPR #71のブランチ。head `c1c3a64e96df1b0ac34c48847acbb967aad3b852`で[API](https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37246733627)、[E2E](https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37246733681)、[quality](https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37246733671)、[Web](https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37246733746)の全5チェックが成功。
+
+API DB jobではLinuxで公式ZIPを生成・展開し、生成済みFunctions入口からhealth 200、Prisma query 200、未認証401を確認した。これはクラウド配置の証明ではない。
+
+進捗HTMLは18/42・無料β18/23を維持。04.1.2検索で1件、Netlify資料の展開、PC幅1280/文書1265・スマホ幅390/文書375で横あふれなしを確認した。
 
 ## 残件と状態
 

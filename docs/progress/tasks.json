@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-05T00:13:45.414483+00:00",
+  "updatedAt": "2026-10-05T00:19:23.168104+00:00",
   "snapshotLabel": "2026-10-05 / STEP 04のNode Functions入口追加 / 未マージ",
   "baseRevision": "2b72980",
   "currentStep": 4,
   "currentTaskId": "04.1.1",
-  "activity": "STEP 02〜05のPRはOpen。STEP 04の追加準備としてNode Functions入口と配置モードを実装し、ローカルの認証・DB・buildを検証。実配置・公開・窓口は確認待ち。",
-  "runtime": "FunctionsモードのWeb build、API/Prisma、単体20件・専用実DB32件・通常NodeのE2E3件、公式ZIP生成を確認。Linux生成物の実行はPR Checksで確認する。外部登録・公開・マージは未実施。",
+  "activity": "STEP 02〜05のPR #65・#67・#69・#71と追加PR #73はOpen。Node Functions入口・配置モードを実装し、PR #73のCI 5項目とLinux生成物のPrisma接続が成功。実配置・公開・窓口は確認待ち。",
+  "runtime": "FunctionsモードのWeb build、単体20件・専用DB32件・通常Node E2E3件、公式ZIP生成を確認。Linux CIで生成済み入口のhealth 200・Prisma query 200・未認証401を確認。外部登録・公開・マージは未実施。",
   "steps": [
     {
       "id": 1,
@@ -197,7 +197,7 @@
               "title": "公開先と費用上限を配置試験で決める",
               "acceptance": "候補の商用条件・無料枠を公式情報で再確認。Next/Hono/Prisma/PostgreSQLを実配置し、制限と総費用・停止条件を記録する。SQLiteへの移行を前提にしない。",
               "status": "blocked",
-              "evidence": ["E09", "E16"],
+              "evidence": ["E09", "E16", "E17"],
               "issue": 68
             },
             {
@@ -205,7 +205,7 @@
               "title": "API URL・CORS・秘密値・ログを分離する",
               "acceptance": "localhost固定を環境設定にし、認証Cookie/CORS/HTTPSを確認。秘密値と学習本文をログやブラウザへ漏らさない。",
               "status": "blocked",
-              "evidence": ["E09", "E16"],
+              "evidence": ["E09", "E16", "E17"],
               "issue": 68
             },
             {
@@ -758,6 +758,23 @@
         "docs/netlify.md",
         "docs/progress/review/step04-netlify.md",
         "https://github.com/IP-GACHI-UT/StudyQuest/issues/72"
+      ]
+    },
+    {
+      "id": "E17",
+      "title": "追加PRのCIとLinux生成物のDB接続",
+      "date": "2026-10-05",
+      "revision": "c1c3a64e96df1b0ac34c48847acbb967aad3b852",
+      "method": "gh pr checksで全5チェック成功を確認し、API DB jobの生成/展開/実行ログを照合。",
+      "result": "PR #73はOpen。Linux生成済みFunctions入口でhealth 200、Prisma query 200、未認証401。quality/web/api-static/api-db/authentication-e2eが成功。",
+      "limit": "記載headのLinux CI。実Netlify adapter/path・HTTPS/context.ip・Neon/SMTP・外部公開・マージは未確認。",
+      "sources": [
+        "https://github.com/IP-GACHI-UT/StudyQuest/pull/73",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37246733627",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37246733681",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37246733671",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37246733746",
+        "docs/progress/review/step04-netlify.md"
       ]
     }
   ],

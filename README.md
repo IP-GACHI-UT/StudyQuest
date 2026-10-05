@@ -32,6 +32,7 @@ StudyQuestは、学習を小さなクエストとして受注し、継続を促�
 - バックアップ・別DB復元: `docs/backup.md`
 - 無料βの公開案内原稿: `docs/beta-notice.md`
 - 無料βの計測・集計コマンド: `docs/beta-metrics.md`
+- STEP 06の生成・採用契約案（未提供）: [docs/ai-quests.md](docs/ai-quests.md)
 
 ## ローカル想定
 

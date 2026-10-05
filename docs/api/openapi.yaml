@@ -5,11 +5,14 @@ info:
   description: |
     StudyQuest MVPで使うAPI仕様です。
     Swagger/OpenAPIをAPI契約書として扱い、フロントエンドとバックエンドの認識を合わせるために使います。
+    AiQuestsはSTEP 06の設計案（planned）であり、現在のアプリでは提供していません。
 servers:
   - url: http://localhost:3001
     description: ローカルAPI開発環境
 security: []
 tags:
+  - name: AiQuests
+    description: STEP 06の未提供の生成・編集採用契約。対象分野・事業者・費用上限は確認待ちです。
   - name: Auth
     description: Better Authによる登録、ログイン、メール確認、パスワード再設定
   - name: Quests
@@ -23,6 +26,130 @@ tags:
   - name: Profile
     description: プロフィール表示に関するAPI
 paths:
+  /api/quest-generations:
+    post:
+      tags: [AiQuests]
+      summary: 目標から今日のクエスト案を生成する（未提供）
+      x-implementation-status: planned
+      description: |
+        Issue #74の契約案。sessionから所有者を決定し、入力のuserIdは受け付けません。
+        本人とrequestIdが同じ要求は再実行せず、入力が異なる場合は409です。
+        既存の同一入力の再送は保存済み結果を返し、今日からの期限検査・回数予約は初回だけ行います。
+        分野・provider・上限・無料βの提供判断が未確定ならAIを呼ばず503です。
+        正規化した文字列と実在する日本時間の日付を検査します。
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateQuestGenerationRequest"
+      responses:
+        "201":
+          description: 全案を検証・保存しました。同じ要求の成功再送も201です。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestGenerationResponse"
+        "202":
+          description: 同じ要求が実行中です。GETで再取得し、再生成しません。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestGenerationResponse"
+        "400":
+          $ref: "#/components/responses/AiQuestRequestError"
+        "401":
+          $ref: "#/components/responses/AuthenticationRequired"
+        "403":
+          $ref: "#/components/responses/AiQuestRequestError"
+        "409":
+          $ref: "#/components/responses/AiQuestRequestError"
+        "429":
+          $ref: "#/components/responses/AiQuestRequestError"
+        "502":
+          description: AI_PROVIDER_FAILEDまたはAI_INVALID_OUTPUT。案の部分保存・採用はしません。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AiQuestGenerationErrorResponse"
+        "503":
+          description: AI_UNAVAILABLE。未接続・制限未設定のためproviderを呼びません。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "504":
+          description: AI_RESULT_UNKNOWN。結果・費用が不明です。同じ要求を再呼び出ししません。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AiQuestGenerationErrorResponse"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/quest-generations/{generationId}:
+    parameters:
+      - $ref: "#/components/parameters/GenerationId"
+    get:
+      tags: [AiQuests]
+      summary: 本人の保存済み生成状態と案を取得する（未提供）
+      x-implementation-status: planned
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: 本人の生成記録です。成功時だけdraftsに検証済みの案を入れます。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestGenerationResponse"
+        "401":
+          $ref: "#/components/responses/AuthenticationRequired"
+        "404":
+          $ref: "#/components/responses/AiQuestNotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /api/quest-generations/{generationId}/adoptions:
+    parameters:
+      - $ref: "#/components/parameters/GenerationId"
+    post:
+      tags: [AiQuests]
+      summary: 本人の一つの案を編集して採用・受注する（未提供）
+      x-implementation-status: planned
+      description: |
+        成功した生成案を一度だけ採用し、個人用Quest・UserQuest・採用記録・活動を
+        同じtransactionで作ります。既存の受注APIを再呼び出ししません。
+        編集後の時間と採用済み案の合計は生成時のavailableMinutes以下です。
+        報酬・category・所有者はサーバーが決め、入力から受け付けません。
+        同じ本人/requestId/内容の再送は確定済み201、異なる内容や別要求での重複採用は409です。
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdoptGeneratedQuestRequest"
+      responses:
+        "201":
+          description: 個人用Questを採用・受注しました。既存タイマーと学習保存へ進めます。
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserQuestResponse"
+        "400":
+          $ref: "#/components/responses/AiQuestRequestError"
+        "401":
+          $ref: "#/components/responses/AuthenticationRequired"
+        "403":
+          $ref: "#/components/responses/AiQuestRequestError"
+        "404":
+          $ref: "#/components/responses/AiQuestNotFound"
+        "409":
+          $ref: "#/components/responses/AiQuestRequestError"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
   /api/auth/sign-up/email:
     post:
       tags: [Auth]
@@ -442,6 +569,15 @@ paths:
         "500":
           $ref: "#/components/responses/InternalServerError"
 components:
+  parameters:
+    GenerationId:
+      name: generationId
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 1
+      description: サーバーが生成する不透明なID。他人のIDと不存在は同じ404です。
   securitySchemes:
     cookieAuth:
       type: apiKey
@@ -449,6 +585,21 @@ components:
       name: studyquest.session_token
       description: Better Authが発行するHttpOnly session Cookie。本番ではSecure属性を付与します。
   responses:
+    AiQuestRequestError:
+      description: |
+        VALIDATION_ERROR（400）、許可Origin以外（403）、REQUEST_ID_CONFLICT /
+        DRAFT_ALREADY_ADOPTED / GENERATION_NOT_READY（409）、AI_LIMIT_REACHED（429）。
+        入力本文やproviderの生エラーを含めません。
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    AiQuestNotFound:
+      description: GENERATION_NOT_FOUND。他人の生成記録と不存在を区別しません。
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
     AuthenticationRequired:
       description: 有効なsessionがありません。
       content:
@@ -480,6 +631,171 @@ components:
           schema:
             $ref: "#/components/schemas/ErrorResponse"
   schemas:
+    AiQuestGenerationErrorResponse:
+      allOf:
+        - $ref: "#/components/schemas/ErrorResponse"
+        - type: object
+          required: [generationId]
+          properties:
+            generationId:
+              type: string
+              minLength: 1
+              description: 本人の保存済み生成ID。同じ要求の再送で初回応答を失った場合も照会先を取得できます。
+    AiRequestId:
+      type: string
+      format: uuid
+      pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$"
+      description: UUID v4。内容が同じ再送では同じ値を使います。
+    CreateQuestGenerationRequest:
+      type: object
+      additionalProperties: false
+      required: [requestId, domain, goal, deadline, availableMinutes]
+      properties:
+        requestId:
+          $ref: "#/components/schemas/AiRequestId"
+        domain:
+          type: string
+          enum: [programming, certification, english]
+          description: 候補の分野コード。試験で選んだ分野だけをサーバーで許可します。選択は確認待ちです。
+        goal:
+          type: string
+          minLength: 1
+          maxLength: 500
+          description: LF統一・前後trim後の目標。Unicodeコードポイント数。個人情報や秘密情報を含めません。
+        deadline:
+          type: string
+          format: date
+          pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+          description: 実在する日付。日本時間の今日以上、90日後以下をサーバーで検査します。
+        availableMinutes:
+          type: integer
+          minimum: 5
+          maximum: 120
+          description: 今日この一度の生成結果に使える合計時間の提案値。週の時間予算ではありません。
+    AiQuestText:
+      type: object
+      additionalProperties: false
+      required: [title, description, estimatedMinutes]
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 80
+          description: LF統一・前後trim後。プレーンテキストで表示します。
+        description:
+          type: string
+          minLength: 1
+          maxLength: 600
+          description: LF統一・前後trim後の具体的な学習行動。
+        estimatedMinutes:
+          type: integer
+          minimum: 5
+          maximum: 120
+    AiProviderDrafts:
+      type: object
+      additionalProperties: false
+      required: [drafts]
+      description: 未接続providerの出力契約。各案の合計時間と重複もサーバーで検査します。
+      properties:
+        drafts:
+          type: array
+          minItems: 1
+          maxItems: 3
+          items:
+            $ref: "#/components/schemas/AiQuestText"
+    GeneratedQuestDraft:
+      type: object
+      additionalProperties: false
+      required: [draftIndex, title, description, estimatedMinutes, adoptedQuestId]
+      properties:
+        draftIndex:
+          type: integer
+          minimum: 1
+          maximum: 3
+          description: サーバーが保存時に付ける不変の番号。
+        title:
+          type: string
+          minLength: 1
+          maxLength: 80
+        description:
+          type: string
+          minLength: 1
+          maxLength: 600
+        estimatedMinutes:
+          type: integer
+          minimum: 5
+          maximum: 120
+        adoptedQuestId:
+          type: string
+          nullable: true
+          description: 未採用はnull。採用後の編集内容は返却されたuserQuestで確認します。
+    QuestGenerationResponse:
+      type: object
+      additionalProperties: false
+      required: [generation]
+      properties:
+        generation:
+          type: object
+          additionalProperties: false
+          required: [id, requestId, domain, goal, deadline, availableMinutes, status, drafts, createdAt, updatedAt]
+          properties:
+            id:
+              type: string
+            requestId:
+              $ref: "#/components/schemas/AiRequestId"
+            domain:
+              type: string
+              enum: [programming, certification, english]
+            goal:
+              type: string
+              minLength: 1
+              maxLength: 500
+            deadline:
+              type: string
+              format: date
+            availableMinutes:
+              type: integer
+              minimum: 5
+              maximum: 120
+            status:
+              type: string
+              enum: [running, succeeded, failed, unknown]
+            drafts:
+              type: array
+              maxItems: 3
+              description: succeededは1〜3件、それ以外は空配列。合計時間は入力予算以下です。
+              items:
+                $ref: "#/components/schemas/GeneratedQuestDraft"
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+    AdoptGeneratedQuestRequest:
+      type: object
+      additionalProperties: false
+      required: [requestId, draftIndex, title, description, estimatedMinutes]
+      properties:
+        requestId:
+          $ref: "#/components/schemas/AiRequestId"
+        draftIndex:
+          type: integer
+          minimum: 1
+          maximum: 3
+        title:
+          type: string
+          minLength: 1
+          maxLength: 80
+        description:
+          type: string
+          minLength: 1
+          maxLength: 600
+        estimatedMinutes:
+          type: integer
+          minimum: 5
+          maximum: 120
+          description: 編集後の時間。採用済み案との合計が元の予算以下かtransaction内で検査します。
     EmailSignUpRequest:
       type: object
       required: [name, email, password]

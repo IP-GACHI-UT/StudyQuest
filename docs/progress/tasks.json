@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-05T00:19:23.168104+00:00",
-  "snapshotLabel": "2026-10-05 / STEP 04のNode Functions入口追加 / 未マージ",
-  "baseRevision": "2b72980",
-  "currentStep": 4,
-  "currentTaskId": "04.1.1",
-  "activity": "STEP 02〜05のPR #65・#67・#69・#71と追加PR #73はOpen。Node Functions入口・配置モードを実装し、PR #73のCI 5項目とLinux生成物のPrisma接続が成功。実配置・公開・窓口は確認待ち。",
-  "runtime": "FunctionsモードのWeb build、単体20件・専用DB32件・通常Node E2E3件、公式ZIP生成を確認。Linux CIで生成済み入口のhealth 200・Prisma query 200・未認証401を確認。外部登録・公開・マージは未実施。",
+  "updatedAt": "2026-10-05T00:53:30.507Z",
+  "snapshotLabel": "2026-10-05 / STEP 06の生成・採用契約案 / 未マージ",
+  "baseRevision": "fadfe74",
+  "currentStep": 6,
+  "currentTaskId": "06.1.1",
+  "activity": "STEP 02〜05のPR #65・#67・#69・#71・#73とSTEP 06設計PR #75はOpen。PR #75のCI 5項目成功。個人用Questの所有権と失敗後の照会/再送を設計。対象分野は確認待ち、完了数18/42を維持。",
+  "runtime": "未提供の契約案を検証。公式OpenAPI schema・内部参照98件・既存19パス保持・3例/23境界が成功。Webの所定チェックとPC/スマホ進捗表を確認。実AI/新API・公開・マージは未実施。",
   "steps": [
     {
       "id": 1,
@@ -294,16 +294,16 @@
               "id": "06.1.1",
               "title": "目標・期限・使える時間と出力契約を定義する",
               "acceptance": "選んだ対象分野で入力・生成クエスト・保存先・本人所有権を定義。必要なOpenAPIとPrisma変更を別Issueで設計する。",
-              "status": "todo",
-              "evidence": [],
-              "issue": null
+              "status": "verify",
+              "evidence": ["E18", "E19"],
+              "issue": 74
             },
             {
               "id": "06.1.2",
               "title": "少数のクエストを生成・編集・採用できる",
               "acceptance": "目標に対応する具体的な行動と所要時間を生成し、利用者が直して採用する。既存受注→学習保存まで通る。",
-              "status": "todo",
-              "evidence": [],
+              "status": "blocked",
+              "evidence": ["E18"],
               "issue": null
             }
           ]
@@ -324,16 +324,16 @@
               "id": "06.2.2",
               "title": "生成回数・時間・出力を制限する",
               "acceptance": "本人単位の回数・予算・タイムアウトを制御し、重複生成、不正な出力、長い入力、失敗を安全に扱う。無制限を約束しない。",
-              "status": "todo",
-              "evidence": [],
+              "status": "blocked",
+              "evidence": ["E18"],
               "issue": null
             },
             {
               "id": "06.2.3",
               "title": "AI失敗時も基本学習を続けられる",
               "acceptance": "入力を保持し、再試行または基本クエストへ戻れる。未接続・生成中・失敗を架空の成功と表示しない。",
-              "status": "todo",
-              "evidence": [],
+              "status": "blocked",
+              "evidence": ["E18"],
               "issue": null
             }
           ]
@@ -776,6 +776,39 @@
         "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37246733746",
         "docs/progress/review/step04-netlify.md"
       ]
+    },
+    {
+      "id": "E18",
+      "title": "STEP 06の未提供契約・個人用Questの設計と残る条件",
+      "date": "2026-10-05",
+      "revision": "fadfe74d3ef01b7aca6ae1a2f12464da9911b729",
+      "method": "既存API/Prismaを読み、plannedの3操作と保存先・本人分離・再送を設計。公式OpenAPI schema・98参照・既存19パス保持・3例/23境界・Webチェックを確認。",
+      "result": "入力/出力/編集採用と既存学習保存への接続条件を定義。共通一覧/掲示板からの個人用除外、採用transaction、不明結果の照会IDと日付変更後の再送を記録。06.1.1は検証待ち。",
+      "limit": "対象分野は未選択。数値上限・報酬は提案。無料βの公開/実測、事業者/料金/同意/保持/原価上限は未決定。生成/採用・制限・失敗復帰の実装と実AI/DB/画面検証は未実施。",
+      "sources": [
+        "docs/ai-quests.md",
+        "docs/api/openapi.yaml",
+        "docs/progress/review/step06-contract.md",
+        "https://github.com/IP-GACHI-UT/StudyQuest/issues/74",
+        "https://github.com/IP-GACHI-UT/StudyQuest/pull/75"
+      ]
+    },
+    {
+      "id": "E19",
+      "title": "STEP 06設計のOpen PRと既存実装のCI",
+      "date": "2026-10-05",
+      "revision": "fadfe74d3ef01b7aca6ae1a2f12464da9911b729",
+      "method": "gh pr checks / gh pr viewでhead・Open・CheckRunを照合。",
+      "result": "PR #75はPR #73へ積み上げ、5チェック（quality/web/api-static/api-db/authentication-e2e）がSUCCESS。",
+      "limit": "記載headのCIで既存実装を検証。plannedの生成/採用API、本人所有DB変更、実AI、対象分野の選択、無料β公開/実観測、マージは未実施。",
+      "sources": [
+        "https://github.com/IP-GACHI-UT/StudyQuest/pull/75",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37249077363",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37249077352",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37249077299",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37249077344",
+        "docs/progress/review/step06-contract.md"
+      ]
     }
   ],
   "phases": [
@@ -908,9 +941,9 @@
     {
       "id": "R10",
       "screen": "AI目標 / Plus / 決済",
-      "route": "後続IssueでOpenAPIとPrismaを定義",
-      "status": "未実装。価値・需要・有料提供は検証待ち",
-      "next": "価値→需要→有料提供を順に検証",
+      "route": "POST /api/quest-generations、GET /api/quest-generations/{generationId}、POST /api/quest-generations/{generationId}/adoptions（すべてplanned）",
+      "status": "Issue #74で未提供契約・本人所有権を設計。対象分野は確認待ち、API/画面/DBは未実装",
+      "next": "無料βの結果と対象分野・AI事業者・上限を確定して別Issueで実装",
       "step": 6
     }
   ],
@@ -946,7 +979,7 @@
         {
           "title": "事業者・送信データ・提供回数",
           "status": "未決定",
-          "note": "料金、入力の利用・保存条件、必要な同意、削除、回数/原価上限を確認する。"
+          "note": "入出力と本人所有権の契約案はあり。対象分野・事業者、料金、入力の利用/保存条件、同意/削除、回数/原価上限は未決定。無料βの実測・提供判断後に接続する。"
         },
         {
           "title": "生成から学習までの試験と判断基準",

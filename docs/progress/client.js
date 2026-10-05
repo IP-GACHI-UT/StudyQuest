@@ -119,7 +119,7 @@
       allTasks.length - totalDone,
       '未着手・対応中・検証待ち',
     ],
-    ['verify', '検証待ち', count(allTasks, 'verify'), '実装後の確認が必要'],
+    ['verify', '検証待ち', count(allTasks, 'verify'), '完了条件の確認が必要'],
     ['todo', '未着手', count(allTasks, 'todo'), '計画上の残りの小項目'],
   ];
   byId('summary').innerHTML = metrics
@@ -182,7 +182,7 @@
     const issue = task.issue
       ? `<p><a href="https://github.com/IP-GACHI-UT/StudyQuest/issues/${task.issue}" target="_blank" rel="noopener noreferrer">関連Issue #${task.issue}</a>（Issueの状態とこの小項目の完了は別判定）</p>`
       : '';
-    return `<details class="task" data-status="${escapeHtml(task.status)}" id="task-${task.id}"><summary><span class="task-symbol" aria-hidden="true">${symbols[task.status]}</span><span><span class="task-id">${task.id}</span>${escapeHtml(task.title)}</span>${badge(task.status)}</summary><div class="task-detail"><p><strong>完了条件</strong><br>${escapeHtml(task.acceptance)}</p>${issue}${evidence.length ? `<p><strong>記録された根拠</strong><br>${evidence.map((record) => `<button type="button" class="evidence-chip" data-evidence="${record.id}">${record.id} ${escapeHtml(record.title)}</button>`).join('')}</p>` : '<p>この小項目の完了根拠はまだ記録されていません。</p>'}${task.status === 'verify' ? '<p>上の根拠は実装の存在確認です。完了条件にある実動作の確認が残っています。</p>' : ''}</div></details>`;
+    return `<details class="task" data-status="${escapeHtml(task.status)}" id="task-${task.id}"><summary><span class="task-symbol" aria-hidden="true">${symbols[task.status]}</span><span><span class="task-id">${task.id}</span>${escapeHtml(task.title)}</span>${badge(task.status)}</summary><div class="task-detail"><p><strong>完了条件</strong><br>${escapeHtml(task.acceptance)}</p>${issue}${evidence.length ? `<p><strong>記録された根拠</strong><br>${evidence.map((record) => `<button type="button" class="evidence-chip" data-evidence="${record.id}">${record.id} ${escapeHtml(record.title)}</button>`).join('')}</p>` : '<p>この小項目の完了根拠はまだ記録されていません。</p>'}${task.status === 'verify' ? '<p>上の根拠は記録した範囲の準備・確認結果です。完了条件に未確認の項目が残っています。</p>' : ''}</div></details>`;
   }
   function renderTasks() {
     let visible = 0;

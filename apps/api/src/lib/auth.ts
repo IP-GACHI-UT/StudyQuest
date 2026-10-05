@@ -4,6 +4,7 @@ import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { haveIBeenPwned } from 'better-auth/plugins';
 import type { MiddlewareHandler } from 'hono';
 import { errorResponse } from './api-response.js';
+import { getApiRuntime, NETLIFY_CLIENT_IP_HEADER } from './api-runtime.js';
 import { sendActionEmail } from './mailer.js';
 
 const DAY_IN_SECONDS = 60 * 60 * 24;
@@ -12,6 +13,9 @@ const isProduction = process.env.NODE_ENV === 'production';
 const isTest = process.env.NODE_ENV === 'test';
 
 function getTrustedProxies() {
+  if (getApiRuntime() === 'netlify') {
+    return [];
+  }
   const trustedProxies = (process.env.TRUSTED_PROXY_IPS ?? '127.0.0.1,::1')
     .split(',')
     .map((value) => value.trim())
@@ -135,8 +139,13 @@ export const auth = betterAuth({
     },
   },
   advanced: {
+    disableCSRFCheck: false,
+    disableOriginCheck: false,
     ipAddress: {
-      ipAddressHeaders: ['x-forwarded-for', 'x-real-ip'],
+      ipAddressHeaders:
+        getApiRuntime() === 'netlify'
+          ? [NETLIFY_CLIENT_IP_HEADER]
+          : ['x-forwarded-for', 'x-real-ip'],
       trustedProxies: getTrustedProxies(),
     },
     useSecureCookies: isProduction,

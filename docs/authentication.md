@@ -63,13 +63,13 @@ DNS検証、本番URL、Privacy Policy、Terms、Googleブランド情報が確�
 - 認証APIはDBベースでレート制限します。登録・ログインは5回/15分/IP、再設定・確認メール再送は3回/15分/IPです。
 - OAuth tokenはDB保存前に暗号化します。
 - `next`やcallback URLは信頼済みオリジン内のパスだけを許可します。
-- HonoはNext.jsなどの既知のreverse proxyからだけ到達できる構成とし、`TRUSTED_PROXY_IPS`へそのproxyのIPまたはCIDRを設定します。転送されたIPはsession記録とレート制限に使用します。
+- Node HTTP構成ではHonoを既知のreverse proxyからだけ到達できるようにし、`TRUSTED_PROXY_IPS`へそのproxyのIP/CIDRを設定します。Netlify候補は[netlify.md](netlify.md)の入口でcontext.ipを内部ヘッダーへ上書きし、転送ヘッダーを信用しません。IPはsession記録とレート制限に使います。
 
 ## 公開前チェックリスト
 
-- [ ] 本番の`APP_ORIGIN`と`API_INTERNAL_URL`を設定した
+- [ ] 本番のAPP_ORIGINと配置モードを設定した（NodeはAPI_INTERNAL_URL、Functionsはbuild/実行時の両方でnetlify）
 - [ ] `BETTER_AUTH_SECRET`を安全なランダム値にした
-- [ ] Honoを外部へ直接公開せず、`TRUSTED_PROXY_IPS`へreverse proxyだけを設定した
+- [ ] Nodeは信頼proxy経路、Functionsは実context.ipでIP分離・レート制限を確認した
 - [ ] `mail.gtowell.dev`のDNS検証が完了した
 - [ ] Resend SMTPから確認・再設定メールを受信できた
 - [ ] 本番OAuth redirect URIをGoogle Cloudへ追加した

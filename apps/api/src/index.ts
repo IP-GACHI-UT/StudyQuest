@@ -1,5 +1,8 @@
 import { serve } from '@hono/node-server';
 import { app } from './app.js';
+import { requireApiRuntime } from './lib/api-runtime.js';
+
+requireApiRuntime('node');
 
 const DEFAULT_API_PORT = 3001;
 

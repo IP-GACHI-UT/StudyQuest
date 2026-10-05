@@ -11,6 +11,7 @@ const sourceDocuments = [
   ['公開・価値検証ロードマップ', 'docs/roadmap.md'],
   ['公開MVPの範囲', 'docs/mvp.md'],
   ['配置候補・費用と公開残件', 'docs/release.md'],
+  ['Netlify候補のAPI入口と検証', 'docs/netlify.md'],
   ['バックアップ・別DB復元', 'docs/backup.md'],
   ['無料βの公開案内原稿', 'docs/beta-notice.md'],
   ['無料βの計測・実験基準', 'docs/beta-metrics.md'],

@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
   // 例: allowedDevOrigins: ['10.1.35.247']
   allowedDevOrigins: ['10.1.35.247', '127.0.0.1'],
   async rewrites() {
+    if (process.env.STUDYQUEST_API_RUNTIME === 'netlify') {
+      return [];
+    }
     const apiInternalUrl =
       process.env.API_INTERNAL_URL ?? 'http://localhost:3001';
 

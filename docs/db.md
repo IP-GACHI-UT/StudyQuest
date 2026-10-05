@@ -4,6 +4,8 @@
 
 バックアップ・別DB復元、取得周期・保持・担当の案は[backup.md](backup.md)を参照してください。クラウドへの本番配置と定期取得は未実施です。
 
+STEP 06の生成記録・採用記録・個人用Questの追加案は[ai-quests.md](ai-quests.md)に記録しています。設計のみで、現在のPrisma schemaとmigrationには反映していません。
+
 ## 前提
 
 - DBは PostgreSQL を使用します。

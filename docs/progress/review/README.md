@@ -1,5 +1,7 @@
 # 進捗表・ロードマップの確認結果
 
+STEP 06の未提供契約と設計準備は[step06-contract.md](step06-contract.md)。対象分野・AI事業者・実接続は確認待ち。
+
 STEP 04のNode Functions入口・配置モード・検証の追加記録は[step04-netlify.md](step04-netlify.md)。実配置は未確認。
 
 2026-10-04。対象: `docs/roadmap-progress`の今回の作業差分。アプリの基準版は`8600867`。アプリ画面、API、Prisma、認証、依存バージョンは変更していない。

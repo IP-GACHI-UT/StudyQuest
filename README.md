@@ -26,6 +26,7 @@ StudyQuestは、学習を小さなクエストとして受注し、継続を促�
 - DBモデル定義: `prisma/schema.prisma`
 - DB・Prisma運用手順: `docs/db.md`
 - アーキテクチャ方針: `docs/architecture.md`
+- Netlify候補の入口・配置設定・検証: [docs/netlify.md](docs/netlify.md)
 - 認証設計・外部サービス設定: `docs/authentication.md`
 - 配置候補・費用上限・公開残件: `docs/release.md`
 - バックアップ・別DB復元: `docs/backup.md`

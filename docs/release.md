@@ -19,7 +19,7 @@ Vercel Hobbyは個人の非商用用途の条件があり、チームの事業�
 
 ## 現構成との差分・配置試験
 
-現在のHonoはNode HTTPプロセスで起動する。NetlifyへそのままPushするだけでAPIが動くとは扱わない。以下の接続処理は**未実装・未試験**。
+Node Functions入口と配置候補の設定をIssue #72で追加した。[Netlify入口・設定・検証](netlify.md)を正とする。外部配置は未実施。以下は入口のローカル検証と、実配置で残る確認を分けて扱う。
 
 1. `apps/api`内のHonoをNode FunctionsのRequest/Responseへ接続する入口を用意する。DB処理・認証・Presenterは既存Honoを使い、Next.jsの`app/api`へ複製しない。[Functions入口](https://docs.netlify.com/build/functions/get-started/)
 2. Functionsが`/api/*`を処理する場合は、Next.jsのlocalhost向けrewriteを配置設定で外す。保護レイアウトのAPI接続先を決め、自己rewriteのループを防ぐ。[Next.js対応](https://docs.netlify.com/build/frameworks/framework-setup-guides/nextjs/overview/)
@@ -38,14 +38,15 @@ Vercel Hobbyは個人の非商用用途の条件があり、チームの事業�
 | `API_HOST` / `API_PORT` | Node HTTP入口 | Honoを直接外部公開しない。Functionsには別入口が必要 |
 | `DATABASE_URL` | API・Prisma | 秘密。開発・CI・復元・本番を分離、TLS・接続数を確認 |
 | `BETTER_AUTH_SECRET` | API認証 | 秘密。32文字以上のランダム値、環境ごとに分離 |
-| `TRUSTED_PROXY_IPS` | APIのIP判定 | 信頼proxyだけ。実際の転送経路と一致 |
+| `STUDYQUEST_API_RUNTIME` | Web/APIの入口 | Nodeはnode、Functionsはbuild/実行時の両方でnetlify |
+| `TRUSTED_PROXY_IPS` | Node APIのIP判定 | 信頼proxyだけ。Functionsはcontext.ipを使用 |
 | `SMTP_*` / `MAIL_FROM` / `MAIL_REPLY_TO` | APIメール | 資格情報は秘密。認証送信元と問い合わせ窓口を分ける |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | APIのみ | Google提供時に設定。未確認なら未提供 |
 | `NEXT_PUBLIC_GOOGLE_AUTH_ENABLED` | Webビルド | 公開してよい真偽値のみ。実OAuth確認まではfalse |
 
 ブラウザーは同一originの`/api/*`を使用。旧`NEXT_PUBLIC_API_URL`・`CORS_ORIGIN`は使わない。秘密値・接続URL・Cookie・認証リンク・パスワード・メール・学習メモをrequest bodyや例外全文としてログへ出さない。監視は操作種別、HTTP status、匿名の相関ID、集計件数に絞り、配置サービス側の自動ログも確認する。
 
-ローカルのブラウザー操作では接続元IPを取得できず、認証レート制限が共有bucketへ退避する警告が出た。E2Eは指定ヘッダーでのIP分離試験で、実proxyが正しいIPを付ける証明ではない。配置試験で解消する残件。
+従来Nodeのブラウザー操作では接続元IPが共有bucketへ退避した。Functions入口はcontext.ipで上書きし、合成contextのDBテストでヘッダー偽装拒否を確認する。実プラットフォームが正しいIPを渡す証明は配置試験で残る。
 
 ## 費用上限・停止条件（承認用案）
 

@@ -26,6 +26,8 @@
 
 ## ローカル想定
 
+STEP 04のNetlify候補は[netlify.md](netlify.md)を正とする。apps/apiのNode Functions入口が既存HonoへRequest/Responseを渡し、context.ipを認証へ渡す。Webは配置モードでrewriteを外し、サーバー認証はAPP_ORIGINへ接続する。外部配置は未確認。
+
 - `apps/web`: `http://localhost:3000`
 - `apps/api`: `http://localhost:3001`
 

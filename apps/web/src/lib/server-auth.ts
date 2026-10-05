@@ -17,7 +17,13 @@ type ServerSession = {
 };
 
 const API_INTERNAL_URL =
-  process.env.API_INTERNAL_URL ?? 'http://localhost:3001';
+  process.env.STUDYQUEST_API_RUNTIME === 'netlify'
+    ? process.env.APP_ORIGIN
+    : (process.env.API_INTERNAL_URL ?? 'http://localhost:3001');
+
+if (!API_INTERNAL_URL) {
+  throw new Error('APP_ORIGIN is required for Netlify server authentication.');
+}
 
 export const getServerSession = cache(
   async (): Promise<ServerSession | null> => {

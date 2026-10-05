@@ -60,6 +60,9 @@ jobs:
       - name: API unit tests
         run: pnpm test:api
 
+      - name: Build candidate Netlify API function locally
+        run: pnpm netlify:bundle
+
   api-db:
     name: api-db
     runs-on: ubuntu-latest
@@ -104,3 +107,16 @@ jobs:
 
       - name: Run API DB integration tests
         run: pnpm test:api:db
+
+      - name: Build and validate candidate Functions handler against the test DB
+        env:
+          DATABASE_URL: postgresql://studyquest_test:studyquest_test@127.0.0.1:5433/studyquest_test?schema=public
+          NODE_ENV: production
+          STUDYQUEST_API_RUNTIME: netlify
+          APP_ORIGIN: https://studyquest.example
+          BETTER_AUTH_SECRET: studyquest-functions-ci-secret-at-least-32-characters
+        run: |
+          pnpm build:api
+          pnpm netlify:bundle
+          unzip -q .local/netlify-functions/studyquest-api.zip -d .local/netlify-function-test
+          node scripts/netlify-smoke.mjs

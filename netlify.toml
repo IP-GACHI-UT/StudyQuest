@@ -1,0 +1,16 @@
+# Candidate configuration only. Connecting/deploying a site needs user approval.
+[build]
+command = "pnpm prisma:generate && pnpm build:api && pnpm build:web"
+publish = "apps/web/.next"
+
+[build.environment]
+NODE_VERSION = "22"
+PNPM_VERSION = "10.13.1"
+STUDYQUEST_API_RUNTIME = "netlify"
+NEXT_PUBLIC_GOOGLE_AUTH_ENABLED = "false"
+
+[functions]
+directory = "apps/api/functions"
+node_bundler = "esbuild"
+external_node_modules = ["@prisma/client"]
+included_files = ["node_modules/.pnpm/@prisma+client@*/node_modules/.prisma/client/**"]

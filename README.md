@@ -33,6 +33,7 @@ StudyQuestは、学習を小さなクエストとして受注し、継続を促�
 - 無料βの公開案内原稿: `docs/beta-notice.md`
 - 無料βの計測・集計コマンド: `docs/beta-metrics.md`
 - STEP 06の生成・採用契約案（未提供）: [docs/ai-quests.md](docs/ai-quests.md)
+- STEP 06のAI候補・原価試算（未選択）: [docs/ai-provider.md](docs/ai-provider.md)。`pnpm ai:estimate`は外部接続のない試算。
 
 ## ローカル想定
 

@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "purpose": "offline_comparison",
+  "verifiedAt": "2026-10-05",
+  "selectedProvider": null,
+  "profiles": [
+    {
+      "provider": "openai",
+      "model": "gpt-6-luna",
+      "tier": "paid",
+      "processing": "standard",
+      "inputUsdPerMillion": "0.10",
+      "cachedInputUsdPerMillion": "0.01",
+      "cacheWriteUsdPerMillion": "0.125",
+      "outputUsdPerMillion": "0.50",
+      "sources": [
+        "https://developers.openai.com/api/docs/models/gpt-6-luna",
+        "https://developers.openai.com/api/docs/guides/prompt-caching"
+      ]
+    },
+    {
+      "provider": "google",
+      "model": "gemini-3.5-flash-lite",
+      "tier": "paid",
+      "processing": "standard",
+      "inputUsdPerMillion": "0.30",
+      "cachedInputUsdPerMillion": "0.03",
+      "cacheWriteUsdPerMillion": null,
+      "outputUsdPerMillion": "2.50",
+      "sources": [
+        "https://ai.google.dev/gemini-api/docs/pricing#gemini-3.5-flash-lite"
+      ]
+    }
+  ]
+}

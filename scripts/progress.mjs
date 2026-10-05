@@ -16,6 +16,7 @@ const sourceDocuments = [
   ['無料βの公開案内原稿', 'docs/beta-notice.md'],
   ['無料βの計測・実験基準', 'docs/beta-metrics.md'],
   ['STEP 06の生成・採用契約案（未提供）', 'docs/ai-quests.md'],
+  ['STEP 06のAI候補・原価試算（未選択）', 'docs/ai-provider.md'],
   ['バックエンドの作業順', 'docs/backend-roadmap.md'],
   ['進捗の更新方法', 'docs/progress/README.md'],
   ['今回の進捗表の確認結果', 'docs/progress/review/README.md'],

@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "ai:estimate": "node scripts/ai-cost-estimate.mjs",
+    "test:ai-estimate": "node --test scripts/ai-cost-estimate.test.mjs",
     "netlify:bundle": "node scripts/netlify-bundle.mjs",
     "beta:report": "node scripts/beta-metrics.mjs",
     "progress:build": "node scripts/progress.mjs build",

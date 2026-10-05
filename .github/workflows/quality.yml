@@ -43,5 +43,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Offline AI cost estimate tests
+        run: pnpm test:ai-estimate
+
       - name: Biome check
         run: pnpm biome:check

@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-10-05T00:43:09.902Z",
+  "updatedAt": "2026-10-05T00:53:30.507Z",
   "snapshotLabel": "2026-10-05 / STEP 06の生成・採用契約案 / 未マージ",
-  "baseRevision": "693a3de",
+  "baseRevision": "fadfe74",
   "currentStep": 6,
   "currentTaskId": "06.1.1",
-  "activity": "STEP 02〜05のPR #65・#67・#69・#71・#73はOpen。Issue #74でSTEP 06の未提供契約と個人用Questの所有権を設計。対象分野は確認待ち、完了数18/42を維持。",
-  "runtime": "設計用OpenAPIの公式schema・内部参照97件・既存19パス保持・サンプル/境界値を確認。Webの所定チェック成功。AI呼び出し・schema/migration・アプリ画面変更・公開・マージは未実施。",
+  "activity": "STEP 02〜05のPR #65・#67・#69・#71・#73とSTEP 06設計PR #75はOpen。PR #75のCI 5項目成功。個人用Questの所有権と失敗後の照会/再送を設計。対象分野は確認待ち、完了数18/42を維持。",
+  "runtime": "未提供の契約案を検証。公式OpenAPI schema・内部参照98件・既存19パス保持・3例/23境界が成功。Webの所定チェックとPC/スマホ進捗表を確認。実AI/新API・公開・マージは未実施。",
   "steps": [
     {
       "id": 1,
@@ -295,7 +295,7 @@
               "title": "目標・期限・使える時間と出力契約を定義する",
               "acceptance": "選んだ対象分野で入力・生成クエスト・保存先・本人所有権を定義。必要なOpenAPIとPrisma変更を別Issueで設計する。",
               "status": "verify",
-              "evidence": ["E18"],
+              "evidence": ["E18", "E19"],
               "issue": 74
             },
             {
@@ -781,15 +781,33 @@
       "id": "E18",
       "title": "STEP 06の未提供契約・個人用Questの設計と残る条件",
       "date": "2026-10-05",
-      "revision": "693a3deを基にしたdocs/74-step06-quest-contractの設計差分",
-      "method": "既存API/Prismaを読み、plannedの3操作と保存先・本人分離・再送を設計。公式OpenAPI schema・97参照・既存19パス保持・3例/21境界・Webチェックを確認。",
-      "result": "入力/出力/編集採用と既存学習保存への接続条件を定義。個人用Questを共通一覧/掲示板から除外する案、transactionと不明結果の再呼び出し防止を記録。06.1.1は検証待ち。",
+      "revision": "fadfe74d3ef01b7aca6ae1a2f12464da9911b729",
+      "method": "既存API/Prismaを読み、plannedの3操作と保存先・本人分離・再送を設計。公式OpenAPI schema・98参照・既存19パス保持・3例/23境界・Webチェックを確認。",
+      "result": "入力/出力/編集採用と既存学習保存への接続条件を定義。共通一覧/掲示板からの個人用除外、採用transaction、不明結果の照会IDと日付変更後の再送を記録。06.1.1は検証待ち。",
       "limit": "対象分野は未選択。数値上限・報酬は提案。無料βの公開/実測、事業者/料金/同意/保持/原価上限は未決定。生成/採用・制限・失敗復帰の実装と実AI/DB/画面検証は未実施。",
       "sources": [
         "docs/ai-quests.md",
         "docs/api/openapi.yaml",
         "docs/progress/review/step06-contract.md",
-        "https://github.com/IP-GACHI-UT/StudyQuest/issues/74"
+        "https://github.com/IP-GACHI-UT/StudyQuest/issues/74",
+        "https://github.com/IP-GACHI-UT/StudyQuest/pull/75"
+      ]
+    },
+    {
+      "id": "E19",
+      "title": "STEP 06設計のOpen PRと既存実装のCI",
+      "date": "2026-10-05",
+      "revision": "fadfe74d3ef01b7aca6ae1a2f12464da9911b729",
+      "method": "gh pr checks / gh pr viewでhead・Open・CheckRunを照合。",
+      "result": "PR #75はPR #73へ積み上げ、5チェック（quality/web/api-static/api-db/authentication-e2e）がSUCCESS。",
+      "limit": "記載headのCIで既存実装を検証。plannedの生成/採用API、本人所有DB変更、実AI、対象分野の選択、無料β公開/実観測、マージは未実施。",
+      "sources": [
+        "https://github.com/IP-GACHI-UT/StudyQuest/pull/75",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37249077363",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37249077352",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37249077299",
+        "https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37249077344",
+        "docs/progress/review/step06-contract.md"
       ]
     }
   ],

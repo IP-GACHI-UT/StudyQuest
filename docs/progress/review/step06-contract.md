@@ -19,7 +19,7 @@
 
 ## 検証
 
-対象は`693a3de`を基にした今回の設計差分。API動作の合格とは区別する。
+対象は契約案`14c58d9`と照会/再送の補足`fadfe74d3ef01b7aca6ae1a2f12464da9911b729`。API動作の合格とは区別する。
 
 | 確認 | 結果 |
 | --- | --- |
@@ -27,15 +27,28 @@
 | `pnpm prisma:generate` | 既存schemaからClient生成成功。DBへの接続・migrationは行わない |
 | `pnpm format:check` / `pnpm check:web` | format・lint・型・build・Biomeすべて成功 |
 | `node --check scripts/progress.mjs` / `git diff --check` | 成功。最初の差分検査で検出したYAMLの末尾空白1箇所を修正して再確認 |
-| OpenAPIの形式・参照 | js-yaml 4.2.0とAjv 6.15.0を使う一時ローカル検査で、[公式OpenAPI 3.0スキーマ](https://spec.openapis.org/oas/3.0/schema/2024-10-18.html)に適合。内部参照97件解決、既存19パス・既存schemaの内容を保持、追加3操作はplanned/要認証 |
-| 契約用サンプルと境界 | 生成入力・provider出力・編集採用の3例、文字数/時間/日付/UUID/未知項目等21ケースをschemaで検査し成功 |
+| OpenAPIの形式・参照 | js-yaml 4.2.0とAjv 6.15.0を使う一時ローカル検査で、[公式OpenAPI 3.0スキーマ](https://spec.openapis.org/oas/3.0/schema/2024-10-18.html)に適合。内部参照98件解決、既存19パス・既存schemaの内容を保持、追加3操作はplanned/要認証 |
+| 契約用サンプルと境界 | 生成入力・provider出力・編集採用の3例、文字数/時間/日付/UUID/未知項目/失敗時の生成ID等23ケースをschemaで検査し成功 |
 | Markdown参照 | 変更した文書のローカルリンク43件、欠落0 |
 
 公式スキーマの取得版SHA-256は`2385f5bbb8c37878daae73baeabe7f34b2f022a4a8c049329ee61f71796f039c`。`.local/verify-ai-contract.cjs`は検査補助で、アプリの実装・依存・CIに追加しない。合計時間、trim後の検査、相対JST期限、選択分野、本人所有権・providerの副作用はschemaだけでは証明できず、後続実装の検証条件に残す。
 
 `pnpm progress:build` / `pnpm progress:check`も成功。10 STEP・42小項目・完了18、無料β18/23。PC 1280px（document幅1265px）・スマホ390px（375px）でページ全体の横はみ出しなし。06.1.1の開閉、E18への移動、契約本文の同梱、スマホでの検索/検証待ちフィルター（1件）、長いplanned APIの表示を確認。表示サイズと検索を元に戻した。
 
-新APIの動作を確認する画面試験ではなく、進捗表の表示・操作確認。PR/CI結果は確認後に追記する。
+新APIの動作を確認する画面試験ではなく、進捗表の表示・操作確認。
+
+## Open PRとCI
+
+[PR #75](https://github.com/IP-GACHI-UT/StudyQuest/pull/75)はOpen、baseはPR #73の`feature/72-netlify-api-adapter`。マージはユーザーの確認後。
+
+契約補足の対象版`fadfe74d3ef01b7aca6ae1a2f12464da9911b729`で、5チェックがすべてSUCCESS。初回設計版`14c58d9`でも5チェック成功を確認した。
+
+- [api-static / api-db](https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37249077363)
+- [authentication-e2e](https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37249077352)
+- [quality](https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37249077299)
+- [web](https://github.com/IP-GACHI-UT/StudyQuest/actions/runs/37249077344)
+
+API/認証E2Eは既存実装の検証。plannedの生成・採用が実装済み、あるいは実AIの試験に成功した意味ではない。CI記録を含む文書更新後のheadはPR上で再確認する。
 
 ## 未確認・未実施
 

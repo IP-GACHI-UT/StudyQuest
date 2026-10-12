@@ -18,7 +18,7 @@ export const QuestBoardCard = ({ quest, onAccept }: QuestBoardCardProps) => {
         </div>
 
         <div>
-          {quest.acceptedToday && quest.acceptedToday > 0 ? (
+          {quest.isAccepted ? (
             <span className="inline-flex items-center rounded-full border border-gray-600 bg-gray-800 px-3 py-1 text-sm text-gray-200">
               受注済み
             </span>

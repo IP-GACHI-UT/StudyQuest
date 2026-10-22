@@ -7,3 +7,5 @@ allowBuilds:
   prisma: true
   sharp: true
   unrs-resolver: true
+
+engineStrict: true

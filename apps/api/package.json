@@ -4,13 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "pnpm --filter @studyquest/db build && tsx watch src/index.ts",
-    "build": "tsc -p tsconfig.json",
-    "start": "node dist/index.js",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "typecheck": "tsc --noEmit",
-    "check": "pnpm typecheck && pnpm build"
+    "dev": "node ../../scripts/check-runtime.cjs && pnpm --filter @studyquest/db build && tsx watch src/index.ts",
+    "build": "node ../../scripts/check-runtime.cjs && tsc -p tsconfig.json",
+    "start": "node ../../scripts/check-runtime.cjs && node dist/index.js",
+    "test": "node ../../scripts/check-runtime.cjs && vitest run",
+    "test:watch": "node ../../scripts/check-runtime.cjs && vitest",
+    "typecheck": "node ../../scripts/check-runtime.cjs && tsc --noEmit",
+    "check": "node ../../scripts/check-runtime.cjs && pnpm typecheck && pnpm build"
   },
   "dependencies": {
     "@hono/node-server": "^1.19.6",
@@ -22,5 +22,8 @@
     "tsx": "^4.20.6",
     "typescript": "^5",
     "vitest": "^4.1.10"
+  },
+  "engines": {
+    "node": "^22.23.4 || ^24.22.1 || ^26.12.1"
   }
 }

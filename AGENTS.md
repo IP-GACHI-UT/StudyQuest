@@ -125,6 +125,8 @@ pnpm db:seed
 
 ```bash
 pnpm install
+pnpm security:runtime
+pnpm test:security
 pnpm dev:web
 pnpm format:check
 pnpm biome:check

@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "dev": "node ../../scripts/check-runtime.cjs && next dev",
+    "build": "node ../../scripts/check-runtime.cjs && next build",
+    "start": "node ../../scripts/check-runtime.cjs && next start",
+    "lint": "node ../../scripts/check-runtime.cjs && eslint",
+    "typecheck": "node ../../scripts/check-runtime.cjs && tsc --noEmit"
   },
   "dependencies": {
     "lucide-react": "^1.21.0",
@@ -25,5 +25,8 @@
     "eslint-config-next": "16.2.7",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "engines": {
+    "node": "^22.23.4 || ^24.22.1 || ^26.12.1"
   }
 }

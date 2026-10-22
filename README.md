@@ -35,6 +35,8 @@ StudyQuestは、学習を小さなクエストとして受注し、継続を促�
 
 ## セットアップ
 
+Node.jsは`.node-version`の22.23.4、pnpmは既存の10.13.1を使用します。22.23.4 / 24.22.1 / 26.12.1未満の各系列は実行ガードで拒否します。`pnpm security:runtime`と`pnpm test:security`で確認でき、CIも同じ版ファイルを参照します。
+
 事前に Docker Desktop などをインストールし、`docker compose` が使える状態にしてください。
 DBだけを Docker Compose で起動し、Next.js / Hono API は従来どおり pnpm で起動します。
 
